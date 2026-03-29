@@ -232,11 +232,16 @@ async function loadAdminPortfolio() {
 }
 
 async function togglePortfolioVisible(id, val) {
-  await apiRequest(`/portfolio/${id}`, {
+  const res = await apiRequest(`/portfolio/${id}`, {
     method: 'PATCH',
     body: JSON.stringify({ isVisible: val })
   });
-  showToast(val ? 'Приховано' : 'Показано');
+  if (res?.ok) {
+    showToast(val ? 'Показано' : 'Приховано');
+    loadAdminPortfolio();
+  } else {
+    showToast('Помилка оновлення', 'error');
+  }
 }
 
 async function deletePortfolioItem(id) {
