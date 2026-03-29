@@ -26,10 +26,11 @@ router.get('/', (req, res) => {
 router.put('/', auth, (req, res) => {
   try {
     const current = read();
-    const { contacts, colors } = req.body;
+    const { contacts, colors, about } = req.body;
 
     if (contacts) current.contacts = { ...current.contacts, ...contacts };
     if (colors)   current.colors   = { ...current.colors,   ...colors };
+    if (about)    current.about    = { ...current.about,    ...about };
 
     write(current);
     res.json(current);

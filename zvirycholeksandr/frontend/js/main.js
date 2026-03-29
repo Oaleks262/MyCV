@@ -155,6 +155,27 @@ async function applySettings() {
       }
     }
 
+    // Про мене
+    if (s.about) {
+      const a = s.about;
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+      setTxt('about-name',       a.name);
+      setTxt('about-bio1',       a.bio1);
+      setTxt('about-bio2',       a.bio2);
+      setTxt('about-stat1-num',  a.stat1_num);
+      setTxt('about-stat1-lbl',  a.stat1_label);
+      setTxt('about-stat2-num',  a.stat2_num);
+      setTxt('about-stat2-lbl',  a.stat2_label);
+      setTxt('about-stat3-num',  a.stat3_num);
+      setTxt('about-stat3-lbl',  a.stat3_label);
+      if (a.skills) {
+        const container = document.getElementById('about-skills');
+        if (container) {
+          container.innerHTML = a.skills.split(',').map(s => `<span class="skill-tag">${s.trim()}</span>`).join('');
+        }
+      }
+    }
+
     // Контакти → замінити посилання по data-contact
     if (s.contacts) {
       document.querySelectorAll('[data-contact]').forEach(el => {
