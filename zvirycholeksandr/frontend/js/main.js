@@ -8,15 +8,17 @@ window.addEventListener('scroll', () => {
 });
 
 burger?.addEventListener('click', () => {
-  navLinks?.classList.toggle('open');
+  const isOpen = navLinks?.classList.toggle('open');
   burger.classList.toggle('open');
+  burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 });
 
-// Закрити меню при кліку на лінк
-navLinks?.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
+// Закрити меню при кліку на будь-який елемент всередині (посилання або кнопки)
+navLinks?.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('click', () => {
     navLinks.classList.remove('open');
     burger?.classList.remove('open');
+    burger?.setAttribute('aria-expanded', 'false');
   });
 });
 
@@ -198,3 +200,38 @@ async function applySettings() {
 applySettings();
 loadPortfolioPreview();
 loadBlogPreview();
+
+/* ===== SPOTLIGHT CURSOR ===== */
+(function () {
+  const spot = document.getElementById('cursor-spot');
+  const dot  = document.getElementById('cursor-dot');
+  if (!spot || !dot) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  let tx = -600, ty = -600, sx = -600, sy = -600;
+
+  document.addEventListener('mousemove', e => {
+    tx = e.clientX; ty = e.clientY;
+    dot.style.left = tx + 'px';
+    dot.style.top  = ty + 'px';
+  });
+
+  (function lerpSpot() {
+    sx += (tx - sx) * 0.07;
+    sy += (ty - sy) * 0.07;
+    spot.style.left = sx + 'px';
+    spot.style.top  = sy + 'px';
+    requestAnimationFrame(lerpSpot);
+  })();
+
+  const interactive = 'a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(interactive)) spot.classList.add('is-hovering');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
+  });
+
+  document.addEventListener('mousedown', () => dot.classList.add('is-clicking'));
+  document.addEventListener('mouseup',   () => dot.classList.remove('is-clicking'));
+})();

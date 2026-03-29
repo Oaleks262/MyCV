@@ -314,44 +314,5 @@
 
 <script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
-<script>
-/* ===== SPOTLIGHT CURSOR ===== */
-(function() {
-  const spot = document.getElementById('cursor-spot');
-  const dot  = document.getElementById('cursor-dot');
-  if (!spot || !dot) return;
-
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-  let tx = -600, ty = -600, sx = -600, sy = -600;
-
-  document.addEventListener('mousemove', e => {
-    tx = e.clientX; ty = e.clientY;
-    dot.style.left = tx + 'px';
-    dot.style.top  = ty + 'px';
-  });
-
-  // Spotlight follows with smooth lerp lag
-  (function lerpSpot() {
-    sx += (tx - sx) * 0.07;
-    sy += (ty - sy) * 0.07;
-    spot.style.left = sx + 'px';
-    spot.style.top  = sy + 'px';
-    requestAnimationFrame(lerpSpot);
-  })();
-
-  const interactive = 'a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea';
-
-  document.addEventListener('mouseover', e => {
-    if (e.target.closest(interactive)) spot.classList.add('is-hovering');
-  });
-  document.addEventListener('mouseout', e => {
-    if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
-  });
-
-  document.addEventListener('mousedown', () => dot.classList.add('is-clicking'));
-  document.addEventListener('mouseup',   () => dot.classList.remove('is-clicking'));
-})();
-</script>
 </body>
 </html>
