@@ -174,6 +174,26 @@
         </div>
       </div>
 
+      <!-- CHANGE PASSWORD -->
+      <div class="settings-card" style="grid-column: 1 / -1">
+        <h2>🔐 Змінити пароль</h2>
+        <form id="password-form" style="max-width: 420px">
+          <div class="form-group">
+            <label class="form-label">Поточний пароль</label>
+            <input type="password" name="currentPassword" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Новий пароль</label>
+            <input type="password" name="newPassword" class="form-control" required minlength="8">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Підтвердження нового пароля</label>
+            <input type="password" name="confirmPassword" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Змінити пароль</button>
+        </form>
+      </div>
+
     </div>
   </main>
 </div>
@@ -306,6 +326,24 @@ document.getElementById('contacts-form')?.addEventListener('submit', async e => 
 });
 
 loadSettings();
+
+document.getElementById('password-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.newPassword.value !== f.confirmPassword.value) {
+    showToast('Паролі не збігаються', 'error');
+    return;
+  }
+  const res = await apiRequest('/admin/change-password', {
+    method: 'POST',
+    body: JSON.stringify({
+      currentPassword: f.currentPassword.value,
+      newPassword: f.newPassword.value
+    })
+  });
+  if (res?.ok) { showToast('Пароль змінено'); f.reset(); }
+  else { const d = await res?.json(); showToast(d?.error || 'Помилка', 'error'); }
+});
 </script>
 </body>
 </html>

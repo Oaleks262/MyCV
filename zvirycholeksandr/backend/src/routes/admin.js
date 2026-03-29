@@ -31,6 +31,25 @@ router.post('/logout', auth, (req, res) => {
   res.json({ success: true });
 });
 
+// POST /api/admin/change-password
+router.post('/change-password', auth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Всі поля обов\'язкові' });
+    if (newPassword.length < 8) return res.status(400).json({ error: 'Пароль мінімум 8 символів' });
+
+    const admin = JSON.parse(fs.readFileSync(adminFile, 'utf-8'));
+    const valid = await bcrypt.compare(currentPassword, admin.passwordHash);
+    if (!valid) return res.status(401).json({ error: 'Невірний поточний пароль' });
+
+    admin.passwordHash = await bcrypt.hash(newPassword, 12);
+    fs.writeFileSync(adminFile, JSON.stringify(admin));
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Помилка сервера' });
+  }
+});
+
 // GET /api/admin/orders — всі замовлення
 router.get('/orders', auth, (req, res) => {
   const { status } = req.query;

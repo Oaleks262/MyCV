@@ -1,14 +1,19 @@
 const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 
 const blog = new JsonDB('blog.json');
 
+// Ensure upload directory exists
+const UPLOAD_DIR = path.join(__dirname, '../../uploads/blog');
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) =>
-    cb(null, path.join(__dirname, '../../uploads/blog')),
+    cb(null, UPLOAD_DIR),
   filename: (req, file, cb) =>
     cb(null, `${Date.now()}-${file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`)
 });

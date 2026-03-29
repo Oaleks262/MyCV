@@ -34,26 +34,56 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="container hero-content">
-    <div class="hero-badge">Доступний для нових проєктів</div>
-    <h1 class="hero-title">
-      Сайти для бізнесу,<br>
-      які <span class="accent">продають</span>
-    </h1>
-    <p class="hero-desc">
-      Розробляю лендінги, сайти-візитки та онлайн-меню для малого бізнесу в Україні.
-      Від першої консультації до запуску — тиждень.
-    </p>
-    <div class="hero-actions">
-      <button class="btn-primary" data-open-order>Замовити сайт →</button>
-      <a href="/portfolio.html" class="btn-secondary">Переглянути роботи</a>
-    </div>
-    <div class="hero-tags">
-      <span class="hero-tag">HTML / CSS / JS</span>
-      <span class="hero-tag">Node.js</span>
-      <span class="hero-tag">SEO</span>
-      <span class="hero-tag">Mobile-first</span>
-      <span class="hero-tag">Telegram-бот</span>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Доступний для нових проєктів
+        </div>
+        <h1 class="hero-title">
+          Сайти для бізнесу,<br>
+          які <span class="accent">продають</span>
+        </h1>
+        <p class="hero-desc">
+          Розробляю лендінги, сайти-візитки та онлайн-меню для малого бізнесу в Україні.
+          Від першої консультації до запуску — тиждень.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" data-open-order>Замовити сайт →</button>
+          <a href="/portfolio.html" class="btn-secondary">Переглянути роботи</a>
+        </div>
+        <div class="hero-tags">
+          <span class="hero-tag">HTML / CSS / JS</span>
+          <span class="hero-tag">Node.js</span>
+          <span class="hero-tag">SEO</span>
+          <span class="hero-tag">Mobile-first</span>
+          <span class="hero-tag">Telegram-бот</span>
+        </div>
+      </div>
+      <div class="hero-code-card">
+        <div class="code-card-header">
+          <span class="code-dot red"></span>
+          <span class="code-dot yellow"></span>
+          <span class="code-dot green"></span>
+          <span class="code-card-title">project.js</span>
+        </div>
+        <pre class="code-block"><code><span class="code-keyword">const</span> <span class="code-var">project</span> = {
+  <span class="code-prop">client</span>: <span class="code-string">"Ваш бізнес"</span>,
+  <span class="code-prop">deadline</span>: <span class="code-string">"7 днів"</span>,
+  <span class="code-prop">stack</span>: [<span class="code-string">"HTML"</span>, <span class="code-string">"CSS"</span>,
+           <span class="code-string">"Node.js"</span>],
+  <span class="code-prop">seo</span>: <span class="code-bool">true</span>,
+  <span class="code-prop">mobile</span>: <span class="code-bool">true</span>,
+
+  <span class="code-prop">launch</span>: <span class="code-fn">async</span> () =&gt; {
+    <span class="code-keyword">await</span> <span class="code-fn">analyze</span>(client);
+    <span class="code-keyword">await</span> <span class="code-fn">design</span>();
+    <span class="code-keyword">await</span> <span class="code-fn">develop</span>();
+    <span class="code-keyword">return</span> <span class="code-string">"🚀 Online!"</span>;
+  }
+};</code></pre>
+      </div>
     </div>
   </div>
 </section>
@@ -99,6 +129,36 @@
           <span class="skill-tag">PM2</span>
           <span class="skill-tag">Mobile-first</span>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process-section">
+  <div class="container">
+    <span class="section-label fade-in">Як це працює</span>
+    <h2 class="section-title fade-in">Від ідеї до сайту за 4 кроки</h2>
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="process-num">01</div>
+        <h3>Заявка</h3>
+        <p>Заповнюєте коротку форму — я зв'язуюсь протягом 24 годин</p>
+      </div>
+      <div class="process-step fade-in">
+        <div class="process-num">02</div>
+        <h3>Технічне завдання</h3>
+        <p>Розробляю ТЗ з описом структури, дизайну та функціоналу</p>
+      </div>
+      <div class="process-step fade-in">
+        <div class="process-num">03</div>
+        <h3>Розробка</h3>
+        <p>Кодую сайт з нуля — адаптивний, швидкий, SEO-оптимізований</p>
+      </div>
+      <div class="process-step fade-in">
+        <div class="process-num">04</div>
+        <h3>Запуск</h3>
+        <p>Розгортаю на вашому домені, налаштовую хостинг та аналітику</p>
       </div>
     </div>
   </div>
