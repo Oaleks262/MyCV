@@ -388,6 +388,17 @@ section {
   word-break: break-word;
 }
 
+.about-stack {
+  padding: 1.5rem;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.about-stack .section-label {
+  margin-bottom: 1rem;
+}
+
 .about-skills {
   display: flex;
   flex-wrap: wrap;
@@ -1079,10 +1090,10 @@ textarea.order-input {
     font-size: 0.78rem;
   }
 
-  /* About: 2 columns on desktop */
+  /* About: text left (wider) + stack right (narrower) on desktop */
   .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 2fr;
     gap: 3rem;
     align-items: start;
   }
