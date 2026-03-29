@@ -125,6 +125,55 @@ function openPortfolioCard(item) {
   }
 }
 
+/* ===== SITE SETTINGS ===== */
+async function applySettings() {
+  try {
+    const res = await fetch('/api/settings');
+    if (!res.ok) return;
+    const s = await res.json();
+
+    // Кольори → CSS-змінні
+    if (s.colors) {
+      const root = document.documentElement;
+      const map = {
+        accent:      '--color-accent',
+        accentHover: '--color-accent-hover',
+        bg:          '--color-bg',
+        bg2:         '--color-bg-2',
+        bg3:         '--color-bg-3',
+        text:        '--color-text',
+        textMuted:   '--color-text-muted',
+        border:      '--color-border'
+      };
+      Object.entries(map).forEach(([key, cssVar]) => {
+        if (s.colors[key]) root.style.setProperty(cssVar, s.colors[key]);
+      });
+      // accentLight перераховуємо з accent
+      if (s.colors.accent) {
+        const hex = s.colors.accent;
+        root.style.setProperty('--color-accent-light', hex + '1a');
+      }
+    }
+
+    // Контакти → замінити посилання по data-contact
+    if (s.contacts) {
+      document.querySelectorAll('[data-contact]').forEach(el => {
+        const key = el.dataset.contact;
+        const val = s.contacts[key];
+        if (!val) { el.closest('li, span, div') ? el.parentElement.style.display = 'none' : el.style.display = 'none'; return; }
+        el.href = val;
+        el.style.display = '';
+        // Для phone/email показати текст без протоколу
+        if (key === 'email') el.textContent = val.replace('mailto:', '');
+        if (key === 'phone') el.textContent = val.replace('tel:', '');
+      });
+    }
+  } catch (e) {
+    // Тихо ігноруємо — дефолти з CSS залишаються
+  }
+}
+
 // Ініціалізація
+applySettings();
 loadPortfolioPreview();
 loadBlogPreview();
