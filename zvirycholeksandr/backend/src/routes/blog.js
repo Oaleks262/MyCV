@@ -21,9 +21,10 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = /jpeg|jpg|png|webp|gif/;
-    if (allowed.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Тільки зображення дозволені'));
+    const allowedMime = /image\/(jpeg|jpg|png|webp|gif)/;
+    const allowedExt  = /\.(jpe?g|png|webp|gif)$/i;
+    if (allowedMime.test(file.mimetype) || allowedExt.test(file.originalname)) cb(null, true);
+    else cb(new Error('Тільки зображення (JPEG, PNG, WebP, GIF)'));
   }
 });
 

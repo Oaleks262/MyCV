@@ -121,6 +121,56 @@
       <p>Контакти, соцмережі та кольорова схема</p>
     </div>
 
+    <!-- ABOUT SECTION -->
+    <div class="settings-card" style="margin-bottom:2rem">
+      <h2>👤 Про мене</h2>
+      <form id="about-form">
+        <div class="form-group">
+          <label class="form-label">Ім'я</label>
+          <input type="text" name="name" class="form-control" placeholder="Олександр Звірич">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Перший абзац</label>
+          <textarea name="bio1" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Другий абзац</label>
+          <textarea name="bio2" class="form-control" rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Статистика 1 (число)</label>
+            <input type="text" name="stat1_num" class="form-control" placeholder="20+">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Статистика 2 (число)</label>
+            <input type="text" name="stat2_num" class="form-control" placeholder="98%">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Статистика 3 (число)</label>
+            <input type="text" name="stat3_num" class="form-control" placeholder="7д">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Підпис 1</label>
+            <input type="text" name="stat1_label" class="form-control" placeholder="Проєктів">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Підпис 2</label>
+            <input type="text" name="stat2_label" class="form-control" placeholder="Задоволених">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Підпис 3</label>
+            <input type="text" name="stat3_label" class="form-control" placeholder="Середній строк">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Навички (через кому)</label>
+          <textarea name="skills" class="form-control" rows="2" placeholder="HTML5,CSS3,JavaScript,..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти про мене</button>
+      </form>
+    </div>
+
     <div class="settings-grid">
 
       <!-- CONTACTS -->
@@ -298,6 +348,21 @@ async function loadSettings() {
       f.phone_raw.value = (s.contacts.phone  || '').replace('tel:', '');
     }
 
+    // Fill about
+    const af = document.getElementById('about-form');
+    if (af && s.about) {
+      af.name.value        = s.about.name        || '';
+      af.bio1.value        = s.about.bio1        || '';
+      af.bio2.value        = s.about.bio2        || '';
+      af.stat1_num.value   = s.about.stat1_num   || '';
+      af.stat1_label.value = s.about.stat1_label || '';
+      af.stat2_num.value   = s.about.stat2_num   || '';
+      af.stat2_label.value = s.about.stat2_label || '';
+      af.stat3_num.value   = s.about.stat3_num   || '';
+      af.stat3_label.value = s.about.stat3_label || '';
+      af.skills.value      = s.about.skills      || '';
+    }
+
     // Fill colors
     if (s.colors) currentColors = { ...COLOR_DEFAULTS, ...s.colors };
     buildColorRows(currentColors);
@@ -326,6 +391,29 @@ document.getElementById('contacts-form')?.addEventListener('submit', async e => 
 });
 
 loadSettings();
+
+document.getElementById('about-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target;
+  const about = {
+    name:        f.name.value.trim(),
+    bio1:        f.bio1.value.trim(),
+    bio2:        f.bio2.value.trim(),
+    stat1_num:   f.stat1_num.value.trim(),
+    stat1_label: f.stat1_label.value.trim(),
+    stat2_num:   f.stat2_num.value.trim(),
+    stat2_label: f.stat2_label.value.trim(),
+    stat3_num:   f.stat3_num.value.trim(),
+    stat3_label: f.stat3_label.value.trim(),
+    skills:      f.skills.value.trim()
+  };
+  const res = await apiRequest('/settings', {
+    method: 'PUT',
+    body: JSON.stringify({ about })
+  });
+  if (res?.ok) showToast('Збережено — оновіть сторінку сайту');
+  else showToast('Помилка збереження', 'error');
+});
 
 document.getElementById('password-form')?.addEventListener('submit', async e => {
   e.preventDefault();
