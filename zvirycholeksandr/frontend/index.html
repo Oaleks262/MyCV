@@ -337,5 +337,33 @@
 
 <script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
+<script>
+// DEBUG: знайти елемент що виходить за межі екрану
+window.addEventListener('load', function() {
+  var vw = window.innerWidth;
+  var worst = null;
+  var worstRight = 0;
+  document.querySelectorAll('*').forEach(function(el) {
+    var r = el.getBoundingClientRect();
+    if (r.right > worstRight) {
+      worstRight = r.right;
+      worst = el;
+    }
+  });
+  if (worstRight > vw + 2) {
+    var dbg = document.createElement('div');
+    dbg.id = 'overflow-debug';
+    dbg.style.cssText = 'position:fixed;bottom:80px;left:0;right:0;background:#ef4444;color:#fff;padding:10px 16px;z-index:99999;font-size:11px;word-break:break-all;line-height:1.4;';
+    dbg.innerHTML = '⚠️ OVERFLOW +' + Math.round(worstRight - vw) + 'px<br>EL: ' + (worst.tagName) + ' class="' + (worst.className || '—') + '"<br>id="' + (worst.id || '—') + '"';
+    document.body.appendChild(dbg);
+  } else {
+    var dbg = document.createElement('div');
+    dbg.id = 'overflow-debug';
+    dbg.style.cssText = 'position:fixed;bottom:80px;left:0;right:0;background:#22c55e;color:#fff;padding:8px 16px;z-index:99999;font-size:11px;';
+    dbg.textContent = '✓ Overflow не знайдено (vw=' + vw + 'px)';
+    document.body.appendChild(dbg);
+  }
+});
+</script>
 </body>
 </html>
