@@ -20,13 +20,19 @@
 
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
+}
 body {
   font-family: var(--font-body);
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -103,11 +109,16 @@ h3 { font-size: clamp(1.2rem, 3vw, 1.6rem); }
 }
 
 /* ===== SECTIONS ===== */
-section { padding: 100px 0; }
+section {
+  padding: 100px 0;
+  overflow-x: hidden;
+  max-width: 100%;
+}
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  width: 100%;
 }
 
 .section-label {
@@ -505,10 +516,13 @@ section { padding: 100px 0; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ===== TABLET ===== */
+@media (max-width: 1024px) {
+  .about-grid { gap: 2.5rem; }
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
-  /* Prevent horizontal overflow globally */
-  html, body { overflow-x: hidden; }
   .container { padding: 0 1.25rem; }
 
   /* Navbar */
@@ -535,11 +549,15 @@ section { padding: 100px 0; }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
-  .stat { padding: 1rem 0.5rem; }
-  .stat-num { font-size: 1.5rem; }
-  .stat-label { font-size: 0.72rem; }
+  .stat { padding: 0.85rem 0.4rem; }
+  .stat-num { font-size: 1.4rem; }
+  .stat-label { font-size: 0.68rem; }
+
+  /* Skills */
+  .about-skills { gap: 0.4rem; }
+  .skill-tag { font-size: 0.8rem; padding: 0.35rem 0.7rem; }
 
   /* Footer */
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -553,6 +571,10 @@ section { padding: 100px 0; }
 }
 
 @media (max-width: 400px) {
-  .about-stats { grid-template-columns: 1fr; }
-  .stat { padding: 1rem; }
+  .about-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+  .stat { padding: 0.75rem 0.25rem; }
+  .stat-num { font-size: 1.2rem; }
 }
