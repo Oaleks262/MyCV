@@ -15,6 +15,18 @@
 </head>
 <body>
 
+<!-- AURORA -->
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob aurora-blob-1"></div>
+  <div class="aurora-blob aurora-blob-2"></div>
+  <div class="aurora-blob aurora-blob-3"></div>
+  <div class="aurora-blob aurora-blob-4"></div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
@@ -33,7 +45,6 @@
 
 <!-- HERO -->
 <section class="hero">
-  <canvas id="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-bg"></div>
   <div class="container">
     <div class="hero-inner">
@@ -308,97 +319,47 @@
 <script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
 <script>
-/* ===== HERO PARTICLE NETWORK ===== */
+/* ===== CUSTOM CURSOR ===== */
 (function() {
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const ACCENT = '108,99,255';
-  const COUNT = window.innerWidth < 768 ? 40 : 80;
-  const CONNECT_DIST = 130;
-  const MOUSE_DIST = 160;
-  let W, H, mouse = { x: -999, y: -999 }, particles = [], raf;
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
 
-  function resize() {
-    const hero = canvas.parentElement;
-    W = canvas.width  = hero.offsetWidth;
-    H = canvas.height = hero.offsetHeight;
-  }
+  // Only on devices with real hover
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-  function Particle() {
-    this.x  = Math.random() * W;
-    this.y  = Math.random() * H;
-    this.vx = (Math.random() - 0.5) * 0.4;
-    this.vy = (Math.random() - 0.5) * 0.4;
-    this.r  = Math.random() * 1.5 + 1;
-  }
+  let tx = -100, ty = -100, rx = -100, ry = -100;
 
-  Particle.prototype.update = function() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > W) this.vx *= -1;
-    if (this.y < 0 || this.y > H) this.vy *= -1;
-  };
-
-  function init() {
-    particles = Array.from({ length: COUNT }, () => new Particle());
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.update();
-
-      // dot
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${ACCENT},0.7)`;
-      ctx.fill();
-
-      // connect to nearby particles
-      for (let j = i + 1; j < particles.length; j++) {
-        const q = particles[j];
-        const dx = p.x - q.x, dy = p.y - q.y;
-        const d = Math.sqrt(dx * dx + dy * dy);
-        if (d < CONNECT_DIST) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = `rgba(${ACCENT},${0.18 * (1 - d / CONNECT_DIST)})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
-      }
-
-      // react to mouse
-      const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
-      const md = Math.sqrt(mdx * mdx + mdy * mdy);
-      if (md < MOUSE_DIST) {
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = `rgba(${ACCENT},${0.3 * (1 - md / MOUSE_DIST)})`;
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
-    }
-
-    raf = requestAnimationFrame(draw);
-  }
-
-  const hero = canvas.parentElement;
-  hero.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
+  document.addEventListener('mousemove', e => {
+    tx = e.clientX; ty = e.clientY;
+    dot.style.left = tx + 'px';
+    dot.style.top  = ty + 'px';
   });
-  hero.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
 
-  window.addEventListener('resize', () => { cancelAnimationFrame(raf); resize(); init(); draw(); });
+  // Ring follows with smooth lag
+  (function lerpRing() {
+    rx += (tx - rx) * 0.11;
+    ry += (ty - ry) * 0.11;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(lerpRing);
+  })();
 
-  resize(); init(); draw();
+  // Expand on interactive elements
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea')) {
+      ring.classList.add('is-hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea')) {
+      ring.classList.remove('is-hovering');
+    }
+  });
+
+  // Click feedback
+  document.addEventListener('mousedown', () => dot.classList.add('is-clicking'));
+  document.addEventListener('mouseup',   () => dot.classList.remove('is-clicking'));
 })();
 </script>
 </body>
