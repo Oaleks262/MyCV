@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог — zvirycholeksandr</title>
+  <meta name="description" content="Статті про розробку сайтів, SEO та маркетинг для малого бізнесу в Україні.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+  <ul class="navbar-links">
+    <li><a href="/portfolio.html">Портфоліо</a></li>
+    <li><a href="/blog.html" style="color:var(--color-text)">Блог</a></li>
+    <li><a href="/#contacts">Контакти</a></li>
+    <li><a href="/" class="btn-nav">Замовити сайт</a></li>
+  </ul>
+  <button class="navbar-burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="blog-hero">
+  <div class="container">
+    <span class="section-label">Корисні матеріали</span>
+    <h1>Блог</h1>
+    <p class="section-subtitle" style="margin:1rem auto 0">
+      Статті про розробку сайтів, SEO та просування малого бізнесу
+    </p>
+    <div class="blog-search-wrap">
+      <span class="blog-search-icon">🔍</span>
+      <input
+        type="search"
+        id="blog-search"
+        class="blog-search"
+        placeholder="Пошук статей..."
+        autocomplete="off"
+      >
+    </div>
+  </div>
+</div>
+
+<!-- BLOG GRID -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="blog-grid" id="blog-grid">
+      <div class="spinner" style="grid-column:1/-1"></div>
+    </div>
+    <div class="no-results" id="no-results">
+      <p>За вашим запитом нічого не знайдено</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo">zviry<span style="color:var(--color-accent)">ch</span>oleksandr</div>
+        <p>Розробляю сайти для малого бізнесу в Україні.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Навігація</h4>
+        <a href="/portfolio.html">Портфоліо</a>
+        <a href="/blog.html">Блог</a>
+        <a href="/#contacts">Контакти</a>
+      </div>
+      <div class="footer-col">
+        <h4>Правове</h4>
+        <a href="/privacy.html">Конфіденційність</a>
+        <a href="/terms.html">Умови використання</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 zvirycholeksandr</span>
+      <div class="footer-socials">
+        <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://github.com/oaleks262" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/blog.js"></script>
+</body>
+</html>

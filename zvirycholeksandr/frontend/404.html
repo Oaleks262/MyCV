@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Сторінку не знайдено</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .error-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(6rem, 20vw, 12rem);
+      font-weight: 700;
+      color: var(--color-accent);
+      line-height: 1;
+      opacity: 0.15;
+      margin-bottom: -1rem;
+    }
+    .error-content h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 1rem;
+    }
+    .error-content p {
+      color: var(--color-text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+<div class="error-page">
+  <div class="error-content">
+    <div class="error-number">404</div>
+    <h1>Сторінку не знайдено</h1>
+    <p>Схоже, цієї сторінки не існує або вона була переміщена.</p>
+    <a href="/" class="btn-primary" style="display:inline-flex">← На головну</a>
+  </div>
+</div>
+</body>
+</html>

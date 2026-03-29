@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Стаття — zvirycholeksandr</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="">
+  <meta property="og:type" content="article">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/blog.css">
+  <!-- marked.js для Markdown → HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+  <ul class="navbar-links">
+    <li><a href="/portfolio.html">Портфоліо</a></li>
+    <li><a href="/blog.html" style="color:var(--color-text)">Блог</a></li>
+    <li><a href="/#contacts">Контакти</a></li>
+    <li><a href="/" class="btn-nav">Замовити сайт</a></li>
+  </ul>
+  <button class="navbar-burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- LOADING -->
+<div id="post-loading" class="post-wrap" style="text-align:center;padding-top:160px">
+  <div class="spinner"></div>
+</div>
+
+<!-- ERROR -->
+<div id="post-error" style="display:none" class="post-wrap" style="text-align:center;padding-top:160px">
+  <h2>Статтю не знайдено</h2>
+  <p style="color:var(--color-text-muted);margin:1rem 0">Можливо, стаття була видалена або посилання неправильне.</p>
+  <a href="/blog.html" class="btn-primary" style="display:inline-flex;margin-top:1rem">← Повернутися до блогу</a>
+</div>
+
+<!-- POST WRAP -->
+<div id="post-wrap" class="post-wrap hidden" style="display:none">
+  <a href="/blog.html" class="post-back">← Назад до блогу</a>
+  <div class="post-tags" id="post-tags"></div>
+  <p class="post-date" id="post-date"></p>
+  <h1 class="post-title" id="post-title"></h1>
+  <img class="post-cover" id="post-cover" src="" alt="" loading="lazy">
+  <div class="post-content" id="post-content"></div>
+
+  <!-- CTA Block -->
+  <div class="post-cta">
+    <h3>Потрібен сайт для вашого бізнесу?</h3>
+    <p>Замовте лендінг, сайт-візитку або онлайн-меню — від ідеї до запуску за тиждень.</p>
+    <a href="/" class="btn-primary" style="display:inline-flex">Замовити сайт →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo">zviry<span style="color:var(--color-accent)">ch</span>oleksandr</div>
+        <p>Розробляю сайти для малого бізнесу в Україні.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Навігація</h4>
+        <a href="/portfolio.html">Портфоліо</a>
+        <a href="/blog.html">Блог</a>
+        <a href="/#contacts">Контакти</a>
+      </div>
+      <div class="footer-col">
+        <h4>Правове</h4>
+        <a href="/privacy.html">Конфіденційність</a>
+        <a href="/terms.html">Умови використання</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 zvirycholeksandr</span>
+      <div class="footer-socials">
+        <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://github.com/oaleks262" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/blog.js"></script>
+<script>
+  // Показати пост-враппер після завантаження
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrap = document.getElementById('post-wrap');
+    if (wrap) wrap.style.display = 'block';
+  });
+</script>
+</body>
+</html>

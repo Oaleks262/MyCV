@@ -1,0 +1,43 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 1995;
+
+app.use(helmet());
+app.use(cors({
+  origin: ['https://zvirycholeksandr.com', 'http://localhost:3000', 'http://localhost:1995']
+}));
+app.use(express.json({ limit: '10mb' }));
+
+// Rate limit для публічних форм (5 запитів на годину)
+const formLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: { error: 'Забагато запитів, спробуйте пізніше' }
+});
+
+// Публічні роути
+app.use('/api/orders', formLimiter, require('./routes/orders'));
+app.use('/api/portfolio', require('./routes/portfolio'));
+app.use('/api/blog', require('./routes/blog'));
+
+// Адмін роути (JWT захищені)
+app.use('/api/admin', require('./routes/admin'));
+
+// Статичні файли — завантажені зображення
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Фронтенд
+app.use(express.static(path.join(__dirname, '../../frontend')));
+
+// Fallback для SPA (blog-post)
+app.get('/blog/:slug', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/blog-post.html'));
+});
+
+app.listen(PORT, () => console.log(`✓ Server on port ${PORT}`));

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Замовлення — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index.html" class="active">
+        <span class="nav-icon">📋</span> Замовлення
+      </a>
+      <a href="/admin/portfolio.html">
+        <span class="nav-icon">🖼️</span> Портфоліо
+      </a>
+      <a href="/admin/blog.html">
+        <span class="nav-icon">📝</span> Блог
+      </a>
+      <a href="/" target="_blank">
+        <span class="nav-icon">🌐</span> Сайт
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Замовлення</h1>
+      <p>Управління замовленнями від клієнтів</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">Всього</div>
+        <div class="stat-card-value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Нових</div>
+        <div class="stat-card-value" id="stat-new">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">В обробці</div>
+        <div class="stat-card-value" id="stat-prompted">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Виконано</div>
+        <div class="stat-card-value" id="stat-done">—</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <span class="table-title">Список замовлень</span>
+        <select id="status-filter" class="filter-select">
+          <option value="">Всі статуси</option>
+          <option value="new">Нові</option>
+          <option value="prompted">В обробці</option>
+          <option value="done">Виконані</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Клієнт</th>
+            <th>Тип</th>
+            <th>Статус</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">Завантаження...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

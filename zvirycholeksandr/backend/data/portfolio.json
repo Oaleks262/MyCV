@@ -1,0 +1,41 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "title": "Масаж Олени",
+    "niche": "Масажист",
+    "siteType": "landing",
+    "description": "Лендінг для масажиста у Львові. Mobile-first, SEO під 'масаж Львів', Schema.org LocalBusiness.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "https://massage-olena.zvirycholeksandr.com",
+    "isVisible": true,
+    "sortOrder": 1,
+    "createdAt": "2026-03-01T10:00:00.000Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "title": "Кав'ярня Aroma",
+    "niche": "Кафе",
+    "siteType": "menu",
+    "description": "Онлайн-меню для кав'ярні з системою категорій, фотографіями страв та інформацією для гостей.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "https://aroma.zvirycholeksandr.com",
+    "isVisible": true,
+    "sortOrder": 2,
+    "createdAt": "2026-03-10T10:00:00.000Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "Портфоліо Дизайнера",
+    "niche": "Графічний дизайнер",
+    "siteType": "business_card",
+    "description": "Сайт-портфоліо для графічного дизайнера з галереєю робіт, навичками та контактами.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "https://designer.zvirycholeksandr.com",
+    "isVisible": true,
+    "sortOrder": 3,
+    "createdAt": "2026-03-15T10:00:00.000Z"
+  }
+]

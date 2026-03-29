@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вхід — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="login-page">
+
+<div class="login-box">
+  <div class="login-logo">zviry<span>ch</span>oleksandr <span style="color:#555;font-weight:400">admin</span></div>
+
+  <form id="login-form">
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        required
+      >
+    </div>
+    <div id="login-error" style="color:#ef4444;font-size:.85rem;margin-bottom:.75rem;min-height:1.2em"></div>
+    <button type="submit" class="btn btn-primary" style="width:100%">Увійти</button>
+  </form>
+
+  <p style="text-align:center;margin-top:1.5rem">
+    <a href="/" style="color:#555;font-size:.85rem">← Повернутись на сайт</a>
+  </p>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

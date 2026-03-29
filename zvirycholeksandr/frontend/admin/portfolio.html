@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портфоліо — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index.html">
+        <span class="nav-icon">📋</span> Замовлення
+      </a>
+      <a href="/admin/portfolio.html" class="active">
+        <span class="nav-icon">🖼️</span> Портфоліо
+      </a>
+      <a href="/admin/blog.html">
+        <span class="nav-icon">📝</span> Блог
+      </a>
+      <a href="/" target="_blank">
+        <span class="nav-icon">🌐</span> Сайт
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Портфоліо</h1>
+      <p>Управління роботами в портфоліо</p>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <span class="table-title">Всі роботи</span>
+        <button class="btn btn-primary btn-sm" onclick="openAddPortfolio()">+ Додати роботу</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Скріншот</th>
+            <th>Назва</th>
+            <th>Тип</th>
+            <th>Видимість</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody id="portfolio-tbody">
+          <tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">Завантаження...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- PORTFOLIO MODAL -->
+<div class="modal-overlay" id="portfolio-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="portfolio-modal-title">Додати роботу</span>
+      <button class="modal-close" onclick="closeModal('portfolio-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="portfolio-form" onsubmit="savePortfolioItem(event)">
+        <div class="form-group">
+          <label class="form-label">Назва проєкту *</label>
+          <input type="text" name="title" class="form-control" required placeholder="Масаж Олени">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ніша *</label>
+          <input type="text" name="niche" class="form-control" required placeholder="Масажист">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Тип сайту</label>
+          <select name="siteType" class="form-control">
+            <option value="landing">Лендінг</option>
+            <option value="business_card">Візитка</option>
+            <option value="menu">Меню</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Опис</label>
+          <textarea name="description" class="form-control" rows="3" placeholder="Що було зроблено..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Технології (через кому)</label>
+          <input type="text" name="technologies" class="form-control" placeholder="HTML, CSS, JS, Node.js">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL сайту</label>
+          <input type="url" name="liveUrl" class="form-control" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Порядок сортування</label>
+          <input type="number" name="sortOrder" class="form-control" value="0" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Скріншот</label>
+          <div class="upload-area" onclick="this.nextElementSibling.click()">
+            📁 Клікніть для вибору файлу (JPEG, PNG, WebP — до 5 МБ)
+          </div>
+          <input type="file" name="screenshot" accept="image/*" style="display:none"
+            onchange="document.getElementById('screenshot-preview').src = URL.createObjectURL(this.files[0])">
+          <img id="screenshot-preview" class="upload-preview" src="" alt="" style="display:none;margin-top:.5rem"
+            onerror="this.style.display='none'" onload="this.style.display='block'">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('portfolio-modal')">Скасувати</button>
+      <button class="btn btn-primary" onclick="document.getElementById('portfolio-form').requestSubmit()">Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

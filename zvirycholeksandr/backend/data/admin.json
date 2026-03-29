@@ -1,0 +1,4 @@
+{
+  "passwordHash": "$2b$10$rQnA7VyXjT9mB8KpL2uN8OeS3dF1gH4iJ6kM0nP5qR7sT9vX2yZ4w",
+  "_note": "Default password: admin2026 — змініть перед деплоєм! Запустіть: node -e \"require('bcrypt').hash('YOUR_PASSWORD',10).then(console.log)\""
+}

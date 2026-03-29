@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Деталі замовлення — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index.html" class="active">
+        <span class="nav-icon">📋</span> Замовлення
+      </a>
+      <a href="/admin/portfolio.html">
+        <span class="nav-icon">🖼️</span> Портфоліо
+      </a>
+      <a href="/admin/blog.html">
+        <span class="nav-icon">📝</span> Блог
+      </a>
+      <a href="/" target="_blank">
+        <span class="nav-icon">🌐</span> Сайт
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header" style="display:flex;align-items:center;gap:1rem">
+      <a href="/admin/index.html" class="btn btn-secondary btn-sm">← Назад</a>
+      <div>
+        <h1>Деталі замовлення</h1>
+        <p style="font-size:.85rem;color:#888">ID: <code id="order-id" style="font-size:.8rem"></code></p>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Ліва колонка: інфо -->
+      <div>
+        <div class="detail-card" style="margin-bottom:1.5rem">
+          <h3>Загальна інформація</h3>
+          <div class="detail-row">
+            <span class="detail-row-label">Статус</span>
+            <span id="order-status-badge"></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row-label">Тип сайту</span>
+            <span class="detail-row-value" id="order-type"></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row-label">Дата</span>
+            <span class="detail-row-value" id="order-date"></span>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <h3>Дані клієнта</h3>
+          <div id="order-form-data"></div>
+        </div>
+
+        <!-- Зміна статусу -->
+        <div class="detail-card" style="margin-top:1.5rem">
+          <h3>Зміна статусу</h3>
+          <div class="form-group">
+            <select id="order-status-select" class="form-control">
+              <option value="new">Новий</option>
+              <option value="prompted">В обробці</option>
+              <option value="done">Виконано</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="saveOrderStatus()">Зберегти статус</button>
+            <button class="btn btn-danger" onclick="deleteOrderDetail()">Видалити замовлення</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Права колонка: промт -->
+      <div>
+        <div class="detail-card">
+          <h3>Згенерований промт</h3>
+          <div class="form-group">
+            <textarea
+              id="order-prompt"
+              class="form-control md-editor"
+              rows="25"
+              placeholder="Промт буде згенеровано автоматично після обробки замовлення..."
+            ></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveOrderPrompt()">Зберегти промт</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

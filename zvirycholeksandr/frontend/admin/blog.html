@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index.html">
+        <span class="nav-icon">📋</span> Замовлення
+      </a>
+      <a href="/admin/portfolio.html">
+        <span class="nav-icon">🖼️</span> Портфоліо
+      </a>
+      <a href="/admin/blog.html" class="active">
+        <span class="nav-icon">📝</span> Блог
+      </a>
+      <a href="/" target="_blank">
+        <span class="nav-icon">🌐</span> Сайт
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Блог</h1>
+      <p>Управління статтями блогу</p>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <span class="table-title">Всі статті</span>
+        <button class="btn btn-primary btn-sm" onclick="openAddBlog()">+ Нова стаття</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Заголовок</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody id="blog-tbody">
+          <tr><td colspan="4" style="text-align:center;padding:2rem;color:#888">Завантаження...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- BLOG MODAL -->
+<div class="modal-overlay" id="blog-modal">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-header">
+      <span class="modal-title" id="blog-modal-title">Нова стаття</span>
+      <button class="modal-close" onclick="closeModal('blog-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="blog-form" onsubmit="saveBlogPost(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Slug (URL) *</label>
+            <input type="text" name="slug" class="form-control" required
+              placeholder="yak-zrobyty-lending">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Теги (через кому)</label>
+            <input type="text" name="tags" class="form-control" placeholder="лендінг, SEO">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Заголовок *</label>
+          <input type="text" name="title" class="form-control" required
+            placeholder="Як зробити лендінг для масажиста">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Короткий опис (excerpt)</label>
+          <textarea name="excerpt" class="form-control" rows="2"
+            placeholder="Розбираємо структуру продаючого сайту..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Контент (Markdown)</label>
+          <textarea name="content" class="form-control md-editor" rows="15"
+            placeholder="## Заголовок&#10;&#10;Текст статті у форматі Markdown..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Обкладинка</label>
+          <div class="upload-area" onclick="this.nextElementSibling.click()">
+            📁 Клікніть для вибору обкладинки (до 5 МБ)
+          </div>
+          <input type="file" name="cover" accept="image/*" style="display:none"
+            onchange="document.getElementById('cover-preview').src = URL.createObjectURL(this.files[0])">
+          <img id="cover-preview" class="upload-preview" src="" alt=""
+            style="max-width:300px;display:none;margin-top:.5rem"
+            onerror="this.style.display='none'" onload="this.style.display='block'">
+        </div>
+        <div class="form-check">
+          <input type="checkbox" name="isPublished" id="isPublished">
+          <label for="isPublished" style="font-size:.875rem">Опублікувати статтю</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('blog-modal')">Скасувати</button>
+      <button class="btn btn-primary" onclick="document.getElementById('blog-form').requestSubmit()">Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>
