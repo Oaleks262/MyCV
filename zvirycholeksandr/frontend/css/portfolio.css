@@ -250,7 +250,20 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
+  .portfolio-hero { padding: 110px 0 50px; }
   .portfolio-grid { grid-template-columns: 1fr; }
+  .popup-overlay { padding: 0.75rem; align-items: flex-end; }
+  .popup-content {
+    max-height: 95vh;
+    border-radius: 16px 16px 12px 12px;
+  }
   .popup-actions { flex-direction: column; }
-  .popup-live-btn, .popup-order-btn { min-width: unset; }
+  .popup-live-btn, .popup-order-btn {
+    min-width: unset;
+    width: 100%;
+    justify-content: center;
+  }
+  .popup-body { padding: 1.25rem; }
+  .popup-title { font-size: 1.3rem; }
 }
