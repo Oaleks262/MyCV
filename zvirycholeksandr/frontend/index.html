@@ -12,95 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <style>
-    /* ===== ORDER POPUP STYLES ===== */
-    #order-popup {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 3000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.5rem;
-      opacity: 0; visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-    }
-    #order-popup.active { opacity: 1; visibility: visible; }
-    .order-popup-box {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 16px;
-      width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto;
-      padding: 2rem;
-    }
-    .order-popup-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 2rem;
-    }
-    .order-popup-header h2 { font-size: 1.3rem; font-family: 'Space Grotesk', sans-serif; }
-    .order-popup-close {
-      width: 36px; height: 36px; background: #1a1a1a; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; color: #888; cursor: pointer;
-    }
-    .order-popup-close:hover { color: #fff; }
-    .step-indicator {
-      display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem;
-    }
-    .step-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #2a2a2a; transition: background 0.3s;
-    }
-    .step-dot.active { background: #6c63ff; }
-    .site-type-cards {
-      display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem;
-    }
-    .site-type-card {
-      padding: 1.25rem; border: 1px solid #222; border-radius: 12px;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .site-type-card:hover, .site-type-card.selected {
-      border-color: #6c63ff; background: rgba(108,99,255,0.06);
-    }
-    .site-type-card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
-    .site-type-card p { font-size: 0.85rem; color: #888; }
-    .order-step { display: none; }
-    .order-field { margin-bottom: 1rem; }
-    .order-label {
-      display: block; font-size: 0.8rem; font-weight: 600;
-      color: #888; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.08em;
-    }
-    .order-input {
-      width: 100%; padding: 0.7rem 1rem;
-      background: #0a0a0a; border: 1px solid #222; border-radius: 8px;
-      color: #f0f0f0; font-size: 0.875rem; font-family: 'Inter', sans-serif;
-    }
-    .order-input:focus { outline: none; border-color: #6c63ff; }
-    .order-input.error { border-color: #ef4444; }
-    textarea.order-input { resize: vertical; min-height: 80px; }
-    .order-btn-row {
-      display: flex; gap: 1rem; margin-top: 1.5rem;
-    }
-    .order-btn-primary {
-      flex: 1; padding: 0.85rem; background: #6c63ff; color: #fff;
-      border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none;
-    }
-    .order-btn-primary:hover { background: #5a52e0; }
-    .order-btn-secondary {
-      padding: 0.85rem 1.5rem; background: transparent;
-      border: 1px solid #222; border-radius: 8px;
-      color: #888; font-size: 0.9rem; cursor: pointer;
-    }
-    .order-btn-secondary:hover { border-color: #444; color: #f0f0f0; }
-    .order-summary { background: #0a0a0a; border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .order-summary-type { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
-    .order-summary-row { font-size: 0.875rem; color: #888; margin-bottom: 0.4rem; }
-    .order-summary-row b { color: #f0f0f0; }
-    .order-success { text-align: center; padding: 1rem 0; }
-    .order-success-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .order-success h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
-    .order-success p { color: #888; font-size: 0.9rem; line-height: 1.6; }
-  </style>
 </head>
 <body>
 
@@ -121,7 +32,6 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
   <div class="container hero-content">
     <div class="hero-badge">Доступний для нових проєктів</div>
     <h1 class="hero-title">
@@ -152,7 +62,7 @@
     <div class="about-grid">
       <div class="about-text fade-in">
         <span class="section-label">Про мене</span>
-        <h2 class="section-title">Олександр Звиричо</h2>
+        <h2 class="section-title">Олександр Звірич</h2>
         <p>Розробляю веб-сайти для малого бізнесу — масажистів, кав'ярень, дизайнерів, майстрів нігтів та інших спеціалістів, яким потрібен якісний онлайн-образ.</p>
         <p>Моя мета — не просто гарний сайт, а інструмент який приносить клієнтів. Кожен проєкт починається з аналізу аудиторії та конкурентів.</p>
         <div class="about-stats">
