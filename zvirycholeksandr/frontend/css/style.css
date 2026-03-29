@@ -292,7 +292,18 @@ section {
   height: 2px;
   background: var(--color-text);
   border-radius: 2px;
-  transition: var(--transition);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.navbar-burger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.navbar-burger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.navbar-burger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ===== HERO ===== */
