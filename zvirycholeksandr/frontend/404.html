@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 — Сторінку не знайдено</title>
+  <title>404 — Сторінку не знайдено | zvirycholeksandr</title>
+  <meta name="description" content="Сторінку не знайдено">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
@@ -14,36 +15,58 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 1.25rem;
+    }
+    .error-content {
+      width: 100%;
+      max-width: 480px;
     }
     .error-number {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(6rem, 20vw, 12rem);
+      font-size: clamp(5rem, 18vw, 10rem);
       font-weight: 700;
       color: var(--color-accent);
       line-height: 1;
       opacity: 0.15;
-      margin-bottom: -1rem;
+      margin-bottom: -0.5rem;
     }
     .error-content h1 {
-      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-size: clamp(1.4rem, 4vw, 2rem);
       margin-bottom: 1rem;
     }
     .error-content p {
       color: var(--color-text-muted);
       margin-bottom: 2rem;
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+  <ul class="navbar-links">
+    <li><a href="/portfolio.html">Портфоліо</a></li>
+    <li><a href="/blog.html">Блог</a></li>
+    <li><a href="/#contacts">Контакти</a></li>
+  </ul>
+  <button class="navbar-burger" aria-label="Меню">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
 <div class="error-page">
   <div class="error-content">
     <div class="error-number">404</div>
     <h1>Сторінку не знайдено</h1>
     <p>Схоже, цієї сторінки не існує або вона була переміщена.</p>
-    <a href="/" class="btn-primary" style="display:inline-flex">← На головну</a>
+    <a href="/" class="btn-primary">← На головну</a>
   </div>
 </div>
+
+<script src="/js/main.js"></script>
 </body>
 </html>

@@ -18,14 +18,16 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
-  <ul class="navbar-links">
+  <ul class="navbar-links" id="navbar-links">
     <li><a href="/portfolio.html">Портфоліо</a></li>
     <li><a href="/blog.html">Блог</a></li>
     <li><a href="#contacts">Контакти</a></li>
     <li><button class="btn-nav" data-open-order>Замовити сайт</button></li>
   </ul>
-  <button class="navbar-burger" aria-label="Меню">
-    <span></span><span></span><span></span>
+  <button class="navbar-burger" id="navbar-burger" aria-label="Меню" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
   </button>
 </nav>
 
@@ -56,7 +58,7 @@
   </div>
 </section>
 
-<!-- PRO MENE -->
+<!-- ПРО МЕНЕ -->
 <section class="about-section">
   <div class="container">
     <div class="about-grid">
@@ -66,12 +68,21 @@
         <p>Розробляю веб-сайти для малого бізнесу — масажистів, кав'ярень, дизайнерів, майстрів нігтів та інших спеціалістів, яким потрібен якісний онлайн-образ.</p>
         <p>Моя мета — не просто гарний сайт, а інструмент який приносить клієнтів. Кожен проєкт починається з аналізу аудиторії та конкурентів.</p>
         <div class="about-stats">
-          <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Проєктів</div></div>
-          <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Задоволених</div></div>
-          <div class="stat"><div class="stat-num">7д</div><div class="stat-label">Середній строк</div></div>
+          <div class="stat">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Проєктів</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Задоволених</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">7д</div>
+            <div class="stat-label">Середній строк</div>
+          </div>
         </div>
       </div>
-      <div class="fade-in" style="animation-delay:0.2s">
+      <div class="fade-in">
         <div class="about-skills">
           <span class="skill-tag">HTML5</span>
           <span class="skill-tag">CSS3</span>
@@ -93,7 +104,7 @@
   </div>
 </section>
 
-<!-- PORTFOLIO PREVIEW -->
+<!-- ПОРТФОЛІО PREVIEW -->
 <section>
   <div class="container">
     <span class="section-label fade-in">Портфоліо</span>
@@ -107,7 +118,7 @@
   </div>
 </section>
 
-<!-- BLOG PREVIEW -->
+<!-- БЛОГ PREVIEW -->
 <section style="background:var(--color-bg-2)">
   <div class="container">
     <span class="section-label fade-in">Блог</span>
@@ -127,9 +138,7 @@
     <div class="cta-box fade-in">
       <h2>Готові замовити сайт?</h2>
       <p>Заповніть коротку форму — отримаєте технічне завдання протягом доби</p>
-      <button class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem" data-open-order>
-        Замовити зараз →
-      </button>
+      <button class="btn-primary" data-open-order>Замовити зараз →</button>
     </div>
   </div>
 </section>
@@ -139,7 +148,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo">zviry<span style="color:var(--color-accent)">ch</span>oleksandr</div>
+        <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
         <p>Розробляю сайти для малого бізнесу в Україні. Mobile-first, SEO-оптимізовані, швидкі.</p>
       </div>
       <div class="footer-col">
@@ -177,10 +186,9 @@
       <div class="step-dot"></div>
       <div class="step-dot"></div>
     </div>
-
     <!-- Крок 1: Тип сайту -->
     <div class="order-step" data-step="1" style="display:block">
-      <p style="color:#888;margin-bottom:1.5rem;font-size:0.9rem">Оберіть тип сайту, який вам потрібен:</p>
+      <p style="color:#888;margin-bottom:1.25rem;font-size:0.9rem">Оберіть тип сайту, який вам потрібен:</p>
       <div class="site-type-cards">
         <div class="site-type-card" data-type="landing">
           <h3>🎯 Лендінг</h3>
@@ -199,7 +207,6 @@
         <button class="order-btn-primary" onclick="goToStep2()">Далі →</button>
       </div>
     </div>
-
     <!-- Крок 2: Форма -->
     <div class="order-step" data-step="2">
       <form id="order-form" onsubmit="return false">
@@ -210,28 +217,22 @@
         <button class="order-btn-primary" onclick="goToStep3()">Далі →</button>
       </div>
     </div>
-
     <!-- Крок 3: Підтвердження -->
     <div class="order-step" data-step="3">
       <p style="color:#888;margin-bottom:1rem;font-size:0.9rem">Перевірте дані перед відправкою:</p>
       <div class="order-summary" id="order-summary"></div>
       <div class="order-btn-row">
         <button class="order-btn-secondary" onclick="showStep(2)">← Назад</button>
-        <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">
-          Надіслати замовлення
-        </button>
+        <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">Надіслати замовлення</button>
       </div>
     </div>
-
     <!-- Крок 4: Успіх -->
     <div class="order-step" data-step="4">
       <div class="order-success">
         <div class="order-success-icon">🎉</div>
         <h3>Дякуємо за замовлення!</h3>
         <p>Ми отримали вашу заявку і зв'яжемося з вами протягом 24 годин для обговорення деталей.</p>
-        <button class="order-btn-primary" onclick="closeOrderPopup()" style="margin-top:1.5rem">
-          Закрити
-        </button>
+        <button class="order-btn-primary" onclick="closeOrderPopup()" style="margin-top:1.5rem">Закрити</button>
       </div>
     </div>
   </div>
