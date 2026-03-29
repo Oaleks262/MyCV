@@ -11,21 +11,17 @@
   <meta property="og:url" content="https://zvirycholeksandr.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=3">
 </head>
 <body>
 
-<!-- AURORA -->
-<div class="aurora-bg" aria-hidden="true">
-  <div class="aurora-blob aurora-blob-1"></div>
-  <div class="aurora-blob aurora-blob-2"></div>
-  <div class="aurora-blob aurora-blob-3"></div>
-  <div class="aurora-blob aurora-blob-4"></div>
-</div>
+<!-- BACKGROUND -->
+<div class="bg-tint" aria-hidden="true"></div>
+<div class="grain-overlay" aria-hidden="true"></div>
 
 <!-- CURSOR -->
-<div class="cursor-dot" id="cursor-dot"></div>
-<div class="cursor-ring" id="cursor-ring"></div>
+<div class="cursor-spot" id="cursor-spot"></div>
+<div class="cursor-dot"  id="cursor-dot"></div>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
@@ -319,16 +315,15 @@
 <script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
 <script>
-/* ===== CUSTOM CURSOR ===== */
+/* ===== SPOTLIGHT CURSOR ===== */
 (function() {
+  const spot = document.getElementById('cursor-spot');
   const dot  = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  if (!dot || !ring) return;
+  if (!spot || !dot) return;
 
-  // Only on devices with real hover
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-  let tx = -100, ty = -100, rx = -100, ry = -100;
+  let tx = -600, ty = -600, sx = -600, sy = -600;
 
   document.addEventListener('mousemove', e => {
     tx = e.clientX; ty = e.clientY;
@@ -336,28 +331,24 @@
     dot.style.top  = ty + 'px';
   });
 
-  // Ring follows with smooth lag
-  (function lerpRing() {
-    rx += (tx - rx) * 0.11;
-    ry += (ty - ry) * 0.11;
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-    requestAnimationFrame(lerpRing);
+  // Spotlight follows with smooth lerp lag
+  (function lerpSpot() {
+    sx += (tx - sx) * 0.07;
+    sy += (ty - sy) * 0.07;
+    spot.style.left = sx + 'px';
+    spot.style.top  = sy + 'px';
+    requestAnimationFrame(lerpSpot);
   })();
 
-  // Expand on interactive elements
+  const interactive = 'a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea';
+
   document.addEventListener('mouseover', e => {
-    if (e.target.closest('a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea')) {
-      ring.classList.add('is-hovering');
-    }
+    if (e.target.closest(interactive)) spot.classList.add('is-hovering');
   });
   document.addEventListener('mouseout', e => {
-    if (e.target.closest('a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea')) {
-      ring.classList.remove('is-hovering');
-    }
+    if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
   });
 
-  // Click feedback
   document.addEventListener('mousedown', () => dot.classList.add('is-clicking'));
   document.addEventListener('mouseup',   () => dot.classList.remove('is-clicking'));
 })();
