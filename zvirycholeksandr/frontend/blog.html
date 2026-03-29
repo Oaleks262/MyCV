@@ -15,14 +15,16 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
-  <ul class="navbar-links">
+  <ul class="navbar-links" id="navbar-links">
     <li><a href="/portfolio.html">Портфоліо</a></li>
     <li><a href="/blog.html" style="color:var(--color-text)">Блог</a></li>
     <li><a href="/#contacts">Контакти</a></li>
-    <li><a href="/" class="btn-nav">Замовити сайт</a></li>
+    <li><button class="btn-nav" data-open-order>Замовити сайт</button></li>
   </ul>
-  <button class="navbar-burger" aria-label="Меню">
-    <span></span><span></span><span></span>
+  <button class="navbar-burger" id="navbar-burger" aria-label="Меню" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
   </button>
 </nav>
 
@@ -64,7 +66,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo">zviry<span style="color:var(--color-accent)">ch</span>oleksandr</div>
+        <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
         <p>Розробляю сайти для малого бізнесу в Україні.</p>
       </div>
       <div class="footer-col">
@@ -80,15 +82,81 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 zvirycholeksandr</span>
+      <span>© 2026 zvirycholeksandr. Всі права захищені.</span>
       <div class="footer-socials">
-        <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
-        <a href="https://github.com/oaleks262" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://t.me/zvirycholeksandr" data-contact="telegram" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://github.com/oaleks262" data-contact="github" target="_blank" rel="noopener">GitHub</a>
+        <a href="" data-contact="instagram" target="_blank" rel="noopener" style="display:none">Instagram</a>
+        <a href="" data-contact="linkedin" target="_blank" rel="noopener" style="display:none">LinkedIn</a>
+        <a href="" data-contact="email" rel="noopener" style="display:none"></a>
+        <a href="" data-contact="phone" rel="noopener" style="display:none"></a>
       </div>
     </div>
   </div>
 </footer>
 
+<!-- ORDER POPUP -->
+<div id="order-popup" role="dialog" aria-modal="true" aria-label="Форма замовлення">
+  <div class="order-popup-box">
+    <div class="order-popup-header">
+      <h2>Замовити сайт</h2>
+      <button class="order-popup-close" onclick="closeOrderPopup()" aria-label="Закрити">✕</button>
+    </div>
+    <div class="step-indicator">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div class="order-step" data-step="1" style="display:block">
+      <p style="color:#888;margin-bottom:1.25rem;font-size:0.9rem">Оберіть тип сайту, який вам потрібен:</p>
+      <div class="site-type-cards">
+        <div class="site-type-card" data-type="landing">
+          <h3>🎯 Лендінг</h3>
+          <p>Продаючий сайт для місцевого спеціаліста</p>
+        </div>
+        <div class="site-type-card" data-type="business_card">
+          <h3>🪪 Сайт-візитка</h3>
+          <p>Персональне портфоліо або сторінка фахівця</p>
+        </div>
+        <div class="site-type-card" data-type="menu">
+          <h3>🍽️ Онлайн-меню</h3>
+          <p>Меню для кафе або ресторану</p>
+        </div>
+      </div>
+      <div class="order-btn-row">
+        <button class="order-btn-primary" onclick="goToStep2()">Далі →</button>
+      </div>
+    </div>
+    <div class="order-step" data-step="2">
+      <form id="order-form" onsubmit="return false">
+        <div id="order-form-fields"></div>
+      </form>
+      <div class="order-btn-row">
+        <button class="order-btn-secondary" onclick="showStep(1)">← Назад</button>
+        <button class="order-btn-primary" onclick="goToStep3()">Далі →</button>
+      </div>
+    </div>
+    <div class="order-step" data-step="3">
+      <p style="color:#888;margin-bottom:1rem;font-size:0.9rem">Перевірте дані перед відправкою:</p>
+      <div class="order-summary" id="order-summary"></div>
+      <div class="order-btn-row">
+        <button class="order-btn-secondary" onclick="showStep(2)">← Назад</button>
+        <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">Надіслати замовлення</button>
+      </div>
+    </div>
+    <div class="order-step" data-step="4">
+      <div class="order-success">
+        <div class="order-success-icon">🎉</div>
+        <h3>Дякуємо за замовлення!</h3>
+        <p>Зв'яжемося протягом 24 годин для обговорення деталей.</p>
+        <button class="order-btn-primary" onclick="closeOrderPopup()" style="margin-top:1.5rem">Закрити</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/blog.js"></script>
 </body>

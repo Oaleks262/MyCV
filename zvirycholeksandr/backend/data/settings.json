@@ -1,0 +1,20 @@
+{
+  "contacts": {
+    "telegram": "https://t.me/zvirycholeksandr",
+    "github": "https://github.com/oaleks262",
+    "instagram": "",
+    "linkedin": "",
+    "email": "",
+    "phone": ""
+  },
+  "colors": {
+    "accent": "#6c63ff",
+    "accentHover": "#5a52e0",
+    "bg": "#0a0a0a",
+    "bg2": "#111111",
+    "bg3": "#1a1a1a",
+    "text": "#f0f0f0",
+    "textMuted": "#888888",
+    "border": "#222222"
+  }
+}

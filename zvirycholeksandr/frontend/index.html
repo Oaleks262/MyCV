@@ -12,124 +12,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <style>
-    /* ===== ORDER POPUP STYLES ===== */
-    #order-popup {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 3000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.5rem;
-      opacity: 0; visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-    }
-    #order-popup.active { opacity: 1; visibility: visible; }
-    .order-popup-box {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 16px;
-      width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto;
-      padding: 2rem;
-    }
-    .order-popup-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 2rem;
-    }
-    .order-popup-header h2 { font-size: 1.3rem; font-family: 'Space Grotesk', sans-serif; }
-    .order-popup-close {
-      width: 36px; height: 36px; background: #1a1a1a; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; color: #888; cursor: pointer;
-    }
-    .order-popup-close:hover { color: #fff; }
-    .step-indicator {
-      display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem;
-    }
-    .step-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #2a2a2a; transition: background 0.3s;
-    }
-    .step-dot.active { background: #6c63ff; }
-    .site-type-cards {
-      display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem;
-    }
-    .site-type-card {
-      padding: 1.25rem; border: 1px solid #222; border-radius: 12px;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .site-type-card:hover, .site-type-card.selected {
-      border-color: #6c63ff; background: rgba(108,99,255,0.06);
-    }
-    .site-type-card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
-    .site-type-card p { font-size: 0.85rem; color: #888; }
-    .order-step { display: none; }
-    .order-field { margin-bottom: 1rem; }
-    .order-label {
-      display: block; font-size: 0.8rem; font-weight: 600;
-      color: #888; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.08em;
-    }
-    .order-input {
-      width: 100%; padding: 0.7rem 1rem;
-      background: #0a0a0a; border: 1px solid #222; border-radius: 8px;
-      color: #f0f0f0; font-size: 0.875rem; font-family: 'Inter', sans-serif;
-    }
-    .order-input:focus { outline: none; border-color: #6c63ff; }
-    .order-input.error { border-color: #ef4444; }
-    textarea.order-input { resize: vertical; min-height: 80px; }
-    .order-btn-row {
-      display: flex; gap: 1rem; margin-top: 1.5rem;
-    }
-    .order-btn-primary {
-      flex: 1; padding: 0.85rem; background: #6c63ff; color: #fff;
-      border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none;
-    }
-    .order-btn-primary:hover { background: #5a52e0; }
-    .order-btn-secondary {
-      padding: 0.85rem 1.5rem; background: transparent;
-      border: 1px solid #222; border-radius: 8px;
-      color: #888; font-size: 0.9rem; cursor: pointer;
-    }
-    .order-btn-secondary:hover { border-color: #444; color: #f0f0f0; }
-    .order-summary { background: #0a0a0a; border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .order-summary-type { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
-    .order-summary-row { font-size: 0.875rem; color: #888; margin-bottom: 0.4rem; }
-    .order-summary-row b { color: #f0f0f0; }
-    .order-success { text-align: center; padding: 1rem 0; }
-    .order-success-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .order-success h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
-    .order-success p { color: #888; font-size: 0.9rem; line-height: 1.6; }
-    @media (max-width: 768px) {
-      #order-popup { padding: 0; align-items: flex-end; }
-      .order-popup-box {
-        border-radius: 20px 20px 0 0;
-        max-height: 92vh;
-        padding: 1.5rem 1.25rem;
-      }
-    }
-  </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
-  <ul class="navbar-links">
+  <ul class="navbar-links" id="navbar-links">
     <li><a href="/portfolio.html">Портфоліо</a></li>
     <li><a href="/blog.html">Блог</a></li>
     <li><a href="#contacts">Контакти</a></li>
     <li><button class="btn-nav" data-open-order>Замовити сайт</button></li>
   </ul>
-  <button class="navbar-burger" aria-label="Меню">
-    <span></span><span></span><span></span>
+  <button class="navbar-burger" id="navbar-burger" aria-label="Меню" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
   </button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
   <div class="container hero-content">
     <div class="hero-badge">Доступний для нових проєктів</div>
     <h1 class="hero-title">
@@ -154,7 +58,7 @@
   </div>
 </section>
 
-<!-- PRO MENE -->
+<!-- ПРО МЕНЕ -->
 <section class="about-section">
   <div class="container">
     <div class="about-grid">
@@ -164,12 +68,21 @@
         <p>Розробляю веб-сайти для малого бізнесу — масажистів, кав'ярень, дизайнерів, майстрів нігтів та інших спеціалістів, яким потрібен якісний онлайн-образ.</p>
         <p>Моя мета — не просто гарний сайт, а інструмент який приносить клієнтів. Кожен проєкт починається з аналізу аудиторії та конкурентів.</p>
         <div class="about-stats">
-          <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Проєктів</div></div>
-          <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Задоволених</div></div>
-          <div class="stat"><div class="stat-num">7д</div><div class="stat-label">Середній строк</div></div>
+          <div class="stat">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Проєктів</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Задоволених</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">7д</div>
+            <div class="stat-label">Середній строк</div>
+          </div>
         </div>
       </div>
-      <div class="fade-in" style="animation-delay:0.2s">
+      <div class="fade-in">
         <div class="about-skills">
           <span class="skill-tag">HTML5</span>
           <span class="skill-tag">CSS3</span>
@@ -191,7 +104,7 @@
   </div>
 </section>
 
-<!-- PORTFOLIO PREVIEW -->
+<!-- ПОРТФОЛІО PREVIEW -->
 <section>
   <div class="container">
     <span class="section-label fade-in">Портфоліо</span>
@@ -205,7 +118,7 @@
   </div>
 </section>
 
-<!-- BLOG PREVIEW -->
+<!-- БЛОГ PREVIEW -->
 <section style="background:var(--color-bg-2)">
   <div class="container">
     <span class="section-label fade-in">Блог</span>
@@ -225,9 +138,7 @@
     <div class="cta-box fade-in">
       <h2>Готові замовити сайт?</h2>
       <p>Заповніть коротку форму — отримаєте технічне завдання протягом доби</p>
-      <button class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem" data-open-order>
-        Замовити зараз →
-      </button>
+      <button class="btn-primary" data-open-order>Замовити зараз →</button>
     </div>
   </div>
 </section>
@@ -237,7 +148,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="navbar-logo">zviry<span style="color:var(--color-accent)">ch</span>oleksandr</div>
+        <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
         <p>Розробляю сайти для малого бізнесу в Україні. Mobile-first, SEO-оптимізовані, швидкі.</p>
       </div>
       <div class="footer-col">
@@ -255,8 +166,12 @@
     <div class="footer-bottom">
       <span>© 2026 zvirycholeksandr. Всі права захищені.</span>
       <div class="footer-socials">
-        <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
-        <a href="https://github.com/oaleks262" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://t.me/zvirycholeksandr" data-contact="telegram" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://github.com/oaleks262" data-contact="github" target="_blank" rel="noopener">GitHub</a>
+        <a href="" data-contact="instagram" target="_blank" rel="noopener" style="display:none">Instagram</a>
+        <a href="" data-contact="linkedin" target="_blank" rel="noopener" style="display:none">LinkedIn</a>
+        <a href="" data-contact="email" rel="noopener" style="display:none"></a>
+        <a href="" data-contact="phone" rel="noopener" style="display:none"></a>
       </div>
     </div>
   </div>
@@ -275,10 +190,9 @@
       <div class="step-dot"></div>
       <div class="step-dot"></div>
     </div>
-
     <!-- Крок 1: Тип сайту -->
     <div class="order-step" data-step="1" style="display:block">
-      <p style="color:#888;margin-bottom:1.5rem;font-size:0.9rem">Оберіть тип сайту, який вам потрібен:</p>
+      <p style="color:#888;margin-bottom:1.25rem;font-size:0.9rem">Оберіть тип сайту, який вам потрібен:</p>
       <div class="site-type-cards">
         <div class="site-type-card" data-type="landing">
           <h3>🎯 Лендінг</h3>
@@ -297,7 +211,6 @@
         <button class="order-btn-primary" onclick="goToStep2()">Далі →</button>
       </div>
     </div>
-
     <!-- Крок 2: Форма -->
     <div class="order-step" data-step="2">
       <form id="order-form" onsubmit="return false">
@@ -308,28 +221,22 @@
         <button class="order-btn-primary" onclick="goToStep3()">Далі →</button>
       </div>
     </div>
-
     <!-- Крок 3: Підтвердження -->
     <div class="order-step" data-step="3">
       <p style="color:#888;margin-bottom:1rem;font-size:0.9rem">Перевірте дані перед відправкою:</p>
       <div class="order-summary" id="order-summary"></div>
       <div class="order-btn-row">
         <button class="order-btn-secondary" onclick="showStep(2)">← Назад</button>
-        <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">
-          Надіслати замовлення
-        </button>
+        <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">Надіслати замовлення</button>
       </div>
     </div>
-
     <!-- Крок 4: Успіх -->
     <div class="order-step" data-step="4">
       <div class="order-success">
         <div class="order-success-icon">🎉</div>
         <h3>Дякуємо за замовлення!</h3>
         <p>Ми отримали вашу заявку і зв'яжемося з вами протягом 24 годин для обговорення деталей.</p>
-        <button class="order-btn-primary" onclick="closeOrderPopup()" style="margin-top:1.5rem">
-          Закрити
-        </button>
+        <button class="order-btn-primary" onclick="closeOrderPopup()" style="margin-top:1.5rem">Закрити</button>
       </div>
     </div>
   </div>
@@ -337,33 +244,5 @@
 
 <script src="/js/order.js"></script>
 <script src="/js/main.js"></script>
-<script>
-// DEBUG: знайти елемент що виходить за межі екрану
-window.addEventListener('load', function() {
-  var vw = window.innerWidth;
-  var worst = null;
-  var worstRight = 0;
-  document.querySelectorAll('*').forEach(function(el) {
-    var r = el.getBoundingClientRect();
-    if (r.right > worstRight) {
-      worstRight = r.right;
-      worst = el;
-    }
-  });
-  if (worstRight > vw + 2) {
-    var dbg = document.createElement('div');
-    dbg.id = 'overflow-debug';
-    dbg.style.cssText = 'position:fixed;bottom:80px;left:0;right:0;background:#ef4444;color:#fff;padding:10px 16px;z-index:99999;font-size:11px;word-break:break-all;line-height:1.4;';
-    dbg.innerHTML = '⚠️ OVERFLOW +' + Math.round(worstRight - vw) + 'px<br>EL: ' + (worst.tagName) + ' class="' + (worst.className || '—') + '"<br>id="' + (worst.id || '—') + '"';
-    document.body.appendChild(dbg);
-  } else {
-    var dbg = document.createElement('div');
-    dbg.id = 'overflow-debug';
-    dbg.style.cssText = 'position:fixed;bottom:80px;left:0;right:0;background:#22c55e;color:#fff;padding:8px 16px;z-index:99999;font-size:11px;';
-    dbg.textContent = '✓ Overflow не знайдено (vw=' + vw + 'px)';
-    document.body.appendChild(dbg);
-  }
-});
-</script>
 </body>
 </html>

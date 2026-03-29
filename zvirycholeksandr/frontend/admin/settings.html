@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Налаштування — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 900px) { .settings-grid { grid-template-columns: 1fr; } }
+
+    .settings-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .settings-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--admin-text);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    /* Color picker row */
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .55rem 0;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .color-row:last-child { border-bottom: none; }
+    .color-row-label {
+      font-size: .85rem;
+      color: var(--admin-muted);
+    }
+    .color-row-right {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .color-picker {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--admin-border);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+    }
+    .color-hex {
+      width: 88px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: 6px;
+      color: var(--admin-text);
+      font-size: .8rem;
+      padding: .3rem .5rem;
+      font-family: monospace;
+    }
+    .color-hex:focus { outline: none; border-color: var(--admin-accent); }
+
+    /* Preview strip */
+    .color-preview {
+      height: 40px;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--preview-accent, #6c63ff), var(--preview-bg, #0a0a0a));
+      border: 1px solid var(--admin-border);
+      transition: background .3s;
+    }
+
+    /* Reset link */
+    .reset-link {
+      font-size: .78rem;
+      color: var(--admin-muted);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .reset-link:hover { color: var(--admin-danger); }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index.html">
+        <span class="nav-icon">📋</span> Замовлення
+      </a>
+      <a href="/admin/portfolio.html">
+        <span class="nav-icon">🖼️</span> Портфоліо
+      </a>
+      <a href="/admin/blog.html">
+        <span class="nav-icon">📝</span> Блог
+      </a>
+      <a href="/admin/settings.html" class="active">
+        <span class="nav-icon">⚙️</span> Налаштування
+      </a>
+      <a href="/" target="_blank">
+        <span class="nav-icon">🌐</span> Сайт
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Налаштування сайту</h1>
+      <p>Контакти, соцмережі та кольорова схема</p>
+    </div>
+
+    <div class="settings-grid">
+
+      <!-- CONTACTS -->
+      <div class="settings-card">
+        <h2>📬 Контакти та соцмережі</h2>
+        <form id="contacts-form">
+          <div class="form-group">
+            <label class="form-label">Telegram</label>
+            <input type="url" name="telegram" class="form-control" placeholder="https://t.me/username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GitHub</label>
+            <input type="url" name="github" class="form-control" placeholder="https://github.com/username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Instagram</label>
+            <input type="url" name="instagram" class="form-control" placeholder="https://instagram.com/username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LinkedIn</label>
+            <input type="url" name="linkedin" class="form-control" placeholder="https://linkedin.com/in/username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email_raw" class="form-control" placeholder="your@email.com">
+            <span style="font-size:.75rem;color:var(--admin-muted)">Відображатиметься у футері як посилання mailto:</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Телефон</label>
+            <input type="tel" name="phone_raw" class="form-control" placeholder="+380XXXXXXXXX">
+            <span style="font-size:.75rem;color:var(--admin-muted)">Відображатиметься як посилання tel:</span>
+          </div>
+          <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+            <button type="submit" class="btn btn-primary">Зберегти контакти</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- COLORS -->
+      <div class="settings-card">
+        <h2>🎨 Кольорова схема <span class="reset-link" onclick="resetColors()" style="margin-left:auto;font-size:.75rem">Скинути до стандарту</span></h2>
+
+        <div class="color-preview" id="color-preview"></div>
+
+        <div id="colors-list">
+          <!-- Генерується JS -->
+        </div>
+
+        <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+          <button class="btn btn-primary" onclick="saveColors()">Зберегти кольори</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+<script>
+const COLOR_DEFAULTS = {
+  accent:      '#6c63ff',
+  accentHover: '#5a52e0',
+  bg:          '#0a0a0a',
+  bg2:         '#111111',
+  bg3:         '#1a1a1a',
+  text:        '#f0f0f0',
+  textMuted:   '#888888',
+  border:      '#222222'
+};
+
+const COLOR_LABELS = {
+  accent:      'Акцент (кнопки, посилання)',
+  accentHover: 'Акцент при наведенні',
+  bg:          'Фон сторінки',
+  bg2:         'Фон секцій',
+  bg3:         'Фон карток / елементів',
+  text:        'Основний текст',
+  textMuted:   'Приглушений текст',
+  border:      'Колір рамок'
+};
+
+let currentColors = { ...COLOR_DEFAULTS };
+
+/* ---- build color rows ---- */
+function buildColorRows(colors) {
+  const list = document.getElementById('colors-list');
+  list.innerHTML = Object.entries(COLOR_LABELS).map(([key, label]) => `
+    <div class="color-row">
+      <span class="color-row-label">${label}</span>
+      <div class="color-row-right">
+        <input type="color" class="color-picker" id="cp-${key}"
+          value="${colors[key] || COLOR_DEFAULTS[key]}"
+          oninput="syncHex('${key}', this.value)">
+        <input type="text" class="color-hex" id="ch-${key}"
+          value="${colors[key] || COLOR_DEFAULTS[key]}"
+          maxlength="7"
+          oninput="syncPicker('${key}', this.value)">
+      </div>
+    </div>
+  `).join('');
+  updatePreview();
+}
+
+function syncHex(key, val) {
+  currentColors[key] = val;
+  const hex = document.getElementById('ch-' + key);
+  if (hex) hex.value = val;
+  updatePreview();
+}
+
+function syncPicker(key, val) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(val)) return;
+  currentColors[key] = val;
+  const picker = document.getElementById('cp-' + key);
+  if (picker) picker.value = val;
+  updatePreview();
+}
+
+function updatePreview() {
+  const el = document.getElementById('color-preview');
+  if (el) {
+    el.style.background = `linear-gradient(135deg, ${currentColors.accent || '#6c63ff'} 0%, ${currentColors.bg || '#0a0a0a'} 100%)`;
+  }
+}
+
+function resetColors() {
+  currentColors = { ...COLOR_DEFAULTS };
+  buildColorRows(currentColors);
+}
+
+async function saveColors() {
+  const res = await apiRequest('/settings', {
+    method: 'PUT',
+    body: JSON.stringify({ colors: currentColors })
+  });
+  if (res?.ok) showToast('Кольори збережено — оновіть сторінку сайту');
+  else showToast('Помилка збереження', 'error');
+}
+
+/* ---- contacts form ---- */
+async function loadSettings() {
+  requireAuth();
+  try {
+    const res = await fetch('/api/settings');
+    const s = await res.json();
+
+    // Fill contacts
+    const f = document.getElementById('contacts-form');
+    if (f && s.contacts) {
+      f.telegram.value  = s.contacts.telegram  || '';
+      f.github.value    = s.contacts.github     || '';
+      f.instagram.value = s.contacts.instagram  || '';
+      f.linkedin.value  = s.contacts.linkedin   || '';
+      f.email_raw.value = (s.contacts.email  || '').replace('mailto:', '');
+      f.phone_raw.value = (s.contacts.phone  || '').replace('tel:', '');
+    }
+
+    // Fill colors
+    if (s.colors) currentColors = { ...COLOR_DEFAULTS, ...s.colors };
+    buildColorRows(currentColors);
+  } catch {
+    showToast('Помилка завантаження налаштувань', 'error');
+  }
+}
+
+document.getElementById('contacts-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target;
+  const contacts = {
+    telegram:  f.telegram.value.trim(),
+    github:    f.github.value.trim(),
+    instagram: f.instagram.value.trim(),
+    linkedin:  f.linkedin.value.trim(),
+    email:     f.email_raw.value.trim() ? 'mailto:' + f.email_raw.value.trim() : '',
+    phone:     f.phone_raw.value.trim() ? 'tel:'    + f.phone_raw.value.trim() : ''
+  };
+  const res = await apiRequest('/settings', {
+    method: 'PUT',
+    body: JSON.stringify({ contacts })
+  });
+  if (res?.ok) showToast('Контакти збережено');
+  else showToast('Помилка збереження', 'error');
+});
+
+loadSettings();
+</script>
+</body>
+</html>
