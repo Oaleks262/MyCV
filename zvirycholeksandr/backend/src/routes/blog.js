@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 15 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedMime = /image\/(jpeg|jpg|png|webp|gif)/;
     const allowedExt  = /\.(jpe?g|png|webp|gif)$/i;
@@ -47,8 +47,18 @@ router.get('/:slug', (req, res) => {
   res.json(post);
 });
 
+function handleUpload(req, res, next) {
+  upload.single('cover')(req, res, err => {
+    if (!err) return next();
+    const msg = err.code === 'LIMIT_FILE_SIZE'
+      ? 'Файл завеликий. Максимальний розмір — 15 МБ.'
+      : err.message;
+    res.status(400).json({ error: msg });
+  });
+}
+
 // POST /api/blog — створити статтю
-router.post('/', auth, upload.single('cover'), (req, res) => {
+router.post('/', auth, handleUpload, (req, res) => {
   try {
     const data = req.body.data ? JSON.parse(req.body.data) : req.body;
     const coverUrl = req.file ? `/uploads/blog/${req.file.filename}` : '';
@@ -65,7 +75,7 @@ router.post('/', auth, upload.single('cover'), (req, res) => {
 });
 
 // PATCH /api/blog/:id
-router.patch('/:id', auth, upload.single('cover'), (req, res) => {
+router.patch('/:id', auth, handleUpload, (req, res) => {
   try {
     const updates = req.body.data ? JSON.parse(req.body.data) : req.body;
     if (req.file) updates.coverUrl = `/uploads/blog/${req.file.filename}`;

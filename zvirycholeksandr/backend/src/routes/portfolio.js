@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 15 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedMime = /image\/(jpeg|jpg|png|webp|gif)/;
     const allowedExt  = /\.(jpe?g|png|webp|gif)$/i;
@@ -48,8 +48,18 @@ router.get('/:id', (req, res) => {
   res.json(item);
 });
 
+function handleUpload(req, res, next) {
+  upload.single('screenshot')(req, res, err => {
+    if (!err) return next();
+    const msg = err.code === 'LIMIT_FILE_SIZE'
+      ? 'Файл завеликий. Максимальний розмір — 15 МБ.'
+      : err.message;
+    res.status(400).json({ error: msg });
+  });
+}
+
 // POST /api/portfolio — додати роботу
-router.post('/', auth, upload.single('screenshot'), (req, res) => {
+router.post('/', auth, handleUpload, (req, res) => {
   try {
     const data = req.body.data ? JSON.parse(req.body.data) : req.body;
     const screenshotUrl = req.file ? `/uploads/portfolio/${req.file.filename}` : '';
@@ -61,7 +71,7 @@ router.post('/', auth, upload.single('screenshot'), (req, res) => {
 });
 
 // PATCH /api/portfolio/:id
-router.patch('/:id', auth, upload.single('screenshot'), (req, res) => {
+router.patch('/:id', auth, handleUpload, (req, res) => {
   try {
     const updates = req.body.data ? JSON.parse(req.body.data) : req.body;
     if (req.file) updates.screenshotUrl = `/uploads/portfolio/${req.file.filename}`;
