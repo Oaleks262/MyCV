@@ -103,7 +103,7 @@ async function generatePrompt(siteType, formData) {
   const structure = SITE_STRUCTURES[siteType] || SITE_STRUCTURES.landing;
 
   const response = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: 'gpt-3.5-turbo',
     max_tokens: 4000,
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
