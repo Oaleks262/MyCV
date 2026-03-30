@@ -209,7 +209,7 @@ async function loadAdminPortfolio() {
       return;
     }
 
-    tbody.innerHTML = items.map(item => `
+    tbody.innerHTML = items.map((item, idx) => `
       <tr>
         <td>${item.screenshotUrl ? `<img src="${item.screenshotUrl}" style="width:60px;height:40px;object-fit:cover;border-radius:4px">` : '—'}</td>
         <td>${item.title}</td>
@@ -221,6 +221,8 @@ async function loadAdminPortfolio() {
           </label>
         </td>
         <td>
+          <button class="btn btn-secondary btn-sm" onclick="movePortfolioItem('${item.id}', 'up')" ${idx === 0 ? 'disabled' : ''} title="Вище">↑</button>
+          <button class="btn btn-secondary btn-sm" onclick="movePortfolioItem('${item.id}', 'down')" ${idx === items.length - 1 ? 'disabled' : ''} title="Нижче">↓</button>
           <button class="btn btn-secondary btn-sm" onclick="editPortfolioItem('${item.id}')">Редагувати</button>
           <button class="btn btn-danger btn-sm" onclick="deletePortfolioItem('${item.id}')">✕</button>
         </td>
@@ -242,6 +244,30 @@ async function togglePortfolioVisible(id, val) {
   } else {
     showToast('Помилка оновлення', 'error');
   }
+}
+
+async function movePortfolioItem(id, direction) {
+  const res = await apiRequest('/portfolio/all');
+  if (!res) return;
+  const items = await res.json(); // вже відсортовані по sortOrder
+
+  const idx = items.findIndex(i => i.id === id);
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= items.length) return;
+
+  // Міняємо місцями і призначаємо нові порядкові номери
+  await Promise.all([
+    apiRequest(`/portfolio/${items[idx].id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ sortOrder: swapIdx })
+    }),
+    apiRequest(`/portfolio/${items[swapIdx].id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ sortOrder: idx })
+    })
+  ]);
+
+  loadAdminPortfolio();
 }
 
 async function deletePortfolioItem(id) {
