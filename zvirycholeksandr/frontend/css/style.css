@@ -259,12 +259,14 @@ section {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--color-bg);
+  background: #07070f;
+  border-top: 1px solid var(--color-border);
   padding: 2rem 1.25rem;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 1000;
+  font-size: 1.1rem;
 }
 
 .btn-nav {
