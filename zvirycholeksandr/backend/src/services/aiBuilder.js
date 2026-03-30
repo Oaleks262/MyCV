@@ -1,5 +1,5 @@
-const Anthropic = require('@anthropic-ai/sdk');
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const OpenAI = require('openai');
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const QUALITY_STANDARDS = `
 UNIVERSAL QUALITY STANDARDS (apply to every site regardless of niche):
@@ -102,19 +102,21 @@ async function generatePrompt(siteType, formData) {
   const slug = buildSlug(formData.name || formData.cafeName);
   const structure = SITE_STRUCTURES[siteType] || SITE_STRUCTURES.landing;
 
-  const response = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
+  const response = await client.chat.completions.create({
+    model: 'gpt-4o-mini',
     max_tokens: 4000,
-    system: SYSTEM_PROMPT,
-    messages: [{
-      role: 'user',
-      content: `${structure}\n\nCLIENT DATA:\nslug: ${slug}\n${
-        Object.entries(formData).map(([k, v]) => `${k}: ${v}`).join('\n')
-      }\n\nGenerate the complete Claude Code prompt. All text in Ukrainian.`
-    }]
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      {
+        role: 'user',
+        content: `${structure}\n\nCLIENT DATA:\nslug: ${slug}\n${
+          Object.entries(formData).map(([k, v]) => `${k}: ${v}`).join('\n')
+        }\n\nGenerate the complete Claude Code prompt. All text in Ukrainian.`
+      }
+    ]
   });
 
-  return response.content[0].text.trim();
+  return response.choices[0].message.content.trim();
 }
 
 module.exports = { generatePrompt };
