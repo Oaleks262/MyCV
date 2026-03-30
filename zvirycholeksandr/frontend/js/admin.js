@@ -71,6 +71,30 @@ loginForm?.addEventListener('submit', async e => {
   }
 });
 
+/* ===== MOBILE SIDEBAR TOGGLE ===== */
+(function () {
+  const burger  = document.getElementById('admin-burger');
+  const sidebar = document.querySelector('.admin-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  function closeSidebar() {
+    sidebar?.classList.remove('open');
+    overlay?.classList.remove('active');
+  }
+
+  burger?.addEventListener('click', () => {
+    sidebar?.classList.toggle('open');
+    overlay?.classList.toggle('active');
+  });
+
+  overlay?.addEventListener('click', closeSidebar);
+
+  // Закрити при кліку на пункт меню
+  sidebar?.querySelectorAll('.sidebar-nav a').forEach(a => {
+    a.addEventListener('click', closeSidebar);
+  });
+})();
+
 /* ===== LOGOUT ===== */
 document.getElementById('logout-btn')?.addEventListener('click', () => {
   removeToken();
