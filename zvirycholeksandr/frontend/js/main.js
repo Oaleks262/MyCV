@@ -227,18 +227,18 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
   let tx = -600, ty = -600, sx = -600, sy = -600;
+  let clicking = false;
 
   document.addEventListener('mousemove', e => {
     tx = e.clientX; ty = e.clientY;
-    dot.style.left = tx + 'px';
-    dot.style.top  = ty + 'px';
+    const scale = clicking ? ' scale(0.4)' : '';
+    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%))${scale}`;
   });
 
   (function lerpSpot() {
     sx += (tx - sx) * 0.07;
     sy += (ty - sy) * 0.07;
-    spot.style.left = sx + 'px';
-    spot.style.top  = sy + 'px';
+    spot.style.transform = `translate(calc(${sx}px - 50%), calc(${sy}px - 50%))`;
     requestAnimationFrame(lerpSpot);
   })();
 
@@ -250,6 +250,12 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
   });
 
-  document.addEventListener('mousedown', () => dot.classList.add('is-clicking'));
-  document.addEventListener('mouseup',   () => dot.classList.remove('is-clicking'));
+  document.addEventListener('mousedown', () => {
+    clicking = true;
+    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%)) scale(0.4)`;
+  });
+  document.addEventListener('mouseup', () => {
+    clicking = false;
+    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%))`;
+  });
 })();

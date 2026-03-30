@@ -67,6 +67,8 @@
 
   .cursor-spot {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 420px;
     height: 420px;
     background: radial-gradient(circle, rgba(108,99,255,0.13) 0%, rgba(108,99,255,0.04) 45%, transparent 70%);
@@ -75,7 +77,7 @@
     z-index: 9990;
     transform: translate(-50%, -50%);
     transition: width 0.4s ease, height 0.4s ease, background 0.4s ease;
-    will-change: left, top;
+    will-change: transform;
   }
 
   .cursor-spot.is-hovering {
@@ -86,6 +88,8 @@
 
   .cursor-dot {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 6px;
     height: 6px;
     background: rgba(255,255,255,0.9);
@@ -95,7 +99,7 @@
     transform: translate(-50%, -50%);
     transition: transform 0.08s, opacity 0.2s;
     box-shadow: 0 0 8px rgba(255,255,255,0.7), 0 0 3px rgba(108,99,255,0.8);
-    will-change: left, top;
+    will-change: transform;
   }
 
   .cursor-dot.is-clicking {
