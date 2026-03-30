@@ -93,6 +93,20 @@ document.querySelectorAll('.site-type-card').forEach(card => {
   });
 });
 
+function phoneMask(e) {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.startsWith('380')) v = v.slice(3);
+  else if (v.startsWith('38')) v = v.slice(2);
+  else if (v.startsWith('0')) v = v.slice(1);
+  v = v.slice(0, 9);
+  let out = '+380';
+  if (v.length > 0) out += ' ' + v.slice(0, 2);
+  if (v.length > 2) out += ' ' + v.slice(2, 5);
+  if (v.length > 5) out += ' ' + v.slice(5, 7);
+  if (v.length > 7) out += ' ' + v.slice(7, 9);
+  e.target.value = out;
+}
+
 function goToStep2() {
   if (!selectedType) {
     alert('Оберіть тип сайту');
@@ -100,6 +114,9 @@ function goToStep2() {
   }
   buildStep2Form();
   showStep(2);
+  // Підключаємо маску до поля телефону
+  document.querySelector('#order-form input[type="tel"]')
+    ?.addEventListener('input', phoneMask);
 }
 
 // Крок 2: динамічна форма
@@ -131,7 +148,12 @@ function buildStep2Form() {
     return `
       <div class="order-field">
         <label class="order-label">${field.label}</label>
-        <input type="${field.type}" name="${field.name}" class="order-input" ${field.required ? 'required' : ''}>
+        <input type="${field.type}" name="${field.name}" class="order-input"
+          ${field.required ? 'required' : ''}
+          ${field.type === 'tel'   ? 'placeholder="+380 XX XXX XX XX"' : ''}
+          ${field.type === 'email' ? 'placeholder="example@gmail.com"' : ''}
+          ${field.type === 'url'   ? 'placeholder="https://example.com"' : ''}
+        >
       </div>`;
   }).join('');
 }
