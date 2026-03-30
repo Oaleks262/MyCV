@@ -12,6 +12,12 @@ router.post('/submit', async (req, res) => {
   if (!formData?.name || !formData?.email || !formData?.phone) {
     return res.status(400).json({ error: 'Заповніть обовʼязкові поля' });
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email)) {
+    return res.status(400).json({ error: 'Невірний формат email' });
+  }
+  if (!/^[\+]?[\d\s\-\(\)]{7,15}$/.test(formData.phone)) {
+    return res.status(400).json({ error: 'Невірний формат телефону' });
+  }
 
   const order = orders.insert({ siteType, formData, status: 'new' });
 

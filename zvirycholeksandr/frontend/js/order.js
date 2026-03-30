@@ -136,22 +136,42 @@ function buildStep2Form() {
   }).join('');
 }
 
+function validateField(field) {
+  const val = field.value.trim();
+  if (!val && field.required) return 'Обовʼязкове поле';
+  if (field.type === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val))
+    return 'Невірний формат email';
+  if (field.type === 'tel' && val && !/^[\+]?[\d\s\-\(\)]{7,15}$/.test(val))
+    return 'Невірний формат телефону';
+  return null;
+}
+
 function goToStep3() {
   const form = document.getElementById('order-form');
-  const requiredFields = form?.querySelectorAll('[required]');
+  const requiredFields = form?.querySelectorAll('[required], [type="email"], [type="tel"]');
   let valid = true;
+  let firstError = null;
 
   requiredFields?.forEach(field => {
-    if (!field.value.trim()) {
+    // Remove old error hint
+    field.nextElementSibling?.classList.contains('field-error') && field.nextElementSibling.remove();
+
+    const err = validateField(field);
+    if (err) {
       field.classList.add('error');
+      const hint = document.createElement('span');
+      hint.className = 'field-error';
+      hint.textContent = err;
+      field.after(hint);
       valid = false;
+      if (!firstError) firstError = field;
     } else {
       field.classList.remove('error');
     }
   });
 
   if (!valid) {
-    alert('Заповніть усі обовʼязкові поля');
+    firstError?.focus();
     return;
   }
 
