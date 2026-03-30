@@ -8,9 +8,28 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 1995;
 
-app.use(helmet());
+// Helmet без CSP і HSTS — сайт поки без SSL/домену
+app.use(helmet({
+  contentSecurityPolicy: false,   // вимикаємо CSP (upgrade-insecure-requests ламав CSS)
+  hsts: false,                    // вимикаємо HSTS (Safari блокував HTTP після першого відвіду)
+}));
+
 app.use(cors({
-  origin: ['https://zvirycholeksandr.com', 'http://localhost:3000', 'http://localhost:1995']
+  origin: function(origin, callback) {
+    // Дозволяємо: домен, localhost, прямий IP-доступ і відсутність origin (мобільні)
+    const allowed = [
+      'https://zvirycholeksandr.com',
+      'http://zvirycholeksandr.com',
+      'http://localhost:3000',
+      'http://localhost:1995',
+    ];
+    if (!origin || allowed.includes(origin) || /^http:\/\/78\.27\.236\.157/.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // тимчасово дозволяємо всі origin до підключення домену
+    }
+  },
+  credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
 
