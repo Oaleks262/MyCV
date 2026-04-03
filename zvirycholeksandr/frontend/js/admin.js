@@ -8,7 +8,7 @@ function removeToken() { localStorage.removeItem('admin_token'); }
 
 function requireAuth() {
   if (!getToken()) {
-    window.location.href = '/admin/login.html';
+    window.location.href = '/admin/login';
   }
 }
 
@@ -24,7 +24,7 @@ async function apiRequest(path, opts = {}) {
   });
   if (res.status === 401) {
     removeToken();
-    window.location.href = '/admin/login.html';
+    window.location.href = '/admin/login';
     return null;
   }
   return res;
@@ -63,7 +63,7 @@ loginForm?.addEventListener('submit', async e => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Помилка');
     setToken(data.token);
-    window.location.href = '/admin/index.html';
+    window.location.href = '/admin/index';
   } catch (err) {
     document.getElementById('login-error').textContent = err.message;
     btn.disabled = false;
@@ -98,7 +98,7 @@ loginForm?.addEventListener('submit', async e => {
 /* ===== LOGOUT ===== */
 document.getElementById('logout-btn')?.addEventListener('click', () => {
   removeToken();
-  window.location.href = '/admin/login.html';
+  window.location.href = '/admin/login';
 });
 
 /* ===== ORDERS LIST PAGE ===== */
@@ -134,7 +134,7 @@ async function loadOrders() {
         <td>${siteTypeLabel(order.siteType)}</td>
         <td><span class="badge badge-${order.status}">${statusLabel(order.status)}</span></td>
         <td>
-          <a href="/admin/order.html?id=${order.id}" class="btn btn-secondary btn-sm">Відкрити</a>
+          <a href="/admin/order?id=${order.id}" class="btn btn-secondary btn-sm">Відкрити</a>
           <button class="btn btn-danger btn-sm" onclick="deleteOrder('${order.id}')">✕</button>
         </td>
       </tr>
@@ -214,7 +214,7 @@ async function deleteOrderDetail() {
   if (!confirm('Видалити замовлення? Цю дію не можна скасувати.')) return;
   const id = new URLSearchParams(window.location.search).get('id');
   await apiRequest(`/admin/orders/${id}`, { method: 'DELETE' });
-  window.location.href = '/admin/index.html';
+  window.location.href = '/admin/index';
 }
 
 /* ===== PORTFOLIO ADMIN ===== */

@@ -28,7 +28,7 @@ function renderBlog(posts) {
   noResults?.classList.remove('visible');
 
   grid.innerHTML = posts.map(post => `
-    <a href="/blog-post.html?slug=${post.slug}" class="blog-card fade-in">
+    <a href="/blog-post?slug=${post.slug}" class="blog-card fade-in">
       ${post.coverUrl
         ? `<img class="blog-card-cover" src="${post.coverUrl}" alt="${post.title}" loading="lazy">`
         : `<div class="blog-card-cover-placeholder">📝</div>`

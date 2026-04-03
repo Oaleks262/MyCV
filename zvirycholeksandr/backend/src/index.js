@@ -52,8 +52,10 @@ app.use('/api/admin', require('./routes/admin'));
 // Статичні файли — завантажені зображення
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Фронтенд
-app.use(express.static(path.join(__dirname, '../../frontend')));
+// Фронтенд — extensions дозволяє відкривати сторінки без .html
+app.use(express.static(path.join(__dirname, '../../frontend'), {
+  extensions: ['html'],
+}));
 
 // Fallback для SPA (blog-post)
 app.get('/blog/:slug', (req, res) => {
