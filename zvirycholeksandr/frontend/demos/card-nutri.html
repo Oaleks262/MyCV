@@ -3,218 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Аліна Дорош · Нутриціолог · Онлайн</title>
+  <title>Аліна Дорош · Нутриціолог</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f5f9f4;
-      --bg2: #eaf3e8;
-      --text: #1a2418;
-      --text-muted: #5a7254;
-      --accent: #3d7a35;
-      --accent-dark: #2e5e28;
-      --accent-light: rgba(61,122,53,0.1);
-      --border: #cde0ca;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f4f9f2;--bg2:#e8f3e4;--bg3:#daecd5;
+      --text:#141e12;--muted:#5a7050;--accent:#2e7d32;--accent2:#4caf50;--accent3:#81c784;
+      --border:#c5e0c0;--white:#fff;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    a { color: inherit; text-decoration: none; }
-    section { padding: 4.5rem 1.25rem; }
-    .container { max-width: 680px; margin: 0 auto; }
-    .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: block; }
-    h2 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.2; }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    section{padding:5rem 1.5rem}
+    .container{max-width:680px;margin:0 auto}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;padding:0.9rem 1.5rem;display:flex;justify-content:space-between;align-items:center;z-index:100;background:rgba(244,249,242,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--accent)}
+    .nav-btn{background:var(--accent);color:#fff;padding:0.45rem 1.1rem;border-radius:20px;font-size:0.78rem;font-weight:500}
 
     /* HERO */
-    .hero {
-      background: var(--bg2); min-height: 90vh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 5.5rem 1.25rem 4rem;
+    .hero{
+      min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+      padding:7rem 1.5rem 4rem;
+      background:radial-gradient(ellipse 100% 80% at 80% 20%,rgba(76,175,80,0.12),transparent),var(--bg2);
+      position:relative;overflow:hidden;
     }
-    .hero-inner { max-width: 680px; margin: 0 auto; }
-    .hero-chip {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.78rem; color: var(--accent); border: 1px solid var(--border);
-      border-radius: 20px; padding: 0.35rem 0.85rem; margin-bottom: 1.5rem;
+    .hero-leaf{
+      position:absolute;right:-60px;top:-60px;width:280px;height:280px;
+      background:radial-gradient(circle,rgba(46,125,50,0.08),transparent 70%);
+      border-radius:50%;
     }
-    h1 {
-      font-family: 'Fraunces', serif;
-      font-size: clamp(2.3rem, 8vw, 3.2rem);
-      line-height: 1.15; margin-bottom: 1.25rem;
-    }
-    h1 em { font-style: italic; color: var(--accent); }
-    .hero-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.75; margin-bottom: 2rem; }
-    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-    .btn-primary {
-      background: var(--accent); color: #fff;
-      padding: 0.9rem 1.75rem; border-radius: 6px;
-      font-size: 0.9rem; font-weight: 600; border: none;
-      cursor: pointer; font-family: inherit; transition: background 0.2s;
-    }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-outline {
-      border: 1px solid var(--border); color: var(--text-muted);
-      padding: 0.9rem 1.5rem; border-radius: 6px; font-size: 0.9rem;
-      background: none; cursor: pointer; font-family: inherit; transition: all 0.2s;
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-    .fact-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .fact { }
-    .fact-num { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--accent); }
-    .fact-lbl { font-size: 0.75rem; color: var(--text-muted); }
+    .hero-leaf2{position:absolute;left:-80px;bottom:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(76,175,80,0.06),transparent 70%);border-radius:50%}
+    .hero-inner{max-width:660px;margin:0 auto;position:relative}
+    .hero-chip{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(46,125,50,0.1);border:1px solid rgba(46,125,50,0.2);border-radius:20px;padding:0.35rem 0.9rem;font-size:0.72rem;color:var(--accent);margin-bottom:1.75rem;font-weight:500}
+    .hero-chip::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%}
+    .hero-title{font-family:'Fraunces',serif;font-size:clamp(2.6rem,9vw,4rem);font-weight:300;line-height:1.1;margin-bottom:1.25rem}
+    .hero-title em{font-style:italic;color:var(--accent)}
+    .hero-desc{font-size:1rem;color:var(--muted);line-height:1.8;max-width:460px;font-weight:300;margin-bottom:2.5rem}
+    .hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:3rem}
+    .btn-primary{background:var(--accent);color:#fff;padding:1rem 1.75rem;border-radius:8px;font-size:0.9rem;font-weight:500;border:none;cursor:pointer;font-family:inherit;transition:all 0.25s;box-shadow:0 4px 16px rgba(46,125,50,0.3)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,125,50,0.35)}
+    .btn-soft{background:var(--white);border:1px solid var(--border);color:var(--muted);padding:1rem 1.5rem;border-radius:8px;font-size:0.9rem;cursor:pointer;font-family:inherit;transition:all 0.2s}
+    .btn-soft:hover{border-color:var(--accent);color:var(--accent)}
+    .hero-nums{display:flex;gap:2rem;flex-wrap:wrap;padding-top:2rem;border-top:1px solid var(--border)}
+    .h-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:400;color:var(--accent);line-height:1}
+    .h-lbl{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
 
-    /* RESULTS */
-    .results-section { background: var(--bg); }
-    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.75rem; }
-    .result-card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1.1rem;
-    }
-    .result-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .result-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.25rem; }
-    .result-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+    /* PROBLEM SECTION */
+    .problem-section{background:var(--white)}
+    .s-eyebrow{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;font-weight:600}
+    .s-title{font-family:'Fraunces',serif;font-size:clamp(1.8rem,6vw,2.6rem);font-weight:300;line-height:1.15;margin-bottom:1.5rem}
+    .s-title em{font-style:italic;color:var(--accent)}
+    .myths-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.5rem}
+    .myth-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem}
+    .myth-icon{font-size:1.5rem;margin-bottom:0.4rem}
+    .myth-title{font-weight:600;font-size:0.85rem;margin-bottom:0.3rem}
+    .myth-desc{font-size:0.76rem;color:var(--muted);line-height:1.55}
 
-    /* ПРОГРАМИ */
-    .programs-section { background: var(--bg2); }
-    .programs-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.75rem; }
-    .program-card {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1.25rem 1.5rem;
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
-    }
-    .program-card.featured { border-color: var(--accent); background: var(--accent-light); }
-    .program-badge {
-      font-size: 0.65rem; background: var(--accent); color: #fff;
-      padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 600;
-      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; display: inline-block;
-    }
-    .program-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
-    .program-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
-    .program-duration { font-size: 0.75rem; color: var(--accent); margin-top: 0.4rem; }
-    .program-price { font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--accent); white-space: nowrap; font-weight: 600; }
+    /* PROGRAMS */
+    .programs-bg{background:var(--bg2)}
+    .prog-list{display:flex;flex-direction:column;gap:0.75rem;margin-top:1.5rem}
+    .prog-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;position:relative;transition:all 0.2s}
+    .prog-card.featured{border-color:var(--accent);background:linear-gradient(135deg,rgba(46,125,50,0.04),var(--white))}
+    .prog-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,125,50,0.1)}
+    .prog-badge{position:absolute;top:-10px;left:1.5rem;background:var(--accent);color:#fff;font-size:0.65rem;padding:0.2rem 0.6rem;border-radius:20px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
+    .prog-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;gap:1rem}
+    .prog-name{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:400}
+    .prog-price{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--accent);white-space:nowrap}
+    .prog-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:0.75rem}
+    .prog-features{list-style:none;display:flex;flex-direction:column;gap:0.3rem}
+    .prog-features li{font-size:0.78rem;color:var(--muted);padding-left:1.25rem;position:relative}
+    .prog-features li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:600}
+    .prog-dur{font-size:0.72rem;color:var(--accent);margin-top:0.6rem;font-weight:500}
 
-    /* ПРО МЕНЕ */
-    .about-section { background: var(--bg); }
-    .about-inner { display: flex; flex-direction: column; gap: 1.75rem; }
-    .about-avatar {
-      width: 100px; height: 100px; border-radius: 50%;
-      background: var(--bg2); border: 3px solid var(--border);
-      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
-    }
-    .about-text p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.75; margin-bottom: 0.85rem; }
-    .cert-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-    .cert { font-size: 0.72rem; border: 1px solid var(--border); color: var(--text-muted); padding: 0.25rem 0.6rem; border-radius: 4px; }
+    /* ABOUT */
+    .about-inner{display:flex;flex-direction:column;gap:2rem}
+    .about-visual{background:var(--bg2);border-radius:16px;border:2px solid var(--border);aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;font-size:5rem;overflow:hidden;position:relative}
+    .about-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(46,125,50,0.1),transparent)}
+    .about-text p{color:var(--muted);font-size:0.9rem;line-height:1.8;margin-bottom:1rem;font-weight:300}
+    .cert-wrap{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem}
+    .cert{font-size:0.72rem;background:var(--bg2);border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.65rem;border-radius:6px}
 
-    /* ВІДГУКИ */
-    .reviews-section { background: var(--bg2); }
-    .review-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.75rem; }
-    .review-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
-    .review-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; font-style: italic; margin-bottom: 0.75rem; }
-    .review-meta { display: flex; align-items: center; gap: 0.75rem; }
-    .review-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-    .review-name { font-size: 0.82rem; font-weight: 600; }
-    .review-result { font-size: 0.72rem; color: var(--accent); }
+    /* REVIEWS */
+    .reviews-bg{background:var(--bg2)}
+    .review-list{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem}
+    .review{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+    .review-stars{color:#f59e0b;font-size:0.85rem;margin-bottom:0.75rem}
+    .review-text{font-size:0.88rem;color:var(--muted);line-height:1.75;font-style:italic;margin-bottom:1rem}
+    .review-meta{display:flex;align-items:center;gap:0.75rem}
+    .r-avatar{width:36px;height:36px;border-radius:50%;background:var(--bg2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .r-name{font-weight:600;font-size:0.82rem}
+    .r-result{font-size:0.7rem;color:var(--accent);margin-top:0.15rem}
 
     /* CTA */
-    .cta-section { background: var(--accent); color: #fff; text-align: center; padding: 4.5rem 1.25rem; }
-    .cta-section h2 { color: #fff; }
-    .cta-section p { opacity: 0.85; margin: 0.75rem 0 2rem; }
-    .btn-white { background: #fff; color: var(--accent); padding: 0.9rem 2rem; border-radius: 6px; font-size: 0.9rem; font-weight: 700; display: inline-block; margin: 0.25rem; }
-    .btn-white-out { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 0.9rem 1.5rem; border-radius: 6px; font-size: 0.9rem; display: inline-block; margin: 0.25rem; }
+    .cta-section{background:linear-gradient(135deg,var(--accent),#43a047);padding:5rem 1.5rem;text-align:center}
+    .cta-title{font-family:'Fraunces',serif;font-size:clamp(2rem,7vw,3rem);font-weight:300;color:#fff;margin-bottom:0.75rem;line-height:1.15}
+    .cta-title em{font-style:italic}
+    .cta-desc{color:rgba(255,255,255,0.82);font-size:0.95rem;line-height:1.65;margin-bottom:0.75rem}
+    .free-tag{display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-size:0.72rem;padding:0.25rem 0.75rem;border-radius:20px;margin-bottom:2rem}
+    .cta-actions{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap}
+    .btn-white{background:#fff;color:var(--accent);padding:0.95rem 2rem;border-radius:8px;font-size:0.9rem;font-weight:600;display:inline-block;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+    .btn-ghost{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:0.95rem 1.75rem;border-radius:8px;font-size:0.9rem;display:inline-block}
 
-    footer { text-align: center; padding: 1.5rem; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+    footer{background:var(--text);color:rgba(255,255,255,0.4);text-align:center;padding:1.5rem;font-size:0.75rem}
 
-    .demo-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--text); color: rgba(255,255,255,0.6);
-      text-align: center; padding: 0.6rem 1rem; font-size: 0.75rem;
-      z-index: 999; display: flex; justify-content: center; align-items: center; gap: 1rem;
-    }
-    .demo-bar a { background: var(--accent); color: #fff; padding: 0.3rem 0.9rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .demo-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(20,30,18,0.92);backdrop-filter:blur(8px);color:rgba(255,255,255,0.5);text-align:center;padding:0.6rem 1rem;font-size:0.72rem;z-index:999;display:flex;justify-content:center;align-items:center;gap:1rem}
+    .demo-bar a{background:var(--accent2);color:#fff;padding:0.3rem 1rem;border-radius:4px;font-size:0.72rem;font-weight:600}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
   </style>
 </head>
 <body>
 
-<!-- HERO -->
+<nav class="nav">
+  <div class="nav-logo">Аліна Дорош</div>
+  <a href="#cta" class="nav-btn">Консультація</a>
+</nav>
+
 <section class="hero">
+  <div class="hero-leaf"></div><div class="hero-leaf2"></div>
   <div class="hero-inner">
-    <span class="hero-chip">🟢 Приймаю клієнтів · Онлайн</span>
-    <h1>Їжа, яка <em>лікує</em>,<br>а не обмежує</h1>
-    <p class="hero-desc">Допомагаю нормалізувати вагу, покращити самопочуття і налагодити стосунки з їжею. Без жорстких дієт — через розуміння свого тіла.</p>
+    <div class="hero-chip">🟢 Приймаю клієнтів · Онлайн</div>
+    <h1 class="hero-title">Їжа, що <em>живить</em>,<br>а не обмежує</h1>
+    <p class="hero-desc">Допомагаю нормалізувати вагу і покращити самопочуття — без жорстких дієт, заборон і зривів. Через розуміння власного тіла.</p>
     <div class="hero-actions">
       <button class="btn-primary" onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">Обрати програму</button>
-      <button class="btn-outline" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Безкоштовна консультація</button>
+      <button class="btn-soft" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Безкоштовна консультація</button>
     </div>
-    <div class="fact-row">
-      <div class="fact"><div class="fact-num">250+</div><div class="fact-lbl">Клієнтів</div></div>
-      <div class="fact"><div class="fact-num">3 роки</div><div class="fact-lbl">Практики</div></div>
-      <div class="fact"><div class="fact-num">96%</div><div class="fact-lbl">Досягають мети</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- РЕЗУЛЬТАТИ -->
-<section class="results-section">
-  <div class="container">
-    <span class="label">Результати</span>
-    <h2>Що зміниться</h2>
-    <div class="results-grid">
-      <div class="result-card"><div class="result-icon">⚖️</div><div class="result-title">Нормальна вага</div><div class="result-desc">Без повернення кілограмів після закінчення</div></div>
-      <div class="result-card"><div class="result-icon">⚡</div><div class="result-title">Більше енергії</div><div class="result-desc">Перестанете відчувати втому після їжі</div></div>
-      <div class="result-card"><div class="result-icon">😴</div><div class="result-title">Кращий сон</div><div class="result-desc">Харчування безпосередньо впливає на якість сну</div></div>
-      <div class="result-card"><div class="result-icon">🧠</div><div class="result-title">Стосунки з їжею</div><div class="result-desc">Без заборон, без зривів, без вини</div></div>
+    <div class="hero-nums">
+      <div><div class="h-num">250+</div><div class="h-lbl">Клієнтів</div></div>
+      <div><div class="h-num">3 роки</div><div class="h-lbl">Практики</div></div>
+      <div><div class="h-num">96%</div><div class="h-lbl">Досягають мети</div></div>
     </div>
   </div>
 </section>
 
-<!-- ПРОГРАМИ -->
-<section class="programs-section" id="programs">
+<section class="problem-section">
   <div class="container">
-    <span class="label">Програми</span>
-    <h2>Оберіть формат</h2>
-    <div class="programs-list">
-      <div class="program-card">
-        <div>
-          <div class="program-name">Старт</div>
-          <div class="program-desc">Аналіз харчування, персональний план на місяць, 2 консультації</div>
-          <div class="program-duration">📅 1 місяць</div>
-        </div>
-        <div class="program-price">2 500 грн</div>
+    <div class="s-eyebrow reveal">Чому це не працює</div>
+    <h2 class="s-title reveal">Звичні підходи,<br>які <em>не дають результату</em></h2>
+    <div class="myths-grid reveal">
+      <div class="myth-card"><div class="myth-icon">🚫</div><div class="myth-title">Жорсткі дієти</div><div class="myth-desc">Вага повертається після закінчення — часто з надлишком</div></div>
+      <div class="myth-card"><div class="myth-icon">🔢</div><div class="myth-title">Підрахунок калорій</div><div class="myth-desc">Стрес, нав'язливі думки про їжу, зриви</div></div>
+      <div class="myth-card"><div class="myth-icon">🏋️</div><div class="myth-title">«Заробити право їсти»</div><div class="myth-desc">Шкідлива психологія, яка веде до розладів</div></div>
+      <div class="myth-card"><div class="myth-icon">📱</div><div class="myth-title">Поради з соцмереж</div><div class="myth-desc">Не враховують ваше тіло, гормони, спосіб життя</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="programs-bg" id="programs">
+  <div class="container">
+    <div class="s-eyebrow reveal">Програми</div>
+    <h2 class="s-title reveal">Оберіть <em>свій формат</em></h2>
+    <div class="prog-list reveal">
+      <div class="prog-card">
+        <div class="prog-header"><div class="prog-name">Старт</div><div class="prog-price">2 500 грн</div></div>
+        <div class="prog-desc">Аналіз харчування, персональний план на місяць, 2 консультації</div>
+        <ul class="prog-features"><li>Харчовий щоденник</li><li>Персональне меню</li><li>Підтримка в чаті</li></ul>
+        <div class="prog-dur">📅 1 місяць</div>
       </div>
-      <div class="program-card featured">
-        <div>
-          <div class="program-badge">Популярне</div>
-          <div class="program-name">Трансформація</div>
-          <div class="program-desc">Повний супровід, щотижневі зустрічі, коригування плану, підтримка в чаті</div>
-          <div class="program-duration">📅 3 місяці</div>
-        </div>
-        <div class="program-price">5 900 грн</div>
+      <div class="prog-card featured">
+        <div class="prog-badge">Популярне</div>
+        <div class="prog-header"><div class="prog-name">Трансформація</div><div class="prog-price">5 900 грн</div></div>
+        <div class="prog-desc">Повний супровід, щотижневі зустрічі, коригування плану, необмежена підтримка</div>
+        <ul class="prog-features"><li>Щотижневі відеодзвінки</li><li>Меню на кожен тиждень</li><li>Підтримка 24/7 у чаті</li><li>Аналіз складу тіла</li></ul>
+        <div class="prog-dur">📅 3 місяці</div>
       </div>
-      <div class="program-card">
-        <div>
-          <div class="program-name">VIP</div>
-          <div class="program-desc">Необмежена підтримка, аналізи, персональне меню на кожен тиждень</div>
-          <div class="program-duration">📅 6 місяців</div>
-        </div>
-        <div class="program-price">9 800 грн</div>
+      <div class="prog-card">
+        <div class="prog-header"><div class="prog-name">VIP Супровід</div><div class="prog-price">9 800 грн</div></div>
+        <div class="prog-desc">Максимальний результат: аналізи, персональне меню щотижня, необмежений контакт</div>
+        <ul class="prog-features"><li>Аналіз крові та гормонів</li><li>Меню на кожен день</li><li>Пріоритетний зв'язок</li></ul>
+        <div class="prog-dur">📅 6 місяців</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ПРО МЕНЕ -->
-<section class="about-section">
+<section>
   <div class="container">
-    <span class="label">Про мене</span>
-    <div class="about-inner">
-      <div class="about-avatar">🌿</div>
+    <div class="s-eyebrow reveal">Про мене</div>
+    <div class="about-inner reveal">
+      <div class="about-visual">🌿</div>
       <div class="about-text">
-        <h2>Аліна Дорош</h2>
+        <h2 class="s-title" style="margin-bottom:1rem">Аліна <em>Дорош</em></h2>
         <p>Дипломований нутриціолог, член Асоціації дієтологів України. Спеціалізуюсь на нормалізації ваги, інтуїтивному харчуванні та харчових розладах.</p>
-        <p>Сама пройшла шлях від жорстких дієт до усвідомленого харчування. Тому розумію, як це — і як з цим справді працювати.</p>
-        <div class="cert-list">
+        <p>Сама пройшла шлях від жорстких дієт до усвідомленого харчування — тому розумію ваш досвід зсередини. Це не теорія — це практика.</p>
+        <div class="cert-wrap">
           <span class="cert">Нутриціологія</span>
-          <span class="cert">КПТ для харчових розладів</span>
+          <span class="cert">КПТ для харч. розладів</span>
           <span class="cert">Спортивне харчування</span>
         </div>
       </div>
@@ -222,46 +202,39 @@
   </div>
 </section>
 
-<!-- ВІДГУКИ -->
-<section class="reviews-section">
+<section class="reviews-bg">
   <div class="container">
-    <span class="label">Відгуки</span>
-    <h2>Реальні результати</h2>
-    <div class="review-list">
-      <div class="review-card">
-        <div class="review-text">«За 3 місяці -8 кг і жодного зриву. Аліна не забороняла нічого — просто навчила думати по-іншому. Це змінило мене.»</div>
-        <div class="review-meta">
-          <div class="review-avatar">👩</div>
-          <div><div class="review-name">Катерина, 31</div><div class="review-result">−8 кг за 3 місяці</div></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-text">«Нарешті розумію своє тіло. Більше не лічу калорії, їм із задоволенням і почуваюся краще ніж у 25.»</div>
-        <div class="review-meta">
-          <div class="review-avatar">👩</div>
-          <div><div class="review-name">Ірина, 38</div><div class="review-result">Нормалізація стосунків з їжею</div></div>
-        </div>
-      </div>
+    <div class="s-eyebrow reveal">Відгуки</div>
+    <h2 class="s-title reveal">Реальні <em>результати</em></h2>
+    <div class="review-list reveal">
+      <div class="review"><div class="review-stars">★★★★★</div><div class="review-text">«За 3 місяці -8 кг і жодного зриву. Аліна не забороняла нічого — просто навчила думати інакше. Це дійсно змінило моє ставлення до їжі назавжди.»</div><div class="review-meta"><div class="r-avatar">👩</div><div><div class="r-name">Катерина, 31</div><div class="r-result">✓ −8 кг за 3 місяці</div></div></div></div>
+      <div class="review"><div class="review-stars">★★★★★</div><div class="review-text">«Нарешті розумію своє тіло. Більше не рахую калорії, їм із задоволенням і почуваюся краще, ніж у 25. Магія? Ні — наука і підтримка.»</div><div class="review-meta"><div class="r-avatar">👩</div><div><div class="r-name">Ірина, 38</div><div class="r-result">✓ Нормалізація стосунків з їжею</div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <section class="cta-section" id="cta">
   <div class="container">
-    <h2>Почнемо разом?</h2>
-    <p>Безкоштовна 20-хвилинна консультація — розберемось з вашою ситуацією</p>
-    <a href="https://t.me/example" class="btn-white">Написати в Telegram</a>
-    <a href="mailto:alina@nutri.ua" class="btn-white-out">Email</a>
+    <div class="free-tag">✨ Перша консультація — безкоштовно · 20 хвилин</div>
+    <h2 class="cta-title">Починаємо<br><em>разом?</em></h2>
+    <p class="cta-desc">Напишіть про свою ситуацію — я відповім того ж дня<br>і запропоную план, що підходить саме вам.</p>
+    <div class="cta-actions">
+      <a href="https://t.me/example" class="btn-white">Написати в Telegram</a>
+      <a href="mailto:alina@nutri.ua" class="btn-ghost">Email</a>
+    </div>
   </div>
 </section>
 
 <footer>© 2026 Аліна Дорош · Нутриціолог · Онлайн по всій Україні</footer>
 
 <div class="demo-bar">
-  <span>🖥 Демо-зразок сайту типу «Візитка»</span>
-  <a href="/">Замовити такий самий</a>
+  <span>🖥 Демо · Сайт-візитка</span>
+  <a href="/">Замовити сайт</a>
 </div>
 
+<script>
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>

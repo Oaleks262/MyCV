@@ -3,219 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Спокій — Масажний кабінет · Харків</title>
+  <title>Спокій · Масажний кабінет</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f8f5f0;
-      --bg2: #f0ebe2;
-      --text: #1c1510;
-      --text-muted: #6b5c48;
-      --accent: #8b6e52;
-      --accent-dark: #6b5240;
-      --accent-light: rgba(139,110,82,0.1);
-      --border: #ddd5c8;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f9f6f1;--bg2:#f2ece0;--bg3:#e8dece;
+      --text:#1a1208;--muted:#7a6a50;--accent:#6b4f2a;--accent2:#9e7540;
+      --green:#2d6a4f;--border:#ddd0b8;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    a { color: inherit; text-decoration: none; }
-    section { padding: 4rem 1.25rem; }
-    .container { max-width: 680px; margin: 0 auto; }
-    h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: block; }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    /* FLOATING NAV */
+    .nav{
+      position:fixed;top:1rem;left:50%;transform:translateX(-50%);
+      background:rgba(249,246,241,0.85);backdrop-filter:blur(12px);
+      border:1px solid var(--border);border-radius:50px;
+      padding:0.6rem 1.25rem;display:flex;align-items:center;
+      justify-content:space-between;z-index:100;width:calc(100% - 2rem);max-width:600px;
+    }
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--accent)}
+    .nav-cta{background:var(--accent);color:#fff;padding:0.45rem 1rem;border-radius:20px;font-size:0.78rem;font-weight:500}
 
     /* HERO */
-    .hero {
-      min-height: 90vh; display: flex; flex-direction: column;
-      justify-content: center; background: var(--bg2);
-      padding: 5rem 1.25rem 4rem; text-align: center;
+    .hero{
+      min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+      padding:7rem 1.5rem 4rem;position:relative;overflow:hidden;
+      background:radial-gradient(ellipse 80% 60% at 70% 40%,#e8dece,transparent),var(--bg2);
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.75rem; color: var(--accent); font-weight: 500;
-      border: 1px solid var(--border); border-radius: 20px;
-      padding: 0.35rem 0.85rem; margin-bottom: 1.5rem;
+    .hero-ornament{
+      position:absolute;right:-80px;top:50%;transform:translateY(-50%);
+      width:400px;height:400px;border-radius:50%;
+      border:1px solid rgba(107,79,42,0.12);
+      box-shadow:0 0 0 40px rgba(107,79,42,0.05),0 0 0 80px rgba(107,79,42,0.03);
     }
-    .hero-badge::before { content: ''; width: 6px; height: 6px; background: #4caf50; border-radius: 50%; }
-    .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 8vw, 3.5rem);
-      font-weight: 700; line-height: 1.15;
-      margin-bottom: 1.25rem; color: var(--text);
+    .hero-label{font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+    .hero-label::before{content:'';width:28px;height:1px;background:var(--accent2)}
+    .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,11vw,5.5rem);font-weight:300;line-height:1.05;color:var(--text);margin-bottom:1.5rem}
+    .hero-title em{font-style:italic;color:var(--accent)}
+    .hero-desc{font-size:1rem;color:var(--muted);line-height:1.8;max-width:440px;margin-bottom:2.5rem;font-weight:300}
+    .hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:3rem}
+    .btn-main{
+      background:var(--accent);color:#fff;
+      padding:1rem 2rem;border-radius:4px;
+      font-size:0.88rem;font-weight:500;
+      letter-spacing:0.04em;border:none;cursor:pointer;
+      font-family:inherit;transition:all 0.25s;
     }
-    .hero h1 em { font-style: italic; color: var(--accent); }
-    .hero-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.7; max-width: 480px; margin: 0 auto 2rem; }
-    .btn-primary {
-      display: inline-block; background: var(--accent); color: #fff;
-      padding: 0.9rem 2rem; border-radius: 4px; font-size: 0.9rem;
-      font-weight: 600; transition: background 0.2s; cursor: pointer; border: none; font-family: inherit;
-    }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-outline {
-      display: inline-block; border: 1px solid var(--border);
-      color: var(--text-muted); padding: 0.9rem 1.75rem;
-      border-radius: 4px; font-size: 0.9rem; font-weight: 500;
-      transition: all 0.2s; cursor: pointer; font-family: inherit; background: none;
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-    .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-    .hero-stats {
-      display: flex; gap: 2rem; justify-content: center;
-      margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);
-    }
-    .hero-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent); }
-    .hero-stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .btn-main:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(107,79,42,0.3)}
+    .btn-ghost{border:1px solid var(--border);color:var(--muted);padding:1rem 1.75rem;border-radius:4px;font-size:0.88rem;background:none;cursor:pointer;font-family:inherit;transition:all 0.2s}
+    .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+    .hero-trust{display:flex;gap:1.5rem;padding-top:2rem;border-top:1px solid var(--border)}
+    .trust-item{font-size:0.78rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem}
+
+    /* STATS */
+    .stats-section{background:var(--accent);padding:2.5rem 1.5rem}
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:600px;margin:0 auto;text-align:center}
+    .stat-num{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:#fff;line-height:1}
+    .stat-lbl{font-size:0.72rem;color:rgba(255,255,255,0.65);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.35rem}
+
+    /* SECTION */
+    section{padding:5rem 1.5rem}
+    .container{max-width:660px;margin:0 auto}
+    .s-label{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+    .s-label::before{content:'';width:20px;height:1px;background:var(--accent2)}
+    .s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:1.5rem}
+    .s-title em{font-style:italic;color:var(--accent)}
 
     /* SERVICES */
-    .services-section { background: var(--bg); }
-    .services-grid { display: grid; gap: 1rem; margin-top: 2rem; }
-    .service-card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1.5rem;
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+    .services-bg{background:var(--bg2)}
+    .services-list{display:flex;flex-direction:column;gap:0}
+    .service-row{
+      display:flex;justify-content:space-between;align-items:center;gap:1.5rem;
+      padding:1.5rem 0;border-bottom:1px solid var(--border);cursor:default;
+      transition:all 0.2s;
     }
-    .service-name { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
-    .service-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
-    .service-duration { font-size: 0.75rem; color: var(--accent); margin-top: 0.4rem; }
-    .service-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+    .service-row:last-child{border-bottom:none}
+    .service-left{flex:1}
+    .service-name{font-weight:600;font-size:1rem;margin-bottom:0.3rem}
+    .service-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+    .service-tags{display:flex;gap:0.4rem;margin-top:0.5rem;flex-wrap:wrap}
+    .stag{font-size:0.65rem;border:1px solid var(--border);color:var(--muted);padding:0.2rem 0.5rem;border-radius:20px}
+    .service-right{text-align:right;flex-shrink:0}
+    .service-price{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--accent)}
+    .service-dur{font-size:0.72rem;color:var(--muted);margin-top:0.1rem}
 
     /* ABOUT */
-    .about-section { background: var(--bg2); }
-    .about-inner { display: flex; flex-direction: column; gap: 2rem; }
-    .about-photo {
-      width: 120px; height: 120px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-light), var(--border));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3rem;
+    .about-inner{display:flex;flex-direction:column;gap:2rem}
+    .about-photo{
+      aspect-ratio:4/3;background:var(--bg3);border-radius:12px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;
+      position:relative;overflow:hidden;
     }
-    .about-text p { color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 1rem; }
-    .certs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-    .cert { font-size: 0.75rem; color: var(--accent); background: var(--accent-light); padding: 0.25rem 0.65rem; border-radius: 4px; }
+    .about-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(107,79,42,0.15),transparent)}
+    .about-emoji{font-size:5rem;filter:grayscale(0.3)}
+    .about-text p{color:var(--muted);line-height:1.85;font-size:0.92rem;margin-bottom:1rem;font-weight:300}
+    .certs{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem}
+    .cert{font-size:0.72rem;background:var(--bg2);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:4px;color:var(--muted)}
 
-    /* HOW */
-    .how-section { background: var(--bg); }
-    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
-    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
-    .step-num {
-      width: 36px; height: 36px; border-radius: 50%; background: var(--accent-light);
-      color: var(--accent); font-weight: 700; font-size: 0.85rem;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .step-title { font-weight: 600; margin-bottom: 0.25rem; }
-    .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+    /* PROCESS */
+    .process-bg{background:var(--bg2)}
+    .steps{display:flex;flex-direction:column;gap:0}
+    .step{display:flex;gap:1.25rem;padding:1.5rem 0;border-bottom:1px solid var(--border)}
+    .step:last-child{border-bottom:none}
+    .step-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--border);flex-shrink:0;width:36px;line-height:1}
+    .step-title{font-weight:600;font-size:0.95rem;margin-bottom:0.3rem}
+    .step-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+
+    /* REVIEWS */
+    .review-list{display:flex;flex-direction:column;gap:1rem}
+    .review{background:var(--bg2);border-radius:12px;padding:1.5rem;position:relative}
+    .review::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:4rem;color:var(--border);position:absolute;top:-0.5rem;left:1rem;line-height:1}
+    .review-text{font-size:0.9rem;color:var(--muted);line-height:1.75;font-style:italic;padding-top:1rem;margin-bottom:1rem}
+    .review-author{font-size:0.8rem;font-weight:600;color:var(--text)}
+    .review-result{font-size:0.72rem;color:var(--green);margin-top:0.15rem}
 
     /* CTA */
-    .cta-section { background: var(--accent); color: #fff; text-align: center; padding: 4rem 1.25rem; }
-    .cta-section h2 { color: #fff; margin-bottom: 0.75rem; }
-    .cta-section p { opacity: 0.85; margin-bottom: 2rem; font-size: 0.95rem; }
-    .btn-white {
-      background: #fff; color: var(--accent); padding: 0.9rem 2.25rem;
-      border-radius: 4px; font-size: 0.9rem; font-weight: 700;
-      display: inline-block; transition: opacity 0.2s;
-    }
-    .btn-white:hover { opacity: 0.9; }
+    .cta-section{background:linear-gradient(135deg,var(--accent),var(--accent2));padding:5rem 1.5rem;text-align:center}
+    .cta-section .s-title{color:#fff}
+    .cta-section .s-label{color:rgba(255,255,255,0.6);justify-content:center}
+    .cta-section .s-label::before{background:rgba(255,255,255,0.4)}
+    .cta-desc{color:rgba(255,255,255,0.8);margin-bottom:2.5rem;font-size:0.95rem}
+    .cta-phone{display:inline-block;background:#fff;color:var(--accent);padding:1rem 2rem;border-radius:4px;font-size:1rem;font-weight:600;margin-bottom:0.75rem}
+    .cta-tg{display:inline-block;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:0.85rem 1.75rem;border-radius:4px;font-size:0.88rem;margin-left:0.5rem}
 
-    /* FOOTER */
-    .site-footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem 1.25rem; font-size: 0.8rem; }
+    footer{background:var(--text);color:rgba(255,255,255,0.4);text-align:center;padding:1.5rem;font-size:0.75rem}
 
-    /* DEMO BADGE */
-    .demo-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: #1c1510; color: rgba(255,255,255,0.7);
-      text-align: center; padding: 0.6rem 1rem;
-      font-size: 0.75rem; z-index: 999;
-      display: flex; justify-content: center; align-items: center; gap: 1rem;
-    }
-    .demo-bar a {
-      background: var(--accent); color: #fff;
-      padding: 0.3rem 0.9rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
-    }
+    /* DEMO BAR */
+    .demo-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(26,18,8,0.92);backdrop-filter:blur(8px);color:rgba(255,255,255,0.55);text-align:center;padding:0.6rem 1rem;font-size:0.72rem;z-index:999;display:flex;justify-content:center;align-items:center;gap:1rem}
+    .demo-bar a{background:var(--accent2);color:#fff;padding:0.3rem 1rem;border-radius:4px;font-size:0.75rem;font-weight:600}
+
+    /* ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
   </style>
 </head>
 <body>
 
-<!-- HERO -->
+<nav class="nav">
+  <div class="nav-logo">Спокій</div>
+  <a href="#cta" class="nav-cta">Записатися</a>
+</nav>
+
 <section class="hero">
-  <div class="container" style="text-align:center">
-    <div style="margin-bottom:0.75rem">
-      <span class="hero-badge">Приймаю клієнтів</span>
-    </div>
-    <h1>Масаж, який <em>відновлює</em><br>а не просто розслабляє</h1>
-    <p class="hero-desc">Індивідуальний підхід, анатомічний підхід до тіла та реальний результат вже після першого сеансу. Харків, вул. Сумська 18.</p>
+  <div class="hero-ornament"></div>
+  <div class="container">
+    <div class="hero-label">Масажний кабінет · Харків</div>
+    <h1 class="hero-title">Масаж, що<br><em>відновлює</em><br>зсередини</h1>
+    <p class="hero-desc">Індивідуальний підхід до кожного тіла. Реальний результат — вже після першого сеансу. Без шаблонів, без поспіху.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="document.getElementById('contacts').scrollIntoView({behavior:'smooth'})">Записатися →</button>
-      <button class="btn-outline" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Послуги та ціни</button>
+      <button class="btn-main" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Записатися на сеанс</button>
+      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Послуги та ціни</button>
     </div>
-    <div class="hero-stats">
-      <div>
-        <div class="hero-stat-num">5+</div>
-        <div class="hero-stat-lbl">Років досвіду</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">300+</div>
-        <div class="hero-stat-lbl">Задоволених клієнтів</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">98%</div>
-        <div class="hero-stat-lbl">Повертаються знову</div>
-      </div>
+    <div class="hero-trust">
+      <div class="trust-item">🏅 5+ років досвіду</div>
+      <div class="trust-item">✨ 300+ клієнтів</div>
+      <div class="trust-item">📍 Харків, центр</div>
     </div>
   </div>
 </section>
 
-<!-- ПОСЛУГИ -->
-<section class="services-section" id="services">
+<div class="stats-section">
+  <div class="stats-grid">
+    <div><div class="stat-num">5</div><div class="stat-lbl">Років практики</div></div>
+    <div><div class="stat-num">300+</div><div class="stat-lbl">Задоволених клієнтів</div></div>
+    <div><div class="stat-num">98%</div><div class="stat-lbl">Повертаються знову</div></div>
+  </div>
+</div>
+
+<section class="services-bg" id="services">
   <div class="container">
-    <span class="label">Послуги</span>
-    <h2>Що я пропоную</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <div>
+    <div class="s-label reveal">Послуги</div>
+    <h2 class="s-title reveal">Що я <em>пропоную</em></h2>
+    <div class="services-list reveal">
+      <div class="service-row">
+        <div class="service-left">
           <div class="service-name">Класичний масаж</div>
-          <div class="service-desc">Загальний розслаблюючий масаж всього тіла. Знімає напругу, покращує кровообіг.</div>
-          <div class="service-duration">⏱ 60 хв</div>
+          <div class="service-desc">Загальний розслаблюючий масаж всього тіла. Знімає напругу, покращує сон та настрій.</div>
+          <div class="service-tags"><span class="stag">Розслаблення</span><span class="stag">Стрес</span></div>
         </div>
-        <div class="service-price">600 грн</div>
+        <div class="service-right"><div class="service-price">600 грн</div><div class="service-dur">⏱ 60 хв</div></div>
       </div>
-      <div class="service-card">
-        <div>
+      <div class="service-row">
+        <div class="service-left">
           <div class="service-name">Спортивний масаж</div>
           <div class="service-desc">Глибока опрацювання м'язів після навантаження. Відновлення та профілактика травм.</div>
-          <div class="service-duration">⏱ 75 хв</div>
+          <div class="service-tags"><span class="stag">Відновлення</span><span class="stag">Спорт</span></div>
         </div>
-        <div class="service-price">800 грн</div>
+        <div class="service-right"><div class="service-price">800 грн</div><div class="service-dur">⏱ 75 хв</div></div>
       </div>
-      <div class="service-card">
-        <div>
+      <div class="service-row">
+        <div class="service-left">
           <div class="service-name">Лімфодренажний масаж</div>
-          <div class="service-desc">Виводить набряки, покращує обмін речовин. Рекомендований курсом 5–10 сеансів.</div>
-          <div class="service-duration">⏱ 60 хв</div>
+          <div class="service-desc">Виводить набряки, прискорює обмін речовин. Рекомендований курсом 5–10 сеансів.</div>
+          <div class="service-tags"><span class="stag">Набряки</span><span class="stag">Метаболізм</span></div>
         </div>
-        <div class="service-price">750 грн</div>
+        <div class="service-right"><div class="service-price">750 грн</div><div class="service-dur">⏱ 60 хв</div></div>
       </div>
-      <div class="service-card">
-        <div>
+      <div class="service-row">
+        <div class="service-left">
           <div class="service-name">Масаж шиї та спини</div>
-          <div class="service-desc">Зона офісного болю: шия, плечі, поперек. Швидке полегшення після першого разу.</div>
-          <div class="service-duration">⏱ 40 хв</div>
+          <div class="service-desc">Офісний біль, шия, плечовий пояс, поперек. Швидке полегшення після першого разу.</div>
+          <div class="service-tags"><span class="stag">Шия</span><span class="stag">Поперек</span></div>
         </div>
-        <div class="service-price">450 грн</div>
+        <div class="service-right"><div class="service-price">450 грн</div><div class="service-dur">⏱ 40 хв</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ПРО МЕНЕ -->
-<section class="about-section">
+<section>
   <div class="container">
-    <span class="label">Про мене</span>
+    <div class="s-label reveal">Про мене</div>
     <div class="about-inner">
-      <div class="about-photo">🧘</div>
-      <div class="about-text">
-        <h2>Олена Савченко</h2>
-        <p>Сертифікований масажист з 5-річним досвідом. Спеціалізуюсь на спортивному відновленні та корекції постави. Кожен сеанс — індивідуальна програма, а не шаблон.</p>
-        <p>Пройшла навчання у Медичному коледжі №1, курси підвищення кваліфікації в Польщі. Постійно навчаюсь новим технікам.</p>
+      <div class="about-photo reveal">
+        <div class="about-emoji">🧘‍♀️</div>
+      </div>
+      <div class="about-text reveal">
+        <h2 class="s-title" style="margin-bottom:1rem">Олена <em>Савченко</em></h2>
+        <p>Сертифікований масажист з 5-річним досвідом. Спеціалізуюсь на спортивному відновленні та корекції постави. Кожен сеанс — це завжди індивідуальна програма під ваш запит, а не шаблон з підручника.</p>
+        <p>Навчалась у Медичному коледжі №1, пройшла курси підвищення кваліфікації в Польщі. Постійно вивчаю нові техніки — щоб давати вам реальний результат.</p>
         <div class="certs">
           <span class="cert">Класичний масаж</span>
           <span class="cert">Спортивна реабілітація</span>
@@ -227,54 +237,53 @@
   </div>
 </section>
 
-<!-- ЯК ЦЕ ПРАЦЮЄ -->
-<section class="how-section">
+<section class="process-bg">
   <div class="container">
-    <span class="label">Як записатись</span>
-    <h2>Просто та швидко</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-title">Напишіть або зателефонуйте</div>
-          <div class="step-desc">Telegram, Viber або дзвінок — відповідаю протягом 1 години</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-title">Оберемо час разом</div>
-          <div class="step-desc">Зручний для вас час, приймаю щодня з 9:00 до 20:00</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-title">Перший сеанс</div>
-          <div class="step-desc">Розповідаєте про запит, підбираємо техніку, почуваєте результат</div>
-        </div>
-      </div>
+    <div class="s-label reveal">Як записатись</div>
+    <h2 class="s-title reveal">Просто <em>та швидко</em></h2>
+    <div class="steps reveal">
+      <div class="step"><div class="step-num">01</div><div><div class="step-title">Напишіть або зателефонуйте</div><div class="step-desc">Telegram, Viber або дзвінок — відповідаю щодня, протягом години</div></div></div>
+      <div class="step"><div class="step-num">02</div><div><div class="step-title">Оберемо зручний час</div><div class="step-desc">Приймаю щодня з 9:00 до 20:00, підберемо час під вас</div></div></div>
+      <div class="step"><div class="step-num">03</div><div><div class="step-title">Перший сеанс</div><div class="step-desc">Розповідаєте про запит — підбираємо техніку — відчуваєте різницю вже сьогодні</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section" id="contacts">
+<section>
   <div class="container">
-    <h2>Запишіться на перший сеанс</h2>
-    <p>Харків, вул. Сумська 18, каб. 7 · Пн–Нд 9:00–20:00</p>
-    <a href="tel:+380671234567" class="btn-white">📞 +380 67 123 45 67</a>
+    <div class="s-label reveal">Відгуки</div>
+    <h2 class="s-title reveal">Що кажуть <em>клієнти</em></h2>
+    <div class="review-list reveal">
+      <div class="review"><div class="review-text">Прийшла з хронічним болем у шиї після 3 років роботи за ноутбуком. Після п'ятого сеансу біль пішов майже повністю. Олена — чарівниця.</div><div class="review-author">Марина К., 29</div><div class="review-result">✓ Біль у шиї зник після курсу</div></div>
+      <div class="review"><div class="review-text">Ходжу після кожного важкого тренування. Відновлення прискорилось удвічі — це не перебільшення. Тепер це частина мого режиму.</div><div class="review-author">Андрій Л., 34</div><div class="review-result">✓ Спортивне відновлення</div></div>
+    </div>
   </div>
 </section>
 
-<footer class="site-footer">
-  <p>© 2026 Олена Савченко · Масажний кабінет «Спокій» · Харків</p>
-</footer>
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="s-label">Запис</div>
+    <h2 class="s-title">Готові почати<br><em>відновлення?</em></h2>
+    <p class="cta-desc">Харків, вул. Сумська 18, каб. 7 · Пн–Нд 9:00–20:00</p>
+    <div>
+      <a href="tel:+380671234567" class="cta-phone">📞 +380 67 123 45 67</a>
+      <a href="https://t.me/example" class="cta-tg">Telegram</a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Олена Савченко · Масажний кабінет «Спокій» · Харків</footer>
 
 <div class="demo-bar">
-  <span>🖥 Демо-зразок сайту типу «Лендінг»</span>
-  <a href="/">Замовити такий самий</a>
+  <span>🖥 Демо · Лендінг для спеціаліста</span>
+  <a href="/">Замовити сайт</a>
 </div>
 
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)} });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>

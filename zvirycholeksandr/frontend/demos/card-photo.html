@@ -3,144 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Максим Коваль · Фотограф · Львів</title>
+  <title>Максим Коваль · Фотограф</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0f0f0f;
-      --bg2: #181818;
-      --text: #f5f5f5;
-      --text-muted: #888;
-      --accent: #d4a843;
-      --border: #2a2a2a;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0c0c0c;--bg2:#141414;--bg3:#1c1c1c;
+      --text:#f0ece6;--muted:#787068;--accent:#d4a843;
+      --border:#222;
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    a { color: inherit; text-decoration: none; }
-    section { padding: 4.5rem 1.25rem; }
-    .container { max-width: 720px; margin: 0 auto; }
-    .label { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; display: block; }
-    h2 { font-family: 'Italiana', serif; font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    section{padding:5rem 1.5rem}
+    .container{max-width:720px;margin:0 auto}
 
     /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      padding: 1.25rem 1.5rem; display: flex;
-      justify-content: space-between; align-items: center;
-      z-index: 100; background: linear-gradient(to bottom, rgba(15,15,15,0.95), transparent);
-    }
-    .nav-logo { font-family: 'Italiana', serif; font-size: 1.25rem; color: var(--text); letter-spacing: 0.05em; }
-    .nav-links { display: flex; gap: 1.5rem; }
-    .nav-links a { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text); }
+    .nav{position:fixed;top:0;left:0;right:0;padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;z-index:100;background:linear-gradient(to bottom,rgba(12,12,12,0.95),transparent)}
+    .nav-logo{font-family:'Italiana',serif;font-size:1.25rem;letter-spacing:0.04em}
+    .nav-links{display:flex;gap:1.5rem}
+    .nav-links a{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+    .nav-links a:hover{color:var(--text)}
 
     /* HERO */
-    .hero {
-      min-height: 95vh; display: flex; flex-direction: column;
-      justify-content: flex-end; padding: 0 1.25rem 4rem;
-      background: linear-gradient(to top, #0f0f0f 20%, transparent),
-                  linear-gradient(135deg, #1a1a1a, #2a2520);
-      position: relative; overflow: hidden;
+    .hero{
+      min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+      padding:0 1.5rem 4rem;position:relative;overflow:hidden;
+      background:linear-gradient(to top,var(--bg) 0%,transparent 50%),
+                 linear-gradient(160deg,#1a1208 0%,#0c0c0c 100%);
     }
-    .hero-bg-text {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      font-family: 'Italiana', serif; font-size: clamp(6rem, 22vw, 14rem);
-      color: rgba(255,255,255,0.03); white-space: nowrap; pointer-events: none;
-      user-select: none;
+    .hero-bg-text{
+      position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
+      font-family:'Italiana',serif;font-size:clamp(8rem,28vw,18rem);
+      color:rgba(255,255,255,0.025);white-space:nowrap;letter-spacing:0.05em;
+      pointer-events:none;user-select:none;
     }
-    .hero-content { position: relative; }
-    .hero-subtitle { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-    h1 { font-family: 'Italiana', serif; font-size: clamp(2.8rem, 10vw, 5rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.25rem; }
-    .hero-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; max-width: 400px; margin-bottom: 2rem; font-weight: 300; }
-    .btn-primary {
-      display: inline-block; border: 1px solid var(--accent); color: var(--accent);
-      padding: 0.85rem 2rem; font-size: 0.8rem; letter-spacing: 0.1em;
-      text-transform: uppercase; transition: all 0.3s; cursor: pointer; background: none;
-    }
-    .btn-primary:hover { background: var(--accent); color: #0f0f0f; }
+    .hero-content{position:relative;z-index:1;max-width:720px;margin:0 auto;width:100%}
+    .hero-eyebrow{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+    .hero-title{font-family:'Italiana',serif;font-size:clamp(3.5rem,14vw,7rem);font-weight:400;line-height:0.95;margin-bottom:1.5rem}
+    .hero-desc{font-size:0.88rem;color:var(--muted);line-height:1.7;max-width:380px;font-weight:300;margin-bottom:2rem}
+    .hero-cta{display:inline-block;border:1px solid var(--accent);color:var(--accent);padding:0.85rem 2rem;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s;cursor:pointer;background:none}
+    .hero-cta:hover{background:var(--accent);color:var(--bg)}
+    .hero-scroll{display:flex;align-items:center;gap:0.75rem;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+    .scroll-line{height:1px;width:40px;background:var(--border)}
 
-    /* PORTFOLIO GRID */
-    .portfolio-section { background: var(--bg); }
-    .filter-row { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    .filter-btn {
-      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text-muted); cursor: pointer; background: none; border: none;
-      font-family: inherit; padding: 0.25rem 0; border-bottom: 1px solid transparent;
-      transition: all 0.2s;
-    }
-    .filter-btn.active, .filter-btn:hover { color: var(--text); border-color: var(--accent); }
-    .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-    .photo-cell {
-      aspect-ratio: 3/4; background: var(--bg2);
-      border-radius: 2px; overflow: hidden; position: relative;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .photo-cell:first-child { grid-row: span 2; aspect-ratio: auto; }
-    .photo-placeholder { font-size: 2.5rem; opacity: 0.2; }
-    .photo-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-      padding: 1rem 0.75rem 0.5rem;
-      font-size: 0.72rem; letter-spacing: 0.05em; color: rgba(255,255,255,0.7);
-      text-transform: uppercase;
-    }
+    /* PORTFOLIO */
+    .label{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;display:block}
+    .grid-title{font-family:'Italiana',serif;font-size:clamp(2rem,7vw,3.5rem);font-weight:400;margin-bottom:2rem}
 
-    /* ПОСЛУГИ */
-    .services-section { background: var(--bg2); }
-    .services-list { display: flex; flex-direction: column; gap: 0; margin-top: 1.5rem; }
-    .service-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.25rem 0; border-bottom: 1px solid var(--border);
-      gap: 1rem;
-    }
-    .service-row:last-child { border-bottom: none; }
-    .service-name { font-weight: 500; font-size: 0.9rem; }
-    .service-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
-    .service-price { font-family: 'Italiana', serif; font-size: 1.2rem; color: var(--accent); white-space: nowrap; }
+    .filter-row{display:flex;gap:1.25rem;margin-bottom:2rem;overflow-x:auto;scrollbar-width:none}
+    .filter-row::-webkit-scrollbar{display:none}
+    .f-btn{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;padding:0.25rem 0;border-bottom:1px solid transparent;transition:all 0.2s;white-space:nowrap;flex-shrink:0}
+    .f-btn.active,.f-btn:hover{color:var(--text);border-color:var(--accent)}
 
-    /* ПРО МЕНЕ */
-    .about-section { background: var(--bg); }
-    .about-grid { display: flex; flex-direction: column; gap: 2rem; }
-    .about-photo-block {
-      background: var(--bg2); border: 1px solid var(--border); border-radius: 2px;
-      aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 4rem;
+    .photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
+    .photo-cell{
+      position:relative;overflow:hidden;cursor:pointer;
+      background:var(--bg3);
     }
-    .about-text p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.8; margin-bottom: 1rem; font-weight: 300; }
-    .skills-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-    .skill { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); padding: 0.3rem 0.65rem; }
+    .photo-cell:nth-child(1){grid-row:span 2}
+    .photo-cell::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0);transition:background 0.3s}
+    .photo-cell:hover::after{background:rgba(0,0,0,0.4)}
+    .photo-inner{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+    .photo-cell:nth-child(1) .photo-inner{aspect-ratio:auto;height:100%}
+    .photo-label{position:absolute;bottom:0;left:0;right:0;padding:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);transform:translateY(4px);opacity:0;transition:all 0.3s}
+    .photo-cell:hover .photo-label{opacity:1;transform:translateY(0)}
+    .photo-emoji{font-size:2.5rem;opacity:0.25}
 
-    /* CTA */
-    .cta-section { background: var(--bg2); text-align: center; padding: 5rem 1.25rem; }
-    .cta-section h2 { font-size: 2.5rem; margin-bottom: 0.75rem; }
-    .cta-section p { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
-    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .contact-link {
-      border: 1px solid var(--border); color: var(--text-muted);
-      padding: 0.75rem 1.5rem; font-size: 0.8rem; letter-spacing: 0.08em;
-      text-transform: uppercase; transition: all 0.2s;
-    }
-    .contact-link:hover { border-color: var(--accent); color: var(--accent); }
-    .contact-link.main { background: var(--accent); border-color: var(--accent); color: #0f0f0f; font-weight: 600; }
+    /* SERVICES */
+    .services-bg{background:var(--bg2)}
+    .svc-list{display:flex;flex-direction:column;gap:0;margin-top:1.5rem}
+    .svc-row{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;padding:1.5rem 0;border-bottom:1px solid var(--border);transition:all 0.2s;cursor:default}
+    .svc-row:last-child{border-bottom:none}
+    .svc-row:hover{padding-left:8px}
+    .svc-name{font-weight:500;font-size:0.95rem;margin-bottom:0.3rem}
+    .svc-desc{font-size:0.78rem;color:var(--muted);line-height:1.5}
+    .svc-price{font-family:'Italiana',serif;font-size:1.4rem;color:var(--accent);white-space:nowrap}
 
-    footer { text-align: center; padding: 1.5rem; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border); letter-spacing: 0.08em; text-transform: uppercase; }
+    /* ABOUT */
+    .about-inner{display:grid;grid-template-columns:1fr;gap:2rem}
+    .about-visual{background:var(--bg3);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:5rem;filter:grayscale(0.5)}
+    .about-text p{color:var(--muted);font-size:0.88rem;line-height:1.85;margin-bottom:1rem;font-weight:300}
+    .tag-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem}
+    .tag{font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:0.25rem 0.6rem}
 
-    .demo-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(15,15,15,0.95); color: var(--text-muted);
-      text-align: center; padding: 0.6rem 1rem; font-size: 0.75rem;
-      z-index: 999; border-top: 1px solid var(--border);
-      display: flex; justify-content: center; align-items: center; gap: 1rem;
-    }
-    .demo-bar a {
-      background: var(--accent); color: #0f0f0f;
-      padding: 0.3rem 0.9rem; font-size: 0.75rem; font-weight: 600;
-    }
+    /* CONTACT */
+    .contact-section{background:var(--bg2);text-align:center;padding:6rem 1.5rem}
+    .contact-title{font-family:'Italiana',serif;font-size:clamp(2.5rem,10vw,5rem);font-weight:400;margin-bottom:0.5rem}
+    .contact-sub{font-size:0.82rem;color:var(--muted);margin-bottom:2.5rem;letter-spacing:0.06em}
+    .contact-links{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap}
+    .c-link{padding:0.85rem 1.75rem;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.2s;border:1px solid var(--border);color:var(--muted)}
+    .c-link:hover{border-color:var(--accent);color:var(--accent)}
+    .c-link.main{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+    .c-link.main:hover{background:transparent;color:var(--accent)}
+
+    footer{border-top:1px solid var(--border);text-align:center;padding:1.5rem;font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+
+    .demo-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(12,12,12,0.95);border-top:1px solid var(--border);color:var(--muted);text-align:center;padding:0.6rem 1rem;font-size:0.72rem;z-index:999;display:flex;justify-content:center;align-items:center;gap:1rem}
+    .demo-bar a{background:var(--accent);color:var(--bg);padding:0.3rem 1rem;font-size:0.72rem;font-weight:600}
+
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
   </style>
 </head>
 <body>
 
-<nav>
+<nav class="nav">
   <div class="nav-logo">Коваль</div>
   <div class="nav-links">
     <a href="#portfolio">Роботи</a>
@@ -149,132 +118,96 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-text">Photo</div>
+  <div class="hero-bg-text">Koval</div>
   <div class="hero-content">
-    <div class="hero-subtitle">Фотограф · Львів</div>
-    <h1>Максим<br>Коваль</h1>
-    <p class="hero-desc">Портрети, весілля, комерційна зйомка. Фотографую людей такими, якими вони є — живо і без фільтрів.</p>
-    <a href="#contact" class="btn-primary">Обговорити зйомку</a>
-  </div>
-</section>
-
-<!-- ПОРТФОЛІО -->
-<section class="portfolio-section" id="portfolio">
-  <div class="container">
-    <span class="label">Портфоліо</span>
-    <h2>Роботи</h2>
-    <div class="filter-row">
-      <button class="filter-btn active">Всі</button>
-      <button class="filter-btn">Портрети</button>
-      <button class="filter-btn">Весілля</button>
-      <button class="filter-btn">Комерційна</button>
-    </div>
-    <div class="photo-grid">
-      <div class="photo-cell">
-        <div class="photo-placeholder">🧑‍🎤</div>
-        <div class="photo-label">Портрет</div>
-      </div>
-      <div class="photo-cell">
-        <div class="photo-placeholder">💍</div>
-        <div class="photo-label">Весілля</div>
-      </div>
-      <div class="photo-cell">
-        <div class="photo-placeholder">☕</div>
-        <div class="photo-label">Комерційна</div>
-      </div>
-      <div class="photo-cell">
-        <div class="photo-placeholder">👰</div>
-        <div class="photo-label">Весілля</div>
-      </div>
-      <div class="photo-cell">
-        <div class="photo-placeholder">🏙</div>
-        <div class="photo-label">Вулична</div>
-      </div>
+    <div class="hero-eyebrow">Фотограф · Львів · з 2016</div>
+    <h1 class="hero-title">Максим<br>Коваль</h1>
+    <p class="hero-desc">Портрети, весілля, комерційна зйомка. Фотографую людей такими, якими вони є — живо, чесно і без зайвих фільтрів.</p>
+    <a href="#contact" class="hero-cta">Обговорити зйомку</a>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Гортай вниз
     </div>
   </div>
 </section>
 
-<!-- ПОСЛУГИ -->
-<section class="services-section" id="services">
+<section id="portfolio">
   <div class="container">
-    <span class="label">Послуги</span>
-    <h2>Що я знімаю</h2>
-    <div class="services-list">
-      <div class="service-row">
-        <div>
-          <div class="service-name">Портретна сесія</div>
-          <div class="service-desc">1–2 год, 1 локація, 30+ оброблених фото</div>
-        </div>
-        <div class="service-price">від 2 500 грн</div>
-      </div>
-      <div class="service-row">
-        <div>
-          <div class="service-name">Весільна зйомка</div>
-          <div class="service-desc">Цілий день, 100+ фото, 2 тижні на обробку</div>
-        </div>
-        <div class="service-price">від 12 000 грн</div>
-      </div>
-      <div class="service-row">
-        <div>
-          <div class="service-name">Комерційна зйомка</div>
-          <div class="service-desc">Продукт, інтер'єр, меню для закладів, зйомка команди</div>
-        </div>
-        <div class="service-price">від 3 500 грн</div>
-      </div>
-      <div class="service-row">
-        <div>
-          <div class="service-name">Сімейна сесія</div>
-          <div class="service-desc">Жива атмосфера, природні кадри, 50+ фото</div>
-        </div>
-        <div class="service-price">від 2 000 грн</div>
-      </div>
+    <span class="label reveal">Портфоліо</span>
+    <h2 class="grid-title reveal">Роботи</h2>
+    <div class="filter-row reveal">
+      <button class="f-btn active">Всі</button>
+      <button class="f-btn">Портрети</button>
+      <button class="f-btn">Весілля</button>
+      <button class="f-btn">Комерційна</button>
+      <button class="f-btn">Сімейна</button>
+    </div>
+    <div class="photo-grid reveal">
+      <div class="photo-cell"><div class="photo-inner"><div class="photo-emoji">🧑‍🎤</div></div><div class="photo-label">Портрет · студія</div></div>
+      <div class="photo-cell"><div class="photo-inner"><div class="photo-emoji">💍</div></div><div class="photo-label">Весілля · 2025</div></div>
+      <div class="photo-cell"><div class="photo-inner"><div class="photo-emoji">☕</div></div><div class="photo-label">Комерційна</div></div>
+      <div class="photo-cell"><div class="photo-inner"><div class="photo-emoji">👨‍👩‍👧</div></div><div class="photo-label">Сімейна</div></div>
+      <div class="photo-cell"><div class="photo-inner"><div class="photo-emoji">🌆</div></div><div class="photo-label">Вулична</div></div>
     </div>
   </div>
 </section>
 
-<!-- ПРО МЕНЕ -->
-<section class="about-section">
+<section class="services-bg" id="services">
   <div class="container">
-    <span class="label">Про мене</span>
-    <h2>Хто за камерою</h2>
-    <div class="about-grid">
-      <div class="about-photo-block">📷</div>
+    <span class="label reveal">Послуги</span>
+    <h2 class="grid-title reveal">Що я знімаю</h2>
+    <div class="svc-list reveal">
+      <div class="svc-row"><div><div class="svc-name">Портретна сесія</div><div class="svc-desc">1–2 год · 1 локація · 30+ оброблених фото · 2 тижні</div></div><div class="svc-price">від 2 500 грн</div></div>
+      <div class="svc-row"><div><div class="svc-name">Весільна зйомка</div><div class="svc-desc">Цілий день · 100+ фото · Звіт через 2 тижні</div></div><div class="svc-price">від 12 000 грн</div></div>
+      <div class="svc-row"><div><div class="svc-name">Комерційна зйомка</div><div class="svc-desc">Продукт, інтер'єр, меню, корпоративна зйомка</div></div><div class="svc-price">від 3 500 грн</div></div>
+      <div class="svc-row"><div><div class="svc-name">Сімейна сесія</div><div class="svc-desc">Жива атмосфера · природні кадри · 50+ фото</div></div><div class="svc-price">від 2 000 грн</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <span class="label reveal">Про мене</span>
+    <div class="about-inner reveal">
+      <div class="about-visual">📷</div>
       <div class="about-text">
-        <p>Фотографую з 2016 року. Починав зі смартфону, зараз знімаю на Sony A7IV. Люблю природне світло, жваві кадри та людей, які не бояться бути собою.</p>
-        <p>Більше 200 сесій, 15 весіль, співпраця з брендами Lviv Croissants, Pravda Beer та іншими. Живу у Львові, виїжджаю по Україні.</p>
-        <div class="skills-row">
-          <span class="skill">Портрет</span>
-          <span class="skill">Репортаж</span>
-          <span class="skill">Lightroom</span>
-          <span class="skill">Reels</span>
+        <h2 class="grid-title" style="font-size:clamp(1.8rem,6vw,2.5rem);margin-bottom:1.25rem">Хто за<br>камерою</h2>
+        <p>Фотографую з 2016 року. Починав зі смартфону — зараз знімаю на Sony A7IV. Люблю природне світло, живі кадри та людей, які не бояться бути собою.</p>
+        <p>Більше 200 сесій, 15 весіль, співпраця з брендами Lviv Croissants, Pravda Beer, Yakaboo. Живу у Львові — виїжджаю по всій Україні.</p>
+        <div class="tag-list">
+          <span class="tag">Портрет</span><span class="tag">Репортаж</span>
+          <span class="tag">Lightroom</span><span class="tag">Sony A7IV</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- КОНТАКТ -->
-<section class="cta-section" id="contact">
+<div class="contact-section" id="contact">
   <div class="container">
-    <span class="label">Зв'язок</span>
-    <h2>Поговорімо</h2>
-    <p>Розкажіть про задумку — відповідаю щодня</p>
+    <span class="label" style="display:block;text-align:center;margin-bottom:1rem">Контакт</span>
+    <h2 class="contact-title">Поговорімо</h2>
+    <p class="contact-sub">Розкажіть про задумку — відповідаю щодня</p>
     <div class="contact-links">
-      <a href="https://t.me/example" class="contact-link main">Telegram</a>
-      <a href="https://instagram.com" class="contact-link">Instagram</a>
-      <a href="mailto:koval@photo.ua" class="contact-link">Email</a>
+      <a href="https://t.me/example" class="c-link main">Telegram</a>
+      <a href="https://instagram.com" class="c-link">Instagram</a>
+      <a href="mailto:koval@photo.ua" class="c-link">Email</a>
     </div>
   </div>
-</section>
+</div>
 
 <footer>© 2026 Максим Коваль · Фотограф · Львів</footer>
 
 <div class="demo-bar">
-  <span>🖥 Демо-зразок сайту типу «Візитка»</span>
-  <a href="/">Замовити такий самий</a>
+  <span>🖥 Демо · Сайт-візитка</span>
+  <a href="/">Замовити сайт</a>
 </div>
 
+<script>
+  document.querySelectorAll('.f-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.f-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active')})});
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
