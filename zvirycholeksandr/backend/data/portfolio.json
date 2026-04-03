@@ -37,5 +37,83 @@
     "isVisible": true,
     "sortOrder": 3,
     "createdAt": "2026-03-15T10:00:00.000Z"
+  },
+  {
+    "id": "demo-0001",
+    "title": "Кафе «Горобина»",
+    "niche": "Кафе / Онлайн-меню",
+    "siteType": "demo",
+    "description": "Демо онлайн-меню для кафе з категоріями: кава, чай, сніданки, десерти. Адаптивне, темне/світле оформлення.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/menu-cafe.html",
+    "isVisible": true,
+    "sortOrder": 10,
+    "createdAt": "2026-04-03T10:00:00.000Z"
+  },
+  {
+    "id": "demo-0002",
+    "title": "Бар «Бункер»",
+    "niche": "Бар / Онлайн-меню",
+    "siteType": "demo",
+    "description": "Демо меню для пабу в темному стилі: пиво, коктейлі, закуски, акції.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/menu-pub.html",
+    "isVisible": true,
+    "sortOrder": 11,
+    "createdAt": "2026-04-03T10:01:00.000Z"
+  },
+  {
+    "id": "demo-0003",
+    "title": "Масажний кабінет «Спокій»",
+    "niche": "Масажист / Лендінг",
+    "siteType": "demo",
+    "description": "Демо лендінгу для масажиста: послуги та ціни, про майстра, запис на прийом.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/landing-massage.html",
+    "isVisible": true,
+    "sortOrder": 12,
+    "createdAt": "2026-04-03T10:02:00.000Z"
+  },
+  {
+    "id": "demo-0004",
+    "title": "Психолог Марія Дорош",
+    "niche": "Психолог / Лендінг",
+    "siteType": "demo",
+    "description": "Демо лендінгу для психолога: напрямки роботи, як проходить сесія, відгуки клієнтів.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/landing-psycho.html",
+    "isVisible": true,
+    "sortOrder": 13,
+    "createdAt": "2026-04-03T10:03:00.000Z"
+  },
+  {
+    "id": "demo-0005",
+    "title": "Фотограф Максим Коваль",
+    "niche": "Фотограф / Сайт-візитка",
+    "siteType": "demo",
+    "description": "Демо сайту-візитки для фотографа: портфоліо, послуги та ціни, контакти.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/card-photo.html",
+    "isVisible": true,
+    "sortOrder": 14,
+    "createdAt": "2026-04-03T10:04:00.000Z"
+  },
+  {
+    "id": "demo-0006",
+    "title": "Нутриціолог Аліна Дорош",
+    "niche": "Нутриціолог / Сайт-візитка",
+    "siteType": "demo",
+    "description": "Демо сайту-візитки для нутриціолога: програми харчування, результати клієнтів, відгуки.",
+    "technologies": ["HTML", "CSS", "JS"],
+    "screenshotUrl": "",
+    "liveUrl": "/demos/card-nutri.html",
+    "isVisible": true,
+    "sortOrder": 15,
+    "createdAt": "2026-04-03T10:05:00.000Z"
   }
 ]
