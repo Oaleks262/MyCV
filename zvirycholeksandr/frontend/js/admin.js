@@ -489,7 +489,7 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 
 /* ===== UTILS ===== */
 function siteTypeLabel(type) {
-  const map = { landing: 'Лендінг', business_card: 'Візитка', menu: 'Меню' };
+  const map = { landing: 'Лендінг', business_card: 'Візитка', menu: 'Меню', demo: 'Демо' };
   return map[type] || type;
 }
 function statusLabel(s) {
