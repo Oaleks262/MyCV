@@ -47,7 +47,7 @@ async function loadPortfolioPreview() {
     if (!res.ok) throw new Error('Failed to load');
     const items = await res.json();
 
-    container.innerHTML = items.slice(0, 4).map(item => `
+    container.innerHTML = items.slice(0, 3).map(item => `
       <div class="card fade-in" onclick="openPortfolioCard(${JSON.stringify(item).replace(/"/g, '&quot;')})">
         <div class="card-img-wrap">
           ${item.screenshotUrl
