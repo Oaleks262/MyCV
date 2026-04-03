@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Спокій — Масажний кабінет · Харків</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f5f0;
+      --bg2: #f0ebe2;
+      --text: #1c1510;
+      --text-muted: #6b5c48;
+      --accent: #8b6e52;
+      --accent-dark: #6b5240;
+      --accent-light: rgba(139,110,82,0.1);
+      --border: #ddd5c8;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+    section { padding: 4rem 1.25rem; }
+    .container { max-width: 680px; margin: 0 auto; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: block; }
+
+    /* HERO */
+    .hero {
+      min-height: 90vh; display: flex; flex-direction: column;
+      justify-content: center; background: var(--bg2);
+      padding: 5rem 1.25rem 4rem; text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: var(--accent); font-weight: 500;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 0.35rem 0.85rem; margin-bottom: 1.5rem;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: #4caf50; border-radius: 50%; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 8vw, 3.5rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 1.25rem; color: var(--text);
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.7; max-width: 480px; margin: 0 auto 2rem; }
+    .btn-primary {
+      display: inline-block; background: var(--accent); color: #fff;
+      padding: 0.9rem 2rem; border-radius: 4px; font-size: 0.9rem;
+      font-weight: 600; transition: background 0.2s; cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-outline {
+      display: inline-block; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 0.9rem 1.75rem;
+      border-radius: 4px; font-size: 0.9rem; font-weight: 500;
+      transition: all 0.2s; cursor: pointer; font-family: inherit; background: none;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 2rem; justify-content: center;
+      margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);
+    }
+    .hero-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .hero-stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem; }
+
+    /* SERVICES */
+    .services-section { background: var(--bg); }
+    .services-grid { display: grid; gap: 1rem; margin-top: 2rem; }
+    .service-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+    }
+    .service-name { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
+    .service-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+    .service-duration { font-size: 0.75rem; color: var(--accent); margin-top: 0.4rem; }
+    .service-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+    /* ABOUT */
+    .about-section { background: var(--bg2); }
+    .about-inner { display: flex; flex-direction: column; gap: 2rem; }
+    .about-photo {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-light), var(--border));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .about-text p { color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 1rem; }
+    .certs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .cert { font-size: 0.75rem; color: var(--accent); background: var(--accent-light); padding: 0.25rem 0.65rem; border-radius: 4px; }
+
+    /* HOW */
+    .how-section { background: var(--bg); }
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--accent-light);
+      color: var(--accent); font-weight: 700; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .step-title { font-weight: 600; margin-bottom: 0.25rem; }
+    .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* CTA */
+    .cta-section { background: var(--accent); color: #fff; text-align: center; padding: 4rem 1.25rem; }
+    .cta-section h2 { color: #fff; margin-bottom: 0.75rem; }
+    .cta-section p { opacity: 0.85; margin-bottom: 2rem; font-size: 0.95rem; }
+    .btn-white {
+      background: #fff; color: var(--accent); padding: 0.9rem 2.25rem;
+      border-radius: 4px; font-size: 0.9rem; font-weight: 700;
+      display: inline-block; transition: opacity 0.2s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+
+    /* FOOTER */
+    .site-footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem 1.25rem; font-size: 0.8rem; }
+
+    /* DEMO BADGE */
+    .demo-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #1c1510; color: rgba(255,255,255,0.7);
+      text-align: center; padding: 0.6rem 1rem;
+      font-size: 0.75rem; z-index: 999;
+      display: flex; justify-content: center; align-items: center; gap: 1rem;
+    }
+    .demo-bar a {
+      background: var(--accent); color: #fff;
+      padding: 0.3rem 0.9rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container" style="text-align:center">
+    <div style="margin-bottom:0.75rem">
+      <span class="hero-badge">Приймаю клієнтів</span>
+    </div>
+    <h1>Масаж, який <em>відновлює</em><br>а не просто розслабляє</h1>
+    <p class="hero-desc">Індивідуальний підхід, анатомічний підхід до тіла та реальний результат вже після першого сеансу. Харків, вул. Сумська 18.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('contacts').scrollIntoView({behavior:'smooth'})">Записатися →</button>
+      <button class="btn-outline" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Послуги та ціни</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">5+</div>
+        <div class="hero-stat-lbl">Років досвіду</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">300+</div>
+        <div class="hero-stat-lbl">Задоволених клієнтів</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">98%</div>
+        <div class="hero-stat-lbl">Повертаються знову</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПОСЛУГИ -->
+<section class="services-section" id="services">
+  <div class="container">
+    <span class="label">Послуги</span>
+    <h2>Що я пропоную</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div>
+          <div class="service-name">Класичний масаж</div>
+          <div class="service-desc">Загальний розслаблюючий масаж всього тіла. Знімає напругу, покращує кровообіг.</div>
+          <div class="service-duration">⏱ 60 хв</div>
+        </div>
+        <div class="service-price">600 грн</div>
+      </div>
+      <div class="service-card">
+        <div>
+          <div class="service-name">Спортивний масаж</div>
+          <div class="service-desc">Глибока опрацювання м'язів після навантаження. Відновлення та профілактика травм.</div>
+          <div class="service-duration">⏱ 75 хв</div>
+        </div>
+        <div class="service-price">800 грн</div>
+      </div>
+      <div class="service-card">
+        <div>
+          <div class="service-name">Лімфодренажний масаж</div>
+          <div class="service-desc">Виводить набряки, покращує обмін речовин. Рекомендований курсом 5–10 сеансів.</div>
+          <div class="service-duration">⏱ 60 хв</div>
+        </div>
+        <div class="service-price">750 грн</div>
+      </div>
+      <div class="service-card">
+        <div>
+          <div class="service-name">Масаж шиї та спини</div>
+          <div class="service-desc">Зона офісного болю: шия, плечі, поперек. Швидке полегшення після першого разу.</div>
+          <div class="service-duration">⏱ 40 хв</div>
+        </div>
+        <div class="service-price">450 грн</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРО МЕНЕ -->
+<section class="about-section">
+  <div class="container">
+    <span class="label">Про мене</span>
+    <div class="about-inner">
+      <div class="about-photo">🧘</div>
+      <div class="about-text">
+        <h2>Олена Савченко</h2>
+        <p>Сертифікований масажист з 5-річним досвідом. Спеціалізуюсь на спортивному відновленні та корекції постави. Кожен сеанс — індивідуальна програма, а не шаблон.</p>
+        <p>Пройшла навчання у Медичному коледжі №1, курси підвищення кваліфікації в Польщі. Постійно навчаюсь новим технікам.</p>
+        <div class="certs">
+          <span class="cert">Класичний масаж</span>
+          <span class="cert">Спортивна реабілітація</span>
+          <span class="cert">Лімфодренаж</span>
+          <span class="cert">Тайський масаж</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ЯК ЦЕ ПРАЦЮЄ -->
+<section class="how-section">
+  <div class="container">
+    <span class="label">Як записатись</span>
+    <h2>Просто та швидко</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Напишіть або зателефонуйте</div>
+          <div class="step-desc">Telegram, Viber або дзвінок — відповідаю протягом 1 години</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Оберемо час разом</div>
+          <div class="step-desc">Зручний для вас час, приймаю щодня з 9:00 до 20:00</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Перший сеанс</div>
+          <div class="step-desc">Розповідаєте про запит, підбираємо техніку, почуваєте результат</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contacts">
+  <div class="container">
+    <h2>Запишіться на перший сеанс</h2>
+    <p>Харків, вул. Сумська 18, каб. 7 · Пн–Нд 9:00–20:00</p>
+    <a href="tel:+380671234567" class="btn-white">📞 +380 67 123 45 67</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>© 2026 Олена Савченко · Масажний кабінет «Спокій» · Харків</p>
+</footer>
+
+<div class="demo-bar">
+  <span>🖥 Демо-зразок сайту типу «Лендінг»</span>
+  <a href="/">Замовити такий самий</a>
+</div>
+
+</body>
+</html>

@@ -24,22 +24,27 @@ function renderGrid(items) {
     return;
   }
 
-  grid.innerHTML = items.map(item => `
-    <div class="portfolio-card fade-in" onclick="openPortfolioPopup(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+  grid.innerHTML = items.map(item => {
+    const isDemo = item.siteType === 'demo';
+    const clickAttr = isDemo && item.liveUrl
+      ? `onclick="window.open('${item.liveUrl}','_blank')"`
+      : `onclick="openPortfolioPopup(${JSON.stringify(item).replace(/"/g, '&quot;')})"`;
+    return `
+    <div class="portfolio-card fade-in" ${clickAttr}>
       <div class="portfolio-card-img-wrap">
         ${item.screenshotUrl
           ? `<img class="portfolio-card-img" src="${item.screenshotUrl}" alt="${item.title}" loading="lazy">`
           : `<div class="portfolio-card-placeholder">🖥️</div>`
         }
-        <div class="portfolio-card-overlay">Переглянути →</div>
+        <div class="portfolio-card-overlay">${isDemo ? 'Відкрити демо →' : 'Переглянути →'}</div>
       </div>
       <div class="portfolio-card-body">
         <div class="portfolio-card-type">${siteTypeLabel(item.siteType)}</div>
         <div class="portfolio-card-title">${item.title}</div>
         <div class="portfolio-card-niche">${item.niche}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 
   // Fade-in observer
   const observer = new IntersectionObserver(entries => {
@@ -124,7 +129,7 @@ document.addEventListener('keydown', e => {
 
 /* ===== UTILS ===== */
 function siteTypeLabel(type) {
-  const map = { landing: 'Лендінг', business_card: 'Візитка', menu: 'Меню' };
+  const map = { landing: 'Лендінг', business_card: 'Візитка', menu: 'Меню', demo: 'Демо' };
   return map[type] || type;
 }
 

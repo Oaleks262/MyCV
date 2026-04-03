@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Горобина — Кафе · Онлайн-меню</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf7f2;
+      --bg2: #f2ede3;
+      --text: #1a1208;
+      --text-muted: #6b5c3e;
+      --accent: #7c5c2e;
+      --accent-light: #f0e6d3;
+      --border: #e0d5c0;
+      --radius: 14px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .cafe-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1.25rem 1.25rem;
+      text-align: center;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .cafe-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .cafe-tagline { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* CATEGORY TABS */
+    .tabs { display: flex; gap: 0.5rem; overflow-x: auto; padding: 1rem 1.25rem; background: var(--bg); scrollbar-width: none; border-bottom: 1px solid var(--border); }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0;
+      padding: 0.5rem 1.1rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .tab.active, .tab:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* MENU CONTENT */
+    .menu-wrap { padding: 1.5rem 1.25rem 8rem; max-width: 640px; margin: 0 auto; }
+    .category-section { margin-bottom: 2.5rem; display: none; }
+    .category-section.active { display: block; }
+    .category-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent-light);
+    }
+
+    /* MENU ITEM */
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .item-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .item-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .item-tag {
+      font-size: 0.65rem; padding: 0.1rem 0.45rem; border-radius: 20px;
+      background: var(--accent-light); color: var(--accent); font-weight: 500;
+    }
+    .item-price { font-weight: 700; color: var(--accent); font-size: 0.95rem; white-space: nowrap; padding-top: 0.1rem; }
+
+    /* BADGE (demo) */
+    .demo-badge {
+      position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%);
+      background: rgba(26,18,8,0.85); color: #fff;
+      font-size: 0.7rem; padding: 0.35rem 0.9rem; border-radius: 20px;
+      white-space: nowrap; pointer-events: none;
+    }
+
+    /* CTA BUTTON */
+    .cta-fixed {
+      position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      padding: 0.85rem 2rem; border-radius: 30px;
+      font-size: 0.9rem; font-weight: 600;
+      text-decoration: none; white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(124,92,46,0.4);
+      transition: opacity 0.2s;
+    }
+    .cta-fixed:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+<header class="cafe-header">
+  <div class="cafe-logo">Горобина</div>
+  <div class="cafe-tagline">Кафе · Сніданки та кава</div>
+</header>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-cat="kava">☕ Кава</button>
+  <button class="tab" data-cat="tea">🍵 Чай</button>
+  <button class="tab" data-cat="snidanky">🥐 Сніданки</button>
+  <button class="tab" data-cat="deserty">🍰 Десерти</button>
+</div>
+
+<div class="menu-wrap">
+
+  <!-- КАВА -->
+  <div class="category-section active" id="cat-kava">
+    <div class="category-title">Кава</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Еспресо</div>
+        <div class="item-desc">Арабіка 100%, середнє обсмаження, 30 мл</div>
+      </div>
+      <div class="item-price">45 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Американо</div>
+        <div class="item-desc">Подвійний еспресо з гарячою водою, 200 мл</div>
+      </div>
+      <div class="item-price">55 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Капучіно</div>
+        <div class="item-desc">Еспресо, молочна пінка, 250 мл</div>
+        <div class="item-tags"><span class="item-tag">хіт</span></div>
+      </div>
+      <div class="item-price">75 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Флет Вайт</div>
+        <div class="item-desc">Подвійний ристретто, молоко, мікропінка, 160 мл</div>
+      </div>
+      <div class="item-price">80 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Лате</div>
+        <div class="item-desc">Еспресо, парне молоко, 300 мл</div>
+      </div>
+      <div class="item-price">80 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Раф Карамель</div>
+        <div class="item-desc">Еспресо, вершки, карамельний сироп, 300 мл</div>
+        <div class="item-tags"><span class="item-tag">новинка</span></div>
+      </div>
+      <div class="item-price">95 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Холодна кава</div>
+        <div class="item-desc">Колд-брю, молоко, лід, 350 мл</div>
+      </div>
+      <div class="item-price">90 грн</div>
+    </div>
+  </div>
+
+  <!-- ЧАЙ -->
+  <div class="category-section" id="cat-tea">
+    <div class="category-title">Чай</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Чорний Ассам</div>
+        <div class="item-desc">Міцний, солодовий, Індія, 400 мл</div>
+      </div>
+      <div class="item-price">55 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Зелений Сенча</div>
+        <div class="item-desc">Легкий, трав'яний, Японія, 400 мл</div>
+      </div>
+      <div class="item-price">60 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Ромашка з медом</div>
+        <div class="item-desc">Ромашка, липа, акацієвий мед, 400 мл</div>
+        <div class="item-tags"><span class="item-tag">хіт</span></div>
+      </div>
+      <div class="item-price">65 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Іван-чай з ягодами</div>
+        <div class="item-desc">Ферментований, журавлина, шипшина, 400 мл</div>
+      </div>
+      <div class="item-price">70 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Масала</div>
+        <div class="item-desc">Чорний чай, кориця, імбир, кардамон, молоко, 300 мл</div>
+        <div class="item-tags"><span class="item-tag">зігріваючий</span></div>
+      </div>
+      <div class="item-price">75 грн</div>
+    </div>
+  </div>
+
+  <!-- СНІДАНКИ -->
+  <div class="category-section" id="cat-snidanky">
+    <div class="category-title">Сніданки</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Авокадо тост</div>
+        <div class="item-desc">Бородинський хліб, авокадо, яйце пашот, мікрозелень</div>
+        <div class="item-tags"><span class="item-tag">хіт</span></div>
+      </div>
+      <div class="item-price">175 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Вівсянка з ягодами</div>
+        <div class="item-desc">Вівсяні пластівці, полуниця, чорниця, насіння чіа</div>
+      </div>
+      <div class="item-price">120 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Яєчня з беконом</div>
+        <div class="item-desc">2 яйця, хрусткий бекон, тост, помідор черрі</div>
+      </div>
+      <div class="item-price">145 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Сирники</div>
+        <div class="item-desc">Домашній сир, сметана, варення з вишні, 3 шт</div>
+        <div class="item-tags"><span class="item-tag">домашнє</span></div>
+      </div>
+      <div class="item-price">135 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Круасан з шинкою та сиром</div>
+        <div class="item-desc">Листковий круасан, шинка, моцарела, гірчиця</div>
+      </div>
+      <div class="item-price">115 грн</div>
+    </div>
+  </div>
+
+  <!-- ДЕСЕРТИ -->
+  <div class="category-section" id="cat-deserty">
+    <div class="category-title">Десерти</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Чізкейк Нью-Йорк</div>
+        <div class="item-desc">Класичний, вершковий, ягідний соус</div>
+        <div class="item-tags"><span class="item-tag">хіт</span></div>
+      </div>
+      <div class="item-price">120 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Тирамісу</div>
+        <div class="item-desc">Савоярді, маскарпоне, еспресо, какао</div>
+      </div>
+      <div class="item-price">130 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Шоколадний брауні</div>
+        <div class="item-desc">Темний шоколад, грецький горіх, ванільне морозиво</div>
+      </div>
+      <div class="item-price">110 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Панна-котта Манго</div>
+        <div class="item-desc">Вершкова панна-котта, манговий соус</div>
+        <div class="item-tags"><span class="item-tag">новинка</span></div>
+      </div>
+      <div class="item-price">115 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Медовик</div>
+        <div class="item-desc">Домашній, 7 коржів, сметанний крем</div>
+        <div class="item-tags"><span class="item-tag">домашнє</span></div>
+      </div>
+      <div class="item-price">105 грн</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="demo-badge">🖥 Демо-зразок сайту</div>
+<a href="/" class="cta-fixed">Замовити сайт →</a>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.category-section');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('cat-' + tab.dataset.cat).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Психолог Марія Дорош · Онлайн та Київ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f9f8fc;
+      --bg2: #f1eef8;
+      --text: #1a1628;
+      --text-muted: #6b6480;
+      --accent: #6c5ce7;
+      --accent-dark: #5549c8;
+      --accent-light: rgba(108,92,231,0.1);
+      --border: #e2dcf5;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+    section { padding: 4.5rem 1.25rem; }
+    .container { max-width: 680px; margin: 0 auto; }
+    .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.6rem; display: block; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; line-height: 1.2; margin-bottom: 1rem; }
+
+    /* HERO */
+    .hero {
+      background: var(--bg2); min-height: 92vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 1.25rem 4rem;
+    }
+    .hero-inner { max-width: 680px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem; color: var(--accent); background: var(--accent-light);
+      border-radius: 20px; padding: 0.4rem 1rem; margin-bottom: 1.5rem; font-weight: 500;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+      line-height: 1.2; margin-bottom: 1.25rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.75; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: 0.875rem 1.75rem; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; border: none;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-outline {
+      border: 1px solid var(--border); color: var(--text-muted);
+      padding: 0.875rem 1.5rem; border-radius: 8px;
+      font-size: 0.9rem; background: none; cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .trust-row {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border);
+    }
+    .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--text-muted); }
+    .trust-icon { font-size: 1.1rem; }
+
+    /* ДЛЯ КОГО */
+    .for-section { background: var(--bg); }
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.75rem; }
+    .for-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.1rem;
+    }
+    .for-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .for-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .for-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* НАПРЯМКИ */
+    .areas-section { background: var(--bg2); }
+    .area-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .area-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.25rem;
+    }
+    .area-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-top: 0.4rem; flex-shrink: 0; }
+    .area-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .area-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ЯК ПРОХОДИТЬ */
+    .session-section { background: var(--bg); }
+    .session-steps { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.75rem; }
+    .session-step {
+      display: flex; gap: 1rem; padding: 1rem;
+      border-radius: 8px; border: 1px solid var(--border); background: var(--bg2);
+    }
+    .step-emoji { font-size: 1.5rem; flex-shrink: 0; }
+    .step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .step-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ВІДГУКИ */
+    .reviews-section { background: var(--bg2); }
+    .reviews-grid { display: grid; gap: 1rem; margin-top: 1.75rem; }
+    .review-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem;
+    }
+    .review-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0.75rem; font-style: italic; }
+    .review-author { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .review-stars { color: #f59e0b; font-size: 0.8rem; margin-top: 0.2rem; }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--accent), #9c6fe4);
+      color: #fff; text-align: center; padding: 4rem 1.25rem;
+    }
+    .cta-section h2 { color: #fff; }
+    .cta-section p { opacity: 0.85; margin: 0.75rem 0 2rem; font-size: 0.95rem; }
+    .btn-white {
+      background: #fff; color: var(--accent); padding: 0.9rem 2rem;
+      border-radius: 8px; font-size: 0.9rem; font-weight: 700;
+      display: inline-block; margin: 0.25rem;
+    }
+    .btn-white-outline {
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 0.9rem 1.75rem; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 500; display: inline-block; margin: 0.25rem;
+    }
+
+    footer { background: var(--text); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; }
+
+    .demo-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--text); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 0.6rem 1rem; font-size: 0.75rem;
+      z-index: 999; display: flex; justify-content: center; align-items: center; gap: 1rem;
+    }
+    .demo-bar a {
+      background: var(--accent); color: #fff;
+      padding: 0.3rem 0.9rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🟢 Приймаю нових клієнтів</div>
+    <h1>Психологічна допомога,<br>яка <em>справді</em> змінює</h1>
+    <p class="hero-desc">Працюю з тривогою, вигоранням, стосунковими кризами та самооцінкою. Онлайн сесії по всій Україні та офлайн у Києві.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Записатися на консультацію</button>
+      <button class="btn-outline" onclick="document.getElementById('areas').scrollIntoView({behavior:'smooth'})">Мої напрямки</button>
+    </div>
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-icon">🎓</span> Магістр психології</div>
+      <div class="trust-item"><span class="trust-icon">📅</span> 7 років практики</div>
+      <div class="trust-item"><span class="trust-icon">💬</span> Онлайн та офлайн</div>
+    </div>
+  </div>
+</section>
+
+<!-- ДЛЯ КОГО -->
+<section class="for-section">
+  <div class="container">
+    <span class="label">Для кого</span>
+    <h2>Ви потрапили за адресою, якщо...</h2>
+    <div class="cards-grid">
+      <div class="for-card">
+        <div class="for-icon">😰</div>
+        <div class="for-title">Постійна тривога</div>
+        <div class="for-desc">Складно вимкнути голову, важко розслабитись</div>
+      </div>
+      <div class="for-card">
+        <div class="for-icon">🔥</div>
+        <div class="for-title">Вигорання</div>
+        <div class="for-desc">Не хочеться нічого, відчуваєте порожнечу</div>
+      </div>
+      <div class="for-card">
+        <div class="for-icon">💔</div>
+        <div class="for-title">Стосунки</div>
+        <div class="for-desc">Конфлікти, розрив або залежні стосунки</div>
+      </div>
+      <div class="for-card">
+        <div class="for-icon">🪞</div>
+        <div class="for-title">Самооцінка</div>
+        <div class="for-desc">Сумніваєтесь у собі, важко відстояти межі</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- НАПРЯМКИ -->
+<section class="areas-section" id="areas">
+  <div class="container">
+    <span class="label">Напрямки</span>
+    <h2>З чим я працюю</h2>
+    <div class="area-list">
+      <div class="area-item">
+        <div class="area-dot"></div>
+        <div>
+          <div class="area-name">Тривожні розлади та панічні атаки</div>
+          <div class="area-desc">КПТ-підхід, техніки заземлення, робота з тригерами</div>
+        </div>
+      </div>
+      <div class="area-item">
+        <div class="area-dot"></div>
+        <div>
+          <div class="area-name">Стресові та кризові стани</div>
+          <div class="area-desc">Адаптація до змін, ПТСР, підтримка у важкий період</div>
+        </div>
+      </div>
+      <div class="area-item">
+        <div class="area-dot"></div>
+        <div>
+          <div class="area-name">Стосунки і комунікація</div>
+          <div class="area-desc">Сімейні конфлікти, межі у стосунках, розрив</div>
+        </div>
+      </div>
+      <div class="area-item">
+        <div class="area-dot"></div>
+        <div>
+          <div class="area-name">Самооцінка і впевненість</div>
+          <div class="area-desc">Синдром самозванця, токсичне середовище, самоприйняття</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ЯК ПРОХОДИТЬ СЕСІЯ -->
+<section class="session-section">
+  <div class="container">
+    <span class="label">Як це працює</span>
+    <h2>Як проходить сесія</h2>
+    <div class="session-steps">
+      <div class="session-step">
+        <div class="step-emoji">📋</div>
+        <div>
+          <div class="step-title">Безкоштовна знайомча консультація (20 хв)</div>
+          <div class="step-desc">Розповідаєте про запит, я пояснюю підхід. Без зобов'язань.</div>
+        </div>
+      </div>
+      <div class="session-step">
+        <div class="step-emoji">🗓</div>
+        <div>
+          <div class="step-title">Регулярні зустрічі (50 хв)</div>
+          <div class="step-desc">1–2 рази на тиждень, онлайн або у кабінеті на Подолі.</div>
+        </div>
+      </div>
+      <div class="session-step">
+        <div class="step-emoji">📈</div>
+        <div>
+          <div class="step-title">Результат через 4–6 сесій</div>
+          <div class="step-desc">Перші зміни помітні вже у перший місяць роботи.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ВІДГУКИ -->
+<section class="reviews-section">
+  <div class="container">
+    <span class="label">Відгуки</span>
+    <h2>Що кажуть клієнти</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-text">«Прийшла з панічними атаками — через 2 місяці вони майже зникли. Марія вміє пояснити складне просто і без осуду.»</div>
+        <div class="review-author">Анастасія, 28</div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <div class="review-card">
+        <div class="review-text">«Довго боявся психологів. Перша сесія розвіяла всі стереотипи. Зараз ходжу вже 4 місяці і не збираюся зупинятись.»</div>
+        <div class="review-author">Дмитро, 34</div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <h2>Перший крок — найважчий</h2>
+    <p>Безкоштовна знайомча консультація 20 хвилин. Напишіть — відповім сьогодні.</p>
+    <a href="https://t.me/example" class="btn-white">Telegram</a>
+    <a href="tel:+380671234567" class="btn-white-outline">📞 Зателефонувати</a>
+  </div>
+</section>
+
+<footer>© 2026 Марія Дорош · Психолог · Київ та онлайн</footer>
+
+<div class="demo-bar">
+  <span>🖥 Демо-зразок сайту типу «Лендінг»</span>
+  <a href="/">Замовити такий самий</a>
+</div>
+
+</body>
+</html>

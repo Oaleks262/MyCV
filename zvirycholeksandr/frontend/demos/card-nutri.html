@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Аліна Дорош · Нутриціолог · Онлайн</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f9f4;
+      --bg2: #eaf3e8;
+      --text: #1a2418;
+      --text-muted: #5a7254;
+      --accent: #3d7a35;
+      --accent-dark: #2e5e28;
+      --accent-light: rgba(61,122,53,0.1);
+      --border: #cde0ca;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+    section { padding: 4.5rem 1.25rem; }
+    .container { max-width: 680px; margin: 0 auto; }
+    .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: block; }
+    h2 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.2; }
+
+    /* HERO */
+    .hero {
+      background: var(--bg2); min-height: 90vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5.5rem 1.25rem 4rem;
+    }
+    .hero-inner { max-width: 680px; margin: 0 auto; }
+    .hero-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.78rem; color: var(--accent); border: 1px solid var(--border);
+      border-radius: 20px; padding: 0.35rem 0.85rem; margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.3rem, 8vw, 3.2rem);
+      line-height: 1.15; margin-bottom: 1.25rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.75; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: 0.9rem 1.75rem; border-radius: 6px;
+      font-size: 0.9rem; font-weight: 600; border: none;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-outline {
+      border: 1px solid var(--border); color: var(--text-muted);
+      padding: 0.9rem 1.5rem; border-radius: 6px; font-size: 0.9rem;
+      background: none; cursor: pointer; font-family: inherit; transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .fact-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .fact { }
+    .fact-num { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--accent); }
+    .fact-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* RESULTS */
+    .results-section { background: var(--bg); }
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.75rem; }
+    .result-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.1rem;
+    }
+    .result-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .result-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.25rem; }
+    .result-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ПРОГРАМИ */
+    .programs-section { background: var(--bg2); }
+    .programs-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.75rem; }
+    .program-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+    }
+    .program-card.featured { border-color: var(--accent); background: var(--accent-light); }
+    .program-badge {
+      font-size: 0.65rem; background: var(--accent); color: #fff;
+      padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; display: inline-block;
+    }
+    .program-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+    .program-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .program-duration { font-size: 0.75rem; color: var(--accent); margin-top: 0.4rem; }
+    .program-price { font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--accent); white-space: nowrap; font-weight: 600; }
+
+    /* ПРО МЕНЕ */
+    .about-section { background: var(--bg); }
+    .about-inner { display: flex; flex-direction: column; gap: 1.75rem; }
+    .about-avatar {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: var(--bg2); border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+    }
+    .about-text p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.75; margin-bottom: 0.85rem; }
+    .cert-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .cert { font-size: 0.72rem; border: 1px solid var(--border); color: var(--text-muted); padding: 0.25rem 0.6rem; border-radius: 4px; }
+
+    /* ВІДГУКИ */
+    .reviews-section { background: var(--bg2); }
+    .review-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.75rem; }
+    .review-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .review-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; font-style: italic; margin-bottom: 0.75rem; }
+    .review-meta { display: flex; align-items: center; gap: 0.75rem; }
+    .review-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .review-name { font-size: 0.82rem; font-weight: 600; }
+    .review-result { font-size: 0.72rem; color: var(--accent); }
+
+    /* CTA */
+    .cta-section { background: var(--accent); color: #fff; text-align: center; padding: 4.5rem 1.25rem; }
+    .cta-section h2 { color: #fff; }
+    .cta-section p { opacity: 0.85; margin: 0.75rem 0 2rem; }
+    .btn-white { background: #fff; color: var(--accent); padding: 0.9rem 2rem; border-radius: 6px; font-size: 0.9rem; font-weight: 700; display: inline-block; margin: 0.25rem; }
+    .btn-white-out { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 0.9rem 1.5rem; border-radius: 6px; font-size: 0.9rem; display: inline-block; margin: 0.25rem; }
+
+    footer { text-align: center; padding: 1.5rem; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+    .demo-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--text); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 0.6rem 1rem; font-size: 0.75rem;
+      z-index: 999; display: flex; justify-content: center; align-items: center; gap: 1rem;
+    }
+    .demo-bar a { background: var(--accent); color: #fff; padding: 0.3rem 0.9rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-chip">🟢 Приймаю клієнтів · Онлайн</span>
+    <h1>Їжа, яка <em>лікує</em>,<br>а не обмежує</h1>
+    <p class="hero-desc">Допомагаю нормалізувати вагу, покращити самопочуття і налагодити стосунки з їжею. Без жорстких дієт — через розуміння свого тіла.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">Обрати програму</button>
+      <button class="btn-outline" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Безкоштовна консультація</button>
+    </div>
+    <div class="fact-row">
+      <div class="fact"><div class="fact-num">250+</div><div class="fact-lbl">Клієнтів</div></div>
+      <div class="fact"><div class="fact-num">3 роки</div><div class="fact-lbl">Практики</div></div>
+      <div class="fact"><div class="fact-num">96%</div><div class="fact-lbl">Досягають мети</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- РЕЗУЛЬТАТИ -->
+<section class="results-section">
+  <div class="container">
+    <span class="label">Результати</span>
+    <h2>Що зміниться</h2>
+    <div class="results-grid">
+      <div class="result-card"><div class="result-icon">⚖️</div><div class="result-title">Нормальна вага</div><div class="result-desc">Без повернення кілограмів після закінчення</div></div>
+      <div class="result-card"><div class="result-icon">⚡</div><div class="result-title">Більше енергії</div><div class="result-desc">Перестанете відчувати втому після їжі</div></div>
+      <div class="result-card"><div class="result-icon">😴</div><div class="result-title">Кращий сон</div><div class="result-desc">Харчування безпосередньо впливає на якість сну</div></div>
+      <div class="result-card"><div class="result-icon">🧠</div><div class="result-title">Стосунки з їжею</div><div class="result-desc">Без заборон, без зривів, без вини</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРОГРАМИ -->
+<section class="programs-section" id="programs">
+  <div class="container">
+    <span class="label">Програми</span>
+    <h2>Оберіть формат</h2>
+    <div class="programs-list">
+      <div class="program-card">
+        <div>
+          <div class="program-name">Старт</div>
+          <div class="program-desc">Аналіз харчування, персональний план на місяць, 2 консультації</div>
+          <div class="program-duration">📅 1 місяць</div>
+        </div>
+        <div class="program-price">2 500 грн</div>
+      </div>
+      <div class="program-card featured">
+        <div>
+          <div class="program-badge">Популярне</div>
+          <div class="program-name">Трансформація</div>
+          <div class="program-desc">Повний супровід, щотижневі зустрічі, коригування плану, підтримка в чаті</div>
+          <div class="program-duration">📅 3 місяці</div>
+        </div>
+        <div class="program-price">5 900 грн</div>
+      </div>
+      <div class="program-card">
+        <div>
+          <div class="program-name">VIP</div>
+          <div class="program-desc">Необмежена підтримка, аналізи, персональне меню на кожен тиждень</div>
+          <div class="program-duration">📅 6 місяців</div>
+        </div>
+        <div class="program-price">9 800 грн</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРО МЕНЕ -->
+<section class="about-section">
+  <div class="container">
+    <span class="label">Про мене</span>
+    <div class="about-inner">
+      <div class="about-avatar">🌿</div>
+      <div class="about-text">
+        <h2>Аліна Дорош</h2>
+        <p>Дипломований нутриціолог, член Асоціації дієтологів України. Спеціалізуюсь на нормалізації ваги, інтуїтивному харчуванні та харчових розладах.</p>
+        <p>Сама пройшла шлях від жорстких дієт до усвідомленого харчування. Тому розумію, як це — і як з цим справді працювати.</p>
+        <div class="cert-list">
+          <span class="cert">Нутриціологія</span>
+          <span class="cert">КПТ для харчових розладів</span>
+          <span class="cert">Спортивне харчування</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ВІДГУКИ -->
+<section class="reviews-section">
+  <div class="container">
+    <span class="label">Відгуки</span>
+    <h2>Реальні результати</h2>
+    <div class="review-list">
+      <div class="review-card">
+        <div class="review-text">«За 3 місяці -8 кг і жодного зриву. Аліна не забороняла нічого — просто навчила думати по-іншому. Це змінило мене.»</div>
+        <div class="review-meta">
+          <div class="review-avatar">👩</div>
+          <div><div class="review-name">Катерина, 31</div><div class="review-result">−8 кг за 3 місяці</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-text">«Нарешті розумію своє тіло. Більше не лічу калорії, їм із задоволенням і почуваюся краще ніж у 25.»</div>
+        <div class="review-meta">
+          <div class="review-avatar">👩</div>
+          <div><div class="review-name">Ірина, 38</div><div class="review-result">Нормалізація стосунків з їжею</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <h2>Почнемо разом?</h2>
+    <p>Безкоштовна 20-хвилинна консультація — розберемось з вашою ситуацією</p>
+    <a href="https://t.me/example" class="btn-white">Написати в Telegram</a>
+    <a href="mailto:alina@nutri.ua" class="btn-white-out">Email</a>
+  </div>
+</section>
+
+<footer>© 2026 Аліна Дорош · Нутриціолог · Онлайн по всій Україні</footer>
+
+<div class="demo-bar">
+  <span>🖥 Демо-зразок сайту типу «Візитка»</span>
+  <a href="/">Замовити такий самий</a>
+</div>
+
+</body>
+</html>

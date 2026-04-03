@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>БУНКЕР PUB · Меню</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d;
+      --bg2: #161616;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --accent: #c0392b;
+      --accent-light: rgba(192,57,43,0.15);
+      --border: #2a2a2a;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .pub-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.25rem 1rem;
+      text-align: center;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .pub-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+    }
+    .pub-sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.1rem; }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 0.4rem; overflow-x: auto;
+      padding: 0.875rem 1.25rem; background: var(--bg2);
+      border-bottom: 1px solid var(--border); scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0; padding: 0.45rem 1rem;
+      border-radius: 4px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted);
+      font-size: 0.82rem; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; font-family: inherit; white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+    .tab.active, .tab:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* MENU */
+    .menu-wrap { padding: 1.5rem 1.25rem 8rem; max-width: 640px; margin: 0 auto; }
+    .category-section { display: none; }
+    .category-section.active { display: block; }
+    .category-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .menu-item {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; color: var(--text); }
+    .item-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+    .item-meta { display: flex; gap: 0.5rem; margin-top: 0.35rem; align-items: center; }
+    .item-vol { font-size: 0.7rem; color: var(--text-muted); }
+    .item-badge {
+      font-size: 0.62rem; padding: 0.1rem 0.4rem; border-radius: 3px;
+      background: var(--accent-light); color: var(--accent); font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .item-price { font-weight: 700; color: var(--accent); font-size: 0.95rem; white-space: nowrap; }
+
+    .promo-card {
+      background: var(--accent-light);
+      border: 1px solid rgba(192,57,43,0.3);
+      border-radius: 8px; padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .promo-title { font-family: 'Oswald', sans-serif; font-size: 1rem; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .promo-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+    .demo-badge {
+      position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%);
+      background: rgba(240,240,240,0.1); color: var(--text-muted);
+      font-size: 0.7rem; padding: 0.35rem 0.9rem; border-radius: 20px;
+      white-space: nowrap; pointer-events: none; border: 1px solid var(--border);
+    }
+    .cta-fixed {
+      position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      padding: 0.85rem 2rem; border-radius: 4px;
+      font-size: 0.9rem; font-weight: 600; text-decoration: none;
+      white-space: nowrap; box-shadow: 0 4px 20px rgba(192,57,43,0.4);
+      letter-spacing: 0.05em; transition: opacity 0.2s;
+    }
+    .cta-fixed:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+<header class="pub-header">
+  <div class="pub-logo">БУНКЕР</div>
+  <div class="pub-sub">PUB · Бар · Закуски</div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-cat="beer">🍺 Пиво</button>
+  <button class="tab" data-cat="cocktails">🍸 Коктейлі</button>
+  <button class="tab" data-cat="snacks">🍟 Закуски</button>
+  <button class="tab" data-cat="promo">🔥 Акції</button>
+</div>
+
+<div class="menu-wrap">
+
+  <!-- ПИВО -->
+  <div class="category-section active" id="cat-beer">
+    <div class="category-title">Пиво</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Lvivske 1715</div>
+        <div class="item-desc">Світле, 4.7%, класичне</div>
+        <div class="item-meta"><span class="item-vol">0.5 л</span></div>
+      </div>
+      <div class="item-price">75 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Varvar Pale Ale</div>
+        <div class="item-desc">Крафтове, хмелеве, цитрусові ноти, 5.0%</div>
+        <div class="item-meta"><span class="item-vol">0.5 л</span><span class="item-badge">крафт</span></div>
+      </div>
+      <div class="item-price">110 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Бункер Темне</div>
+        <div class="item-desc">Власне темне, карамельне, 4.8% — варимо самі</div>
+        <div class="item-meta"><span class="item-vol">0.5 л</span><span class="item-badge">власне</span></div>
+      </div>
+      <div class="item-price">95 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Guinness</div>
+        <div class="item-desc">Ірландський стаут, кремова пінка, 4.2%</div>
+        <div class="item-meta"><span class="item-vol">0.5 л</span></div>
+      </div>
+      <div class="item-price">130 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Сет 5 крафтів</div>
+        <div class="item-desc">5 склянок по 0.1 л різних крафтових сортів</div>
+        <div class="item-meta"><span class="item-badge">хіт</span></div>
+      </div>
+      <div class="item-price">185 грн</div>
+    </div>
+  </div>
+
+  <!-- КОКТЕЙЛІ -->
+  <div class="category-section" id="cat-cocktails">
+    <div class="category-title">Коктейлі</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Мохіто</div>
+        <div class="item-desc">Ром, лайм, м'ята, содова, цукровий сироп</div>
+      </div>
+      <div class="item-price">140 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Апероль Шприц</div>
+        <div class="item-desc">Апероль, просеко, содова, апельсин</div>
+        <div class="item-meta"><span class="item-badge">хіт</span></div>
+      </div>
+      <div class="item-price">155 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Бункер Сауер</div>
+        <div class="item-desc">Власна настоянка, лимонний сік, яєчний білок</div>
+        <div class="item-meta"><span class="item-badge">власне</span></div>
+      </div>
+      <div class="item-price">160 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Безалкогольний Мохіто</div>
+        <div class="item-desc">Лайм, м'ята, содова, цукор, лід</div>
+      </div>
+      <div class="item-price">90 грн</div>
+    </div>
+  </div>
+
+  <!-- ЗАКУСКИ -->
+  <div class="category-section" id="cat-snacks">
+    <div class="category-title">Закуски</div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Крила у соусі BBQ</div>
+        <div class="item-desc">6 шт, соус барбекю, сирний дип, зелень</div>
+        <div class="item-meta"><span class="item-badge">хіт</span></div>
+      </div>
+      <div class="item-price">195 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Картопля Фрі</div>
+        <div class="item-desc">Хрустка, сіль, соус на вибір</div>
+      </div>
+      <div class="item-price">85 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Сирні кульки</div>
+        <div class="item-desc">Моцарела в паніровці, томатний соус, 6 шт</div>
+      </div>
+      <div class="item-price">130 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">М'ясна тарілка</div>
+        <div class="item-desc">Ковбаски, бекон, сало, гірчиця, хліб</div>
+        <div class="item-meta"><span class="item-badge">до пива</span></div>
+      </div>
+      <div class="item-price">240 грн</div>
+    </div>
+    <div class="menu-item">
+      <div class="item-info">
+        <div class="item-name">Нагетси</div>
+        <div class="item-desc">8 шт, хрустка паніровка, соус BBQ або кетчуп</div>
+      </div>
+      <div class="item-price">120 грн</div>
+    </div>
+  </div>
+
+  <!-- АКЦІЇ -->
+  <div class="category-section" id="cat-promo">
+    <div class="category-title">Акції</div>
+    <div class="promo-card">
+      <div class="promo-title">🍺 HAPPY HOUR</div>
+      <div class="promo-desc">Щодня з 17:00 до 19:00 — пиво на розлив -20%. Приходь раніше, виходь пізніше.</div>
+    </div>
+    <div class="promo-card">
+      <div class="promo-title">🏈 СПОРТИВНА НІCH</div>
+      <div class="promo-desc">Матч на великому екрані — замов 2 пива та закуску і отримай третє пиво у подарунок.</div>
+    </div>
+    <div class="promo-card">
+      <div class="promo-title">🎸 ЖИВИЙ КОНЦЕРТ</div>
+      <div class="promo-desc">Щоп'ятниці з 21:00 — живий звук. Без доплати, тільки замов щось смачне.</div>
+    </div>
+    <div class="promo-card">
+      <div class="promo-title">🎂 ДЕНЬ НАРОДЖЕННЯ</div>
+      <div class="promo-desc">Святкуй з нами! Пляшка просеко в подарунок при бронюванні від 6 осіб.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="demo-badge">🖥 Демо-зразок сайту</div>
+<a href="/" class="cta-fixed">Замовити сайт →</a>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('cat-' + tab.dataset.cat).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
