@@ -49,7 +49,8 @@ app.use('/api/settings', require('./routes/settings'));
 // Адмін роути (JWT захищені)
 app.use('/api/admin', require('./routes/admin'));
 
-// Sitemap — динамічний, включає блог-пости
+const { analyticsMiddleware } = require('./services/analytics');
+app.use(analyticsMiddleware);
 app.get('/sitemap.xml', (req, res) => {
   const JsonDB = require('./db');
   const blog = new JsonDB('blog.json');

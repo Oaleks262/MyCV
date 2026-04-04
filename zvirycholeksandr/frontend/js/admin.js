@@ -169,11 +169,15 @@ async function loadOrderDetail() {
     document.getElementById('order-type').textContent = siteTypeLabel(order.siteType);
     document.getElementById('order-date').textContent = formatDate(order.createdAt);
 
-    // Form data
+    // Form data — редаговані поля
     const formDataEl = document.getElementById('order-form-data');
     if (formDataEl) {
+      const fieldLabels = { name:'Імʼя', cafeName:'Назва закладу', email:'Email', phone:'Телефон', city:'Місто', description:'Опис', budget:'Бюджет', deadline:'Дедлайн' };
       formDataEl.innerHTML = Object.entries(order.formData || {}).map(([k, v]) =>
-        v ? `<div class="detail-row"><span class="detail-row-label">${k}</span><span class="detail-row-value">${v}</span></div>` : ''
+        v ? `<div class="form-group" style="margin-bottom:.6rem">
+          <label class="form-label" style="font-size:.75rem">${fieldLabels[k] || k}</label>
+          <input type="text" class="form-control" data-field="${k}" value="${String(v).replace(/"/g,'&quot;')}" style="padding:.45rem .65rem;font-size:.85rem">
+        </div>` : ''
       ).join('');
     }
 
@@ -186,6 +190,20 @@ async function loadOrderDetail() {
   } catch (e) {
     showToast('Помилка завантаження', 'error');
   }
+}
+
+async function saveClientData() {
+  const id = new URLSearchParams(window.location.search).get('id');
+  const formData = {};
+  document.querySelectorAll('#order-form-data [data-field]').forEach(input => {
+    formData[input.dataset.field] = input.value;
+  });
+  const res = await apiRequest(`/admin/orders/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ formData })
+  });
+  if (res?.ok) showToast('Дані клієнта збережено');
+  else showToast('Помилка', 'error');
 }
 
 async function saveOrderPrompt() {

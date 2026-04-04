@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Статистика — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <style>
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+    .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+    .stat-card-num{font-size:2rem;font-weight:700;color:var(--accent)}
+    .stat-card-lbl{font-size:.8rem;color:#888;margin-top:.25rem}
+    .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+    @media(max-width:640px){.charts-row{grid-template-columns:1fr}}
+    .chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+    .chart-card h3{font-size:.95rem;margin-bottom:1rem;color:var(--text)}
+    .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+    .bar-label{font-size:.78rem;color:#888;width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bar-wrap{flex:1;background:#2a2a3a;border-radius:4px;height:8px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .5s ease}
+    .bar-val{font-size:.75rem;color:#888;min-width:28px;text-align:right}
+    .day-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:.5rem}
+    .day-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+    .day-bar{width:100%;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px;transition:height .4s ease;opacity:.8}
+    .day-bar:hover{opacity:1}
+    .day-lbl{font-size:.6rem;color:#666;text-align:center;white-space:nowrap}
+    .period-btns{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    .period-btn{padding:.35rem .85rem;border:1px solid var(--border);border-radius:6px;background:none;color:#888;cursor:pointer;font-size:.8rem}
+    .period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <div class="admin-topbar">
+    <button class="admin-burger" id="admin-burger">&#9776;</button>
+    <span class="admin-topbar-logo">zviry<span>ch</span>oleksandr</span>
+  </div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index"><span class="nav-icon">📋</span> Замовлення</a>
+      <a href="/admin/portfolio"><span class="nav-icon">🖼️</span> Портфоліо</a>
+      <a href="/admin/blog"><span class="nav-icon">📝</span> Блог</a>
+      <a href="/admin/stats" class="active"><span class="nav-icon">📊</span> Статистика</a>
+      <a href="/admin/settings"><span class="nav-icon">⚙️</span> Налаштування</a>
+      <a href="/" target="_blank"><span class="nav-icon">🌐</span> Сайт</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Статистика</h1>
+      <p>Відвідуваність та джерела трафіку</p>
+    </div>
+
+    <div class="period-btns">
+      <button class="period-btn active" onclick="loadStats(7,this)">7 днів</button>
+      <button class="period-btn" onclick="loadStats(30,this)">30 днів</button>
+      <button class="period-btn" onclick="loadStats(90,this)">90 днів</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-card-num" id="s-total">—</div><div class="stat-card-lbl">Переглядів за період</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-lbl">Сьогодні</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-avg">—</div><div class="stat-card-lbl">Середньо / день</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-sources">—</div><div class="stat-card-lbl">Джерел трафіку</div></div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:1.5rem">
+      <h3>📈 Відвідування по днях</h3>
+      <div class="day-chart" id="day-chart"></div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>📄 Топ сторінок</h3>
+        <div id="pages-chart"></div>
+      </div>
+      <div class="chart-card">
+        <h3>🌐 Джерела трафіку</h3>
+        <div id="referrers-chart"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+<script>
+async function loadStats(days = 7, btn) {
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const res = await apiRequest(`/admin/analytics?days=${days}`);
+  if (!res) return;
+  const data = await res.json();
+
+  // Картки
+  const today = new Date().toISOString().split('T')[0];
+  const todayVal = data.daily[today] || 0;
+  const days_ = Object.keys(data.daily).length || 1;
+  document.getElementById('s-total').textContent   = data.total;
+  document.getElementById('s-today').textContent   = todayVal;
+  document.getElementById('s-avg').textContent     = Math.round(data.total / days_);
+  document.getElementById('s-sources').textContent = Object.keys(data.referrers).length;
+
+  // Графік по днях
+  const sorted = Object.entries(data.daily).sort(([a],[b]) => a.localeCompare(b)).slice(-days);
+  const maxDay = Math.max(...sorted.map(([,v]) => v), 1);
+  document.getElementById('day-chart').innerHTML = sorted.map(([date, val]) => {
+    const h = Math.max(4, Math.round((val / maxDay) * 76));
+    const lbl = date.slice(5); // MM-DD
+    return `<div class="day-col" title="${date}: ${val}">
+      <div class="day-bar" style="height:${h}px"></div>
+      <div class="day-lbl">${lbl}</div>
+    </div>`;
+  }).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+
+  // Топ сторінок
+  const pageNames = { '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог', '/terms': 'Умови', '/privacy': 'Конфіденційність' };
+  const maxPage = Math.max(...Object.values(data.pages), 1);
+  document.getElementById('pages-chart').innerHTML = Object.entries(data.pages).slice(0,8).map(([p, n]) =>
+    `<div class="bar-row">
+      <div class="bar-label" title="${p}">${pageNames[p] || p}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(n/maxPage*100)}%"></div></div>
+      <div class="bar-val">${n}</div>
+    </div>`
+  ).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+
+  // Джерела
+  const srcIcons = { 'Google':'🔍', 'Instagram':'📷', 'Facebook':'👤', 'Telegram':'✈️', 'YouTube':'▶️', 'Прямий перехід':'🔗', 'Bing':'🔍' };
+  const maxRef = Math.max(...Object.values(data.referrers), 1);
+  document.getElementById('referrers-chart').innerHTML = Object.entries(data.referrers).slice(0,8).map(([r, n]) =>
+    `<div class="bar-row">
+      <div class="bar-label" title="${r}">${srcIcons[r] || '🌐'} ${r}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(n/maxRef*100)}%;background:#8b5cf6"></div></div>
+      <div class="bar-val">${n}</div>
+    </div>`
+  ).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+}
+
+loadStats(7);
+</script>
+</body>
+</html>

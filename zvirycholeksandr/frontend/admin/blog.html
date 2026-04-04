@@ -31,6 +31,9 @@
       <a href="/admin/blog" class="active">
         <span class="nav-icon">📝</span> Блог
       </a>
+      <a href="/admin/stats">
+        <span class="nav-icon">📊</span> Статистика
+      </a>
       <a href="/admin/settings">
         <span class="nav-icon">⚙️</span> Налаштування
       </a>
@@ -105,8 +108,18 @@
         </div>
         <div class="form-group">
           <label class="form-label">Контент (Markdown)</label>
-          <textarea name="content" class="form-control md-editor" rows="15"
-            placeholder="## Заголовок&#10;&#10;Текст статті у форматі Markdown..."></textarea>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('**','**','жирний')">B</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('*','*','курсив')" style="font-style:italic">I</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('\n## ','','Заголовок')">H2</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('\n### ','','Підзаголовок')">H3</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsertLink()">🔗 Посилання</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('\n- ','','пункт')">• Список</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('\n> ','','цитата')">❝ Цитата</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="mdInsert('\n---\n','','')">— Розділ</button>
+          </div>
+          <textarea name="content" id="md-content" class="form-control md-editor" rows="15"
+            placeholder="## Заголовок&#10;&#10;Текст статті у форматі Markdown...&#10;&#10;[Назва посилання](https://example.com)"></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Обкладинка</label>
@@ -133,5 +146,30 @@
 </div>
 
 <script src="/js/admin.js"></script>
+<script>
+function getContentEl() {
+  return document.getElementById('md-content') || document.querySelector('[name="content"]');
+}
+function mdInsert(before, after, placeholder) {
+  const ta = getContentEl();
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const sel = ta.value.substring(start, end) || placeholder;
+  ta.value = ta.value.substring(0, start) + before + sel + after + ta.value.substring(end);
+  ta.focus();
+  ta.selectionStart = start + before.length;
+  ta.selectionEnd   = start + before.length + sel.length;
+}
+function mdInsertLink() {
+  const ta = getContentEl();
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const sel = ta.value.substring(start, end);
+  const url = prompt('URL посилання:', 'https://');
+  if (!url) return;
+  const text = sel || prompt('Текст посилання:', 'Назва') || 'Посилання';
+  const md = `[${text}](${url})`;
+  ta.value = ta.value.substring(0, start) + md + ta.value.substring(end);
+  ta.focus();
+}
+</script>
 </body>
 </html>

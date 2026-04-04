@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
+const { getStats } = require('../services/analytics');
 
 const orders = new JsonDB('orders.json');
 const adminFile = path.join(__dirname, '../../data/admin.json');
@@ -78,6 +79,12 @@ router.patch('/orders/:id', auth, (req, res) => {
 router.delete('/orders/:id', auth, (req, res) => {
   orders.delete(req.params.id);
   res.json({ success: true });
+});
+
+// GET /api/admin/analytics?days=30
+router.get('/analytics', auth, (req, res) => {
+  const days = parseInt(req.query.days) || 30;
+  res.json(getStats(days));
 });
 
 module.exports = router;
