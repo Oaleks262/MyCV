@@ -6,6 +6,7 @@ const path = require('path');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 const { getStats } = require('../services/analytics');
+const { sendCompleteWorkEmail } = require('../services/mailer');
 
 const orders = new JsonDB('orders.json');
 const adminFile = path.join(__dirname, '../../data/admin.json');
@@ -79,6 +80,23 @@ router.patch('/orders/:id', auth, (req, res) => {
 router.delete('/orders/:id', auth, (req, res) => {
   orders.delete(req.params.id);
   res.json({ success: true });
+});
+
+// POST /api/admin/orders/:id/complete — надіслати клієнту email з готовою роботою
+router.post('/orders/:id/complete', auth, async (req, res) => {
+  try {
+    const { siteUrl, message, credentials } = req.body;
+    if (!siteUrl) return res.status(400).json({ error: 'siteUrl обов\'язковий' });
+
+    const order = orders.findById(req.params.id);
+    if (!order) return res.status(404).json({ error: 'Not found' });
+
+    await sendCompleteWorkEmail(order, { siteUrl, message: message || '', credentials: credentials || '' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('complete email error:', err);
+    res.status(500).json({ error: 'Помилка надсилання листа' });
+  }
 });
 
 // GET /api/admin/analytics?days=30
