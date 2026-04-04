@@ -117,6 +117,85 @@
   </main>
 </div>
 
+<!-- ПОПАП: Надіслати готову роботу клієнту -->
+<div class="modal-overlay" id="complete-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title">✅ Надіслати готову роботу</span>
+      <button class="modal-close" onclick="closeModal('complete-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:#888;font-size:.875rem;margin-bottom:1.25rem">
+        Заповніть дані — клієнт отримає email з посиланням на готовий сайт.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Посилання на готовий сайт *</label>
+        <input type="url" id="complete-url" class="form-control" placeholder="https://client-site.com.ua">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Додаткове повідомлення клієнту (необов'язково)</label>
+        <textarea id="complete-message" class="form-control" rows="4"
+          placeholder="Наприклад: пароль від адмінки надішлю окремо у Telegram..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дані для входу (необов'язково)</label>
+        <input type="text" id="complete-credentials" class="form-control"
+          placeholder="Логін: admin / Пароль: xxxxxxxx">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('complete-modal')">Скасувати</button>
+      <button class="btn btn-primary" onclick="sendCompleteEmail()">Надіслати клієнту →</button>
+    </div>
+  </div>
+</div>
+
 <script src="/js/admin.js"></script>
+<script>
+// Перехоплюємо збереження статусу "виконано"
+const _origSaveStatus = saveOrderStatus;
+window.saveOrderStatus = async function() {
+  const status = document.getElementById('order-status-select').value;
+  if (status === 'done') {
+    // Спочатку зберігаємо статус, потім відкриваємо попап
+    await _origSaveStatus();
+    openModal('complete-modal');
+  } else {
+    await _origSaveStatus();
+  }
+};
+
+async function sendCompleteEmail() {
+  const url         = document.getElementById('complete-url').value.trim();
+  const message     = document.getElementById('complete-message').value.trim();
+  const credentials = document.getElementById('complete-credentials').value.trim();
+  const id          = new URLSearchParams(window.location.search).get('id');
+
+  if (!url) {
+    showToast('Вкажіть посилання на готовий сайт', 'error');
+    return;
+  }
+
+  const btn = document.querySelector('#complete-modal .btn-primary');
+  btn.disabled = true;
+  btn.textContent = 'Надсилаємо...';
+
+  const res = await apiRequest(`/admin/orders/${id}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({ siteUrl: url, message, credentials })
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Надіслати клієнту →';
+
+  if (res?.ok) {
+    showToast('Email надіслано клієнту! 🎉');
+    closeModal('complete-modal');
+  } else {
+    const data = await res?.json().catch(() => ({}));
+    showToast(data?.error || 'Помилка надсилання', 'error');
+  }
+}
+</script>
 </body>
 </html>
