@@ -49,6 +49,47 @@ app.use('/api/settings', require('./routes/settings'));
 // Адмін роути (JWT захищені)
 app.use('/api/admin', require('./routes/admin'));
 
+// Sitemap — динамічний, включає блог-пости
+app.get('/sitemap.xml', (req, res) => {
+  const JsonDB = require('./db');
+  const blog = new JsonDB('blog.json');
+  const DOMAIN = 'https://zvirycholeksandr.com';
+  const now = new Date().toISOString().split('T')[0];
+
+  const staticPages = [
+    { url: '/', priority: '1.0', freq: 'weekly' },
+    { url: '/portfolio', priority: '0.8', freq: 'monthly' },
+    { url: '/blog', priority: '0.8', freq: 'daily' },
+    { url: '/terms', priority: '0.3', freq: 'yearly' },
+    { url: '/privacy', priority: '0.3', freq: 'yearly' },
+  ];
+
+  const posts = blog.all({ isPublished: true });
+
+  const urls = [
+    ...staticPages.map(p => `
+  <url>
+    <loc>${DOMAIN}${p.url}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>${p.freq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`),
+    ...posts.map(p => `
+  <url>
+    <loc>${DOMAIN}/blog/${p.slug}</loc>
+    <lastmod>${(p.updatedAt || p.createdAt || now).split('T')[0]}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`),
+  ];
+
+  res.setHeader('Content-Type', 'application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('')}
+</urlset>`);
+});
+
 // Статичні файли — завантажені зображення
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
