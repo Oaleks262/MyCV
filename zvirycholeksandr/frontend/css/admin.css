@@ -444,18 +444,19 @@ select.form-control { cursor: pointer; }
 /* ===== TOGGLE ===== */
 .toggle {
   position: relative;
-  width: 40px;
-  height: 22px;
+  width: 44px;
+  height: 24px;
   flex-shrink: 0;
 }
-.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
 .toggle-slider {
   position: absolute;
   inset: 0;
-  background: #444;
-  border-radius: 22px;
+  background: #3a3a3a;
+  border: 1.5px solid #555;
+  border-radius: 24px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.2s, border-color 0.2s;
 }
 .toggle-slider::before {
   content: '';
@@ -463,13 +464,19 @@ select.form-control { cursor: pointer; }
   width: 16px;
   height: 16px;
   left: 3px;
-  top: 3px;
-  background: white;
+  top: 2px;
+  background: #888;
   border-radius: 50%;
-  transition: 0.2s;
+  transition: transform 0.2s, background 0.2s;
 }
-.toggle input:checked + .toggle-slider { background: var(--admin-accent); }
-.toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+.toggle input:checked + .toggle-slider {
+  background: var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background: #fff;
+}
 
 /* ===== TOAST ===== */
 .toast {
