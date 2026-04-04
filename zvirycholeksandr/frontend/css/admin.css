@@ -452,7 +452,7 @@ select.form-control { cursor: pointer; }
 .toggle-slider {
   position: absolute;
   inset: 0;
-  background: var(--admin-border);
+  background: #444;
   border-radius: 22px;
   cursor: pointer;
   transition: 0.2s;
