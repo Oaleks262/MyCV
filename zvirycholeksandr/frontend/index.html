@@ -9,6 +9,44 @@
   <meta property="og:description" content="Лендінги, сайти-візитки та онлайн-меню для кафе — від 5 000 грн, за 7 днів. Без агентій і прихованих витрат.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zvirycholeksandr.com">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Олександр Звірич — Розробка сайтів",
+    "url": "https://zvirycholeksandr.com",
+    "description": "Лендінги, сайти-візитки та онлайн-меню для малого бізнесу в Україні. Від 5000 грн, за 7 днів.",
+    "areaServed": "UA",
+    "priceRange": "від 5000 грн",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Послуги розробки сайтів",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Лендінг" },
+          "price": "5000",
+          "priceCurrency": "UAH",
+          "description": "Продаючий сайт для спеціаліста або бізнесу"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Сайт-візитка" },
+          "price": "7500",
+          "priceCurrency": "UAH",
+          "description": "Персональний сайт з портфоліо та контактами"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Онлайн-меню" },
+          "price": "2500",
+          "priceCurrency": "UAH",
+          "description": "Меню для кафе або ресторану з QR-кодом"
+        }
+      ]
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css?v=5">
@@ -388,6 +426,9 @@
         <button class="order-btn-secondary" onclick="showStep(2)">← Назад</button>
         <button class="order-btn-primary" id="submit-order-btn" onclick="submitOrder()">Надіслати замовлення</button>
       </div>
+      <p style="font-size:0.72rem;color:#555;text-align:center;margin-top:0.75rem">
+        Натискаючи кнопку, ви погоджуєтесь з <a href="/privacy" target="_blank" style="color:var(--color-accent)">політикою конфіденційності</a>
+      </p>
     </div>
     <!-- Крок 4: Успіх -->
     <div class="order-step" data-step="4">
