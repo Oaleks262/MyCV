@@ -103,4 +103,23 @@ app.get('/blog/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, '../../frontend/blog-post.html'));
 });
 
+// Global Express error handler → Telegram
+const { notifyError } = require('./services/telegram');
+app.use((err, req, res, next) => {
+  console.error('Express error:', err);
+  notifyError(err, `${req.method} ${req.path}`);
+  res.status(500).json({ error: 'Внутрішня помилка сервера' });
+});
+
+// Uncaught exceptions → Telegram (потім перезапуск через PM2)
+process.on('uncaughtException', err => {
+  console.error('uncaughtException:', err);
+  notifyError(err, 'uncaughtException').finally(() => process.exit(1));
+});
+process.on('unhandledRejection', (reason) => {
+  const err = reason instanceof Error ? reason : new Error(String(reason));
+  console.error('unhandledRejection:', err);
+  notifyError(err, 'unhandledRejection');
+});
+
 app.listen(PORT, () => console.log(`✓ Server on port ${PORT}`));

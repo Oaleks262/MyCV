@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
+const { convertToWebP } = require('../services/imageProcessor');
 
 const blog = new JsonDB('blog.json');
 
@@ -48,12 +49,17 @@ router.get('/:slug', (req, res) => {
 });
 
 function handleUpload(req, res, next) {
-  upload.single('cover')(req, res, err => {
-    if (!err) return next();
-    const msg = err.code === 'LIMIT_FILE_SIZE'
-      ? 'Файл завеликий. Максимальний розмір — 15 МБ.'
-      : err.message;
-    res.status(400).json({ error: msg });
+  upload.single('cover')(req, res, async err => {
+    if (err) {
+      const msg = err.code === 'LIMIT_FILE_SIZE'
+        ? 'Файл завеликий. Максимальний розмір — 15 МБ.'
+        : err.message;
+      return res.status(400).json({ error: msg });
+    }
+    if (req.file) {
+      try { await convertToWebP(req.file); } catch (e) { console.warn('WebP conversion failed:', e.message); }
+    }
+    next();
   });
 }
 

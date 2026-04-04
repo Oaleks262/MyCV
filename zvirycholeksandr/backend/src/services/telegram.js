@@ -74,4 +74,18 @@ async function notifyTelegram(order, prompt) {
   }
 }
 
-module.exports = { notifyTelegram };
+async function notifyError(err, context = 'server') {
+  try {
+    const stack = (err.stack || '').split('\n').slice(0, 3).join('\n');
+    await send(
+      `🚨 *Помилка на сервері*\n\n` +
+      `*Контекст:* ${esc(context)}\n` +
+      `*Error:* ${esc(err.message)}\n` +
+      `*Stack:*\n\`\`\`\n${esc(stack)}\n\`\`\``
+    );
+  } catch (e) {
+    console.error('Failed to send error notification:', e.message);
+  }
+}
+
+module.exports = { notifyTelegram, notifyError };

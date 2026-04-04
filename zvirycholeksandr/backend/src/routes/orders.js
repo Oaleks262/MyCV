@@ -2,6 +2,7 @@ const router = require('express').Router();
 const JsonDB = require('../db');
 const { generatePrompt } = require('../services/aiBuilder');
 const { notifyTelegram } = require('../services/telegram');
+const { sendOrderConfirmation } = require('../services/mailer');
 
 const orders = new JsonDB('orders.json');
 
@@ -23,6 +24,11 @@ router.post('/submit', async (req, res) => {
 
   // Відповідаємо одразу — не чекаємо AI
   res.json({ success: true, orderId: order.id });
+
+  // Email-підтвердження клієнту (фонове, не блокує)
+  sendOrderConfirmation(order).catch(err =>
+    console.error('Email confirmation error:', err.message)
+  );
 
   // Фонова обробка: Claude Haiku генерує промт → Telegram
   try {
