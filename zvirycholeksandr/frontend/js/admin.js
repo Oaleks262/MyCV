@@ -134,7 +134,7 @@ async function loadOrders() {
         <td>${siteTypeLabel(order.siteType)}</td>
         <td><span class="badge badge-${order.status}">${statusLabel(order.status)}</span></td>
         <td>
-          <a href="/admin/order?id=${order.id}" class="btn btn-secondary btn-sm">Відкрити</a>
+          <a href="/admin/order?id=${order.id}" class="btn btn-secondary btn-sm">Редагувати</a>
           <button class="btn btn-danger btn-sm" onclick="deleteOrder('${order.id}')">✕</button>
         </td>
       </tr>
