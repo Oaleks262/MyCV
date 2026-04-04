@@ -18,8 +18,8 @@ app.use(cors({
   origin: function(origin, callback) {
     // Дозволяємо: домен, localhost, прямий IP-доступ і відсутність origin (мобільні)
     const allowed = [
-      'https://zvirycholeksandr.com',
-      'http://zvirycholeksandr.com',
+      'https://zvirycholeksandr.com.ua',
+      'http://zvirycholeksandr.com.ua',
       'http://localhost:3000',
       'http://localhost:1995',
     ];
@@ -53,7 +53,7 @@ app.use('/api/admin', require('./routes/admin'));
 app.get('/sitemap.xml', (req, res) => {
   const JsonDB = require('./db');
   const blog = new JsonDB('blog.json');
-  const DOMAIN = 'https://zvirycholeksandr.com';
+  const DOMAIN = 'https://zvirycholeksandr.com.ua';
   const now = new Date().toISOString().split('T')[0];
 
   const staticPages = [

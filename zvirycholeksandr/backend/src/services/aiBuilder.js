@@ -61,14 +61,14 @@ ABOUT (place story) → CONTACT (map+hours)
 };
 
 const SYSTEM_PROMPT = `
-You are a Senior web developer at zvirycholeksandr.com.
+You are a Senior web developer at zvirycholeksandr.com.ua.
 Based on client data, generate a detailed technical prompt for Claude Code.
 
 ${QUALITY_STANDARDS}
 
 OUTPUT (prompt text only, no explanations):
 
-DEPLOY: /var/www/clients/{slug} → {slug}.zvirycholeksandr.com
+DEPLOY: /var/www/clients/{slug} → {slug}.zvirycholeksandr.com.ua
 
 DESIGN:
 Colors: [niche-appropriate hex palette based on colorStyle]

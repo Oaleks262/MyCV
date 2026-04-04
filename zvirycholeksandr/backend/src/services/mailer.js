@@ -4,12 +4,11 @@
  * Налаштування в .env:
  *   SMTP_HOST=smtp.gmail.com
  *   SMTP_PORT=587
- *   SMTP_USER=your@gmail.com
+ *   SMTP_USER=oleksandrzvirich@gmail.com
  *   SMTP_PASS=xxxx xxxx xxxx xxxx   ← App Password (не звичайний пароль!)
- *   SMTP_FROM=Олександр Звірич <your@gmail.com>
+ *   SMTP_FROM=Олександр Звірич <oleksandrzvirich@gmail.com>
  *
  * Для Gmail: Google Account → Security → 2-Step → App Passwords → "Mail"
- * Альтернатива: Brevo, Mailgun, SendGrid (безкоштовні ліміти)
  */
 const nodemailer = require('nodemailer');
 
@@ -71,13 +70,13 @@ async function sendOrderConfirmation(order) {
       <p style="color:#555;font-size:0.88rem;line-height:1.6;margin:0 0 1.5rem">
         Якщо виникнуть питання — пишіть у Telegram або відповідайте на цей лист.
       </p>
-      <a href="https://zvirycholeksandr.com"
+      <a href="https://zvirycholeksandr.com.ua"
          style="display:inline-block;background:#8b5cf6;color:#fff;padding:0.75rem 1.5rem;border-radius:6px;font-weight:600;font-size:0.88rem;text-decoration:none">
         Переглянути сайт
       </a>
     </div>
     <div style="border-top:1px solid #f0f0f0;padding:1rem 2rem;font-size:0.75rem;color:#aaa">
-      © 2026 Олександр Звірич · zvirycholeksandr.com
+      © 2026 Олександр Звірич · zvirycholeksandr.com.ua
     </div>
   </div>
 </body>

@@ -1,7 +1,7 @@
 {
   "name": "zvirycholeksandr-backend",
   "version": "1.0.0",
-  "description": "Backend for zvirycholeksandr.com",
+  "description": "Backend for zvirycholeksandr.com.ua",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
