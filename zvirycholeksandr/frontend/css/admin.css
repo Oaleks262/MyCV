@@ -171,7 +171,11 @@ body { font-family: 'Inter', sans-serif; background: var(--admin-bg); color: var
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-wrap table {
+  min-width: 540px;
 }
 .table-toolbar {
   display: flex;
@@ -416,13 +420,19 @@ select.form-control { cursor: pointer; }
   gap: 0.75rem;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
+  flex-wrap: wrap;
 }
 .detail-row-label {
   color: var(--admin-muted);
   min-width: 100px;
   flex-shrink: 0;
 }
-.detail-row-value { color: var(--admin-text); }
+.detail-row-value {
+  color: var(--admin-text);
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
+}
 
 /* ===== MARKDOWN EDITOR ===== */
 .md-editor {

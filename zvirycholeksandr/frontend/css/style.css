@@ -745,7 +745,8 @@ section {
 
 .footer-socials {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
   justify-content: center;
 }
 
