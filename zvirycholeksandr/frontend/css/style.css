@@ -63,15 +63,13 @@
 
 /* ===== SPOTLIGHT CURSOR ===== */
 @media (hover: hover) and (pointer: fine) {
-  * { cursor: none !important; }
-
   .cursor-spot {
     position: fixed;
     top: 0;
     left: 0;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(108,99,255,0.13) 0%, rgba(108,99,255,0.04) 45%, transparent 70%);
+    background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, rgba(108,99,255,0.04) 45%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9990;
@@ -81,31 +79,14 @@
   }
 
   .cursor-spot.is-hovering {
-    width: 560px;
-    height: 560px;
-    background: radial-gradient(circle, rgba(108,99,255,0.2) 0%, rgba(108,99,255,0.07) 40%, transparent 70%);
-  }
-
-  .cursor-dot {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 6px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.08s, opacity 0.2s;
-    box-shadow: 0 0 8px rgba(255,255,255,0.7), 0 0 3px rgba(108,99,255,0.8);
-    will-change: transform;
-  }
-
-  .cursor-dot.is-clicking {
-    transform: translate(-50%, -50%) scale(0.4);
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(108,99,255,0.18) 0%, rgba(108,99,255,0.06) 40%, transparent 70%);
   }
 }
+
+/* cursor-dot більше не використовується — системний курсор */
+.cursor-dot { display: none; }
 
 /* ===== RESET ===== */
 *, *::before, *::after {

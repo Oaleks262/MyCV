@@ -217,25 +217,18 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 /* ===== SPOTLIGHT CURSOR ===== */
 (function () {
   const spot = document.getElementById('cursor-spot');
-  const dot  = document.getElementById('cursor-dot');
-  if (!spot || !dot) return;
+  if (!spot) return;
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-  let tx = -600, ty = -600, sx = -600, sy = -600;
-  let clicking = false;
+  let rafId = null;
 
   document.addEventListener('mousemove', e => {
-    tx = e.clientX; ty = e.clientY;
-    const scale = clicking ? ' scale(0.4)' : '';
-    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%))${scale}`;
+    if (rafId) return; // throttle до одного RAF на mousemove
+    rafId = requestAnimationFrame(() => {
+      spot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      rafId = null;
+    });
   });
-
-  (function lerpSpot() {
-    sx += (tx - sx) * 0.07;
-    sy += (ty - sy) * 0.07;
-    spot.style.transform = `translate(calc(${sx}px - 50%), calc(${sy}px - 50%))`;
-    requestAnimationFrame(lerpSpot);
-  })();
 
   const interactive = 'a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea';
   document.addEventListener('mouseover', e => {
@@ -243,14 +236,5 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   });
   document.addEventListener('mouseout', e => {
     if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
-  });
-
-  document.addEventListener('mousedown', () => {
-    clicking = true;
-    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%)) scale(0.4)`;
-  });
-  document.addEventListener('mouseup', () => {
-    clicking = false;
-    dot.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%))`;
   });
 })();
