@@ -103,24 +103,25 @@
     transition: transform 0.15s ease, background 0.15s, box-shadow 0.15s;
   }
 
-  /* Три крапки у формі курсора (стрілка вліво-вгору) */
-  .cursor-tri span:nth-child(1) { transform: translate(0px,  0px);  } /* кінчик */
-  .cursor-tri span:nth-child(2) { transform: translate(-3px, 14px); } /* лівий низ */
-  .cursor-tri span:nth-child(3) { transform: translate(10px,  8px); } /* правий */
+  /* Рівносторонній трикутник, кут вказує вліво-вгору (як курсор).
+     Всі сторони ≈ 15.5px. Dot2 і Dot3 дзеркальні відносно діагоналі. */
+  .cursor-tri span:nth-child(1) { transform: translate(  0px,  0px); } /* кінчик */
+  .cursor-tri span:nth-child(2) { transform: translate(  4px, 15px); } /* низ-лівий */
+  .cursor-tri span:nth-child(3) { transform: translate( 15px,  4px); } /* правий-верх */
 
-  /* Hover — трохи розходяться */
+  /* Hover — рівномірно розходяться, стають фіолетовими */
   .cursor-tri.is-hovering span {
     background: #8b5cf6;
     box-shadow: 0 0 8px rgba(108,99,255,1);
   }
-  .cursor-tri.is-hovering span:nth-child(1) { transform: translate(-1px, -2px); }
-  .cursor-tri.is-hovering span:nth-child(2) { transform: translate(-5px, 17px); }
-  .cursor-tri.is-hovering span:nth-child(3) { transform: translate(13px, 10px); }
+  .cursor-tri.is-hovering span:nth-child(1) { transform: translate( -2px, -2px); }
+  .cursor-tri.is-hovering span:nth-child(2) { transform: translate(  5px, 19px); }
+  .cursor-tri.is-hovering span:nth-child(3) { transform: translate( 19px,  5px); }
 
   /* Click — стискаються до кінчика */
-  .cursor-tri.is-clicking span:nth-child(1) { transform: translate(0px,   0px); }
-  .cursor-tri.is-clicking span:nth-child(2) { transform: translate(-1px,  7px); }
-  .cursor-tri.is-clicking span:nth-child(3) { transform: translate(5px,   4px); }
+  .cursor-tri.is-clicking span:nth-child(1) { transform: translate(  0px,  0px); }
+  .cursor-tri.is-clicking span:nth-child(2) { transform: translate(  2px,  8px); }
+  .cursor-tri.is-clicking span:nth-child(3) { transform: translate(  8px,  2px); }
 }
 
 /* cursor-dot більше не використовується */
