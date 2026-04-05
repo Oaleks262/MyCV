@@ -214,27 +214,46 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   });
 });
 
-/* ===== SPOTLIGHT CURSOR ===== */
+/* ===== CURSOR ===== */
 (function () {
-  const spot = document.getElementById('cursor-spot');
-  if (!spot) return;
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const spot = document.getElementById('cursor-spot');
+  const tri  = document.getElementById('cursor-tri');
+  if (!tri) return;
 
   let rafId = null;
 
   document.addEventListener('mousemove', e => {
-    if (rafId) return; // throttle до одного RAF на mousemove
+    if (rafId) return;
     rafId = requestAnimationFrame(() => {
-      spot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      const t = `translate(${e.clientX}px, ${e.clientY}px)`;
+      if (spot) spot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      tri.style.transform = t;
       rafId = null;
     });
   });
 
   const interactive = 'a, button, [data-open-order], .card, .portfolio-card, .process-step, .stat, label, input, select, textarea';
+
   document.addEventListener('mouseover', e => {
-    if (e.target.closest(interactive)) spot.classList.add('is-hovering');
+    if (e.target.closest(interactive)) {
+      tri.classList.add('is-hovering');
+      spot?.classList.add('is-hovering');
+    }
   });
   document.addEventListener('mouseout', e => {
-    if (e.target.closest(interactive)) spot.classList.remove('is-hovering');
+    if (e.target.closest(interactive)) {
+      tri.classList.remove('is-hovering');
+      spot?.classList.remove('is-hovering');
+    }
+  });
+
+  document.addEventListener('mousedown', () => {
+    tri.classList.remove('is-hovering');
+    tri.classList.add('is-clicking');
+  });
+  document.addEventListener('mouseup', () => {
+    tri.classList.remove('is-clicking');
   });
 })();

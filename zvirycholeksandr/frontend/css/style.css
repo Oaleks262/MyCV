@@ -61,31 +61,69 @@
   100% { background-position:  15px  25px; }
 }
 
-/* ===== SPOTLIGHT CURSOR ===== */
+/* ===== CURSOR ===== */
 @media (hover: hover) and (pointer: fine) {
+  * { cursor: none !important; }
+
+  /* Spotlight фон */
   .cursor-spot {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 420px;
-    height: 420px;
-    background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, rgba(108,99,255,0.04) 45%, transparent 70%);
+    top: 0; left: 0;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(108,99,255,0.11) 0%, rgba(108,99,255,0.03) 50%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9990;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease, background 0.4s ease;
+    transition: width 0.4s, height 0.4s, background 0.4s;
+    will-change: transform;
+  }
+  .cursor-spot.is-hovering {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(108,99,255,0.17) 0%, rgba(108,99,255,0.05) 45%, transparent 70%);
+  }
+
+  /* Трикутний курсор — обгортка */
+  .cursor-tri {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    pointer-events: none;
+    z-index: 99999;
     will-change: transform;
   }
 
-  .cursor-spot.is-hovering {
-    width: 520px;
-    height: 520px;
-    background: radial-gradient(circle, rgba(108,99,255,0.18) 0%, rgba(108,99,255,0.06) 40%, transparent 70%);
+  /* Три крапки */
+  .cursor-tri span {
+    position: absolute;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(108,99,255,0.9);
+    transition: transform 0.15s ease, background 0.15s, box-shadow 0.15s;
   }
+
+  /* Трикутник: верх, лівий низ, правий низ */
+  .cursor-tri span:nth-child(1) { transform: translate(-50%, -14px); }
+  .cursor-tri span:nth-child(2) { transform: translate(calc(-50% - 9px), 5px); }
+  .cursor-tri span:nth-child(3) { transform: translate(calc(-50% + 9px), 5px); }
+
+  /* Hover — крапки розходяться і стають фіолетовими */
+  .cursor-tri.is-hovering span {
+    background: #8b5cf6;
+    box-shadow: 0 0 8px rgba(108,99,255,1);
+  }
+  .cursor-tri.is-hovering span:nth-child(1) { transform: translate(-50%, -18px); }
+  .cursor-tri.is-hovering span:nth-child(2) { transform: translate(calc(-50% - 13px), 8px); }
+  .cursor-tri.is-hovering span:nth-child(3) { transform: translate(calc(-50% + 13px), 8px); }
+
+  /* Click — стискаються до центру */
+  .cursor-tri.is-clicking span:nth-child(1) { transform: translate(-50%, -6px); }
+  .cursor-tri.is-clicking span:nth-child(2) { transform: translate(calc(-50% - 4px), 2px); }
+  .cursor-tri.is-clicking span:nth-child(3) { transform: translate(calc(-50% + 4px), 2px); }
 }
 
-/* cursor-dot більше не використовується — системний курсор */
+/* cursor-dot більше не використовується */
 .cursor-dot { display: none; }
 
 /* ===== RESET ===== */
