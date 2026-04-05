@@ -104,6 +104,11 @@ app.get('/blog/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, '../../frontend/blog-post.html'));
 });
 
+// 404 — відправляємо красиву сторінку
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+});
+
 // Global Express error handler → Telegram
 const { notifyError } = require('./services/telegram');
 app.use((err, req, res, next) => {
