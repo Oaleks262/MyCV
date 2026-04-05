@@ -227,9 +227,8 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   document.addEventListener('mousemove', e => {
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
-      const t = `translate(${e.clientX}px, ${e.clientY}px)`;
       if (spot) spot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
-      tri.style.transform = t;
+      tri.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
       rafId = null;
     });
   });

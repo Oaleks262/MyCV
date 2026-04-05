@@ -103,24 +103,24 @@
     transition: transform 0.15s ease, background 0.15s, box-shadow 0.15s;
   }
 
-  /* Трикутник: верх, лівий низ, правий низ */
-  .cursor-tri span:nth-child(1) { transform: translate(-50%, -14px); }
-  .cursor-tri span:nth-child(2) { transform: translate(calc(-50% - 9px), 5px); }
-  .cursor-tri span:nth-child(3) { transform: translate(calc(-50% + 9px), 5px); }
+  /* Три крапки у формі курсора (стрілка вліво-вгору) */
+  .cursor-tri span:nth-child(1) { transform: translate(0px,  0px);  } /* кінчик */
+  .cursor-tri span:nth-child(2) { transform: translate(-3px, 14px); } /* лівий низ */
+  .cursor-tri span:nth-child(3) { transform: translate(10px,  8px); } /* правий */
 
-  /* Hover — крапки розходяться і стають фіолетовими */
+  /* Hover — трохи розходяться */
   .cursor-tri.is-hovering span {
     background: #8b5cf6;
     box-shadow: 0 0 8px rgba(108,99,255,1);
   }
-  .cursor-tri.is-hovering span:nth-child(1) { transform: translate(-50%, -18px); }
-  .cursor-tri.is-hovering span:nth-child(2) { transform: translate(calc(-50% - 13px), 8px); }
-  .cursor-tri.is-hovering span:nth-child(3) { transform: translate(calc(-50% + 13px), 8px); }
+  .cursor-tri.is-hovering span:nth-child(1) { transform: translate(-1px, -2px); }
+  .cursor-tri.is-hovering span:nth-child(2) { transform: translate(-5px, 17px); }
+  .cursor-tri.is-hovering span:nth-child(3) { transform: translate(13px, 10px); }
 
-  /* Click — стискаються до центру */
-  .cursor-tri.is-clicking span:nth-child(1) { transform: translate(-50%, -6px); }
-  .cursor-tri.is-clicking span:nth-child(2) { transform: translate(calc(-50% - 4px), 2px); }
-  .cursor-tri.is-clicking span:nth-child(3) { transform: translate(calc(-50% + 4px), 2px); }
+  /* Click — стискаються до кінчика */
+  .cursor-tri.is-clicking span:nth-child(1) { transform: translate(0px,   0px); }
+  .cursor-tri.is-clicking span:nth-child(2) { transform: translate(-1px,  7px); }
+  .cursor-tri.is-clicking span:nth-child(3) { transform: translate(5px,   4px); }
 }
 
 /* cursor-dot більше не використовується */
