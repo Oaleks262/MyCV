@@ -57,6 +57,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css?v=5">
+  <link rel="stylesheet" href="/css/portfolio.css?v=2">
   <!-- Google Analytics (замініть G-XXXXXXXXXX на свій ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -457,7 +458,27 @@
   </div>
 </div>
 
+<!-- PORTFOLIO POPUP -->
+<div id="portfolio-popup" class="popup-overlay">
+  <div class="popup-content">
+    <button class="popup-close" onclick="closePortfolioPopup()" aria-label="Закрити">✕</button>
+    <img class="popup-screenshot" src="" alt="">
+    <div class="popup-screenshot-placeholder" style="display:none">🖥️</div>
+    <div class="popup-body">
+      <div class="popup-niche"></div>
+      <h2 class="popup-title"></h2>
+      <p class="popup-description"></p>
+      <div class="popup-techs"></div>
+      <div class="popup-actions">
+        <a class="popup-live-btn" href="#" target="_blank" rel="noopener">Переглянути сайт →</a>
+        <button class="popup-order-btn">Замовити схожий сайт</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/js/order.js"></script>
+<script src="/js/portfolio.js"></script>
 <script src="/js/main.js"></script>
 </body>
 </html>

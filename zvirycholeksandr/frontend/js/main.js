@@ -119,12 +119,7 @@ function formatDate(dateStr) {
 
 // Функція для відкриття картки портфоліо зі сторінки home (якщо є попап)
 function openPortfolioCard(item) {
-  if (typeof openPortfolioPopup === 'function') {
-    openPortfolioPopup(item);
-  } else {
-    // Редирект на сторінку портфоліо
-    window.location.href = '/portfolio';
-  }
+  openPortfolioPopup(item);
 }
 
 /* ===== SITE SETTINGS ===== */
