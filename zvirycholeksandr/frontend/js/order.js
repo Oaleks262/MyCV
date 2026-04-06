@@ -163,8 +163,11 @@ function validateField(field) {
   if (!val && field.required) return 'Обовʼязкове поле';
   if (field.type === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val))
     return 'Невірний формат email';
-  if (field.type === 'tel' && val && !/^[\+]?[\d\s\-\(\)]{7,15}$/.test(val))
-    return 'Невірний формат телефону';
+  if (field.type === 'tel' && val) {
+    const digits = val.replace(/\D/g, '');
+    if (digits.length < 10 || digits.length > 13)
+      return 'Невірний формат телефону';
+  }
   return null;
 }
 
