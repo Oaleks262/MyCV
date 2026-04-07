@@ -8,10 +8,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 1995;
 
-// Helmet без CSP і HSTS — сайт поки без SSL/домену
 app.use(helmet({
-  contentSecurityPolicy: false,   // вимикаємо CSP (upgrade-insecure-requests ламав CSS)
-  hsts: false,                    // вимикаємо HSTS (Safari блокував HTTP після першого відвіду)
+  contentSecurityPolicy: false,
+  hsts: { maxAge: 31536000, includeSubDomains: true }, // SSL є — вмикаємо HSTS
 }));
 
 app.use(cors({
@@ -31,7 +30,7 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '1mb' })); // Upload йде через multipart, не JSON
 
 // Rate limit для публічних форм (5 запитів на годину)
 const formLimiter = rateLimit({

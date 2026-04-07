@@ -3,16 +3,27 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const auth = require('../middleware/auth');
+const { invalidateToken } = require('../middleware/auth');
 const JsonDB = require('../db');
 const { getStats } = require('../services/analytics');
 const { sendCompleteWorkEmail } = require('../services/mailer');
+
+// Brute-force захист: 5 спроб на 15 хвилин
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Забагато спроб входу. Спробуйте через 15 хвилин.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const orders = new JsonDB('orders.json');
 const adminFile = path.join(__dirname, '../../data/admin.json');
 
 // POST /api/admin/login
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   try {
     const { password } = req.body;
     if (!password) return res.status(400).json({ error: 'Пароль обовʼязковий' });
@@ -28,8 +39,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /api/admin/logout (клієнт видаляє токен, але можна логувати)
+// POST /api/admin/logout — відкликаємо токен
 router.post('/logout', auth, (req, res) => {
+  invalidateToken(req.token);
   res.json({ success: true });
 });
 
