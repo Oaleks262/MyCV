@@ -172,12 +172,12 @@ async function loadOrderDetail() {
     // Form data — редаговані поля
     const formDataEl = document.getElementById('order-form-data');
     if (formDataEl) {
-      const fieldLabels = { name:'Імʼя', cafeName:'Назва закладу', email:'Email', phone:'Телефон', city:'Місто', description:'Опис', budget:'Бюджет', deadline:'Дедлайн' };
+      const fieldLabels = { name:'Імʼя', cafeName:'Назва закладу', email:'Email', phone:'Телефон', city:'Місто', description:'Опис', budget:'Бюджет', deadline:'Дедлайн', address:'Адреса', about:'Про заклад', colorStyle:'Стиль кольору', pages:'Сторінки', features:'Функції', language:'Мова' };
       formDataEl.innerHTML = Object.entries(order.formData || {}).map(([k, v]) =>
-        v ? `<div class="form-group" style="margin-bottom:.6rem">
+        `<div class="form-group" style="margin-bottom:.6rem">
           <label class="form-label" style="font-size:.75rem">${fieldLabels[k] || k}</label>
-          <input type="text" class="form-control" data-field="${k}" value="${String(v).replace(/"/g,'&quot;')}" style="padding:.45rem .65rem;font-size:.85rem">
-        </div>` : ''
+          <input type="text" class="form-control" data-field="${k}" value="${String(v ?? '').replace(/"/g,'&quot;')}" style="padding:.45rem .65rem;font-size:.85rem">
+        </div>`
       ).join('');
     }
 
