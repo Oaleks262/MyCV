@@ -26,7 +26,7 @@ app.use(cors({
     if (!origin || allowed.includes(origin) || /^http:\/\/78\.27\.236\.157/.test(origin)) {
       callback(null, true);
     } else {
-      callback(null, true); // тимчасово дозволяємо всі origin до підключення домену
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,

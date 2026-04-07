@@ -108,37 +108,39 @@ async function loadOrders() {
   requireAuth();
 
   const filter = document.getElementById('status-filter')?.value || '';
-  const url = filter ? `/admin/orders?status=${filter}` : '/admin/orders';
 
   try {
-    const res = await apiRequest(url);
+    const res = await apiRequest('/admin/orders');
     if (!res) return;
-    const orders = await res.json();
+    const all = await res.json();
 
     // Stats
-    const all = await (await apiRequest('/admin/orders')).json();
     document.getElementById('stat-total').textContent = all.length;
     document.getElementById('stat-new').textContent = all.filter(o => o.status === 'new').length;
     document.getElementById('stat-prompted').textContent = all.filter(o => o.status === 'prompted').length;
     document.getElementById('stat-done').textContent = all.filter(o => o.status === 'done').length;
+
+    const orders = filter ? all.filter(o => o.status === filter) : all;
 
     if (!orders.length) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">Замовлень немає</td></tr>';
       return;
     }
 
-    tbody.innerHTML = orders.map(order => `
-      <tr>
+    tbody.innerHTML = orders.map(order => {
+      const name = (order.formData?.name || order.formData?.cafeName || '—')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return `<tr>
         <td>${formatDate(order.createdAt)}</td>
-        <td>${order.formData?.name || order.formData?.cafeName || '—'}</td>
+        <td>${name}</td>
         <td>${siteTypeLabel(order.siteType)}</td>
         <td><span class="badge badge-${order.status}">${statusLabel(order.status)}</span></td>
         <td>
           <a href="/admin/order?id=${order.id}" class="btn btn-secondary btn-sm">Редагувати</a>
           <button class="btn btn-danger btn-sm" onclick="deleteOrder('${order.id}')">✕</button>
         </td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
   } catch (e) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888">Помилка завантаження</td></tr>';
   }
@@ -298,7 +300,7 @@ async function movePortfolioItem(id, direction) {
   if (swapIdx < 0 || swapIdx >= items.length) return;
 
   // Міняємо місцями і призначаємо нові порядкові номери
-  await Promise.all([
+  const [r1, r2] = await Promise.all([
     apiRequest(`/portfolio/${items[idx].id}`, {
       method: 'PATCH',
       body: JSON.stringify({ sortOrder: swapIdx })
@@ -309,6 +311,7 @@ async function movePortfolioItem(id, direction) {
     })
   ]);
 
+  if (!r1 || !r2) { showToast('Помилка зміни порядку', 'error'); return; }
   loadAdminPortfolio();
 }
 
@@ -462,11 +465,10 @@ async function saveBlogPost(e) {
 }
 
 async function editBlogPost(id) {
-  const res = await apiRequest(`/blog/admin/all`);
+  const res = await apiRequest(`/blog/admin/${id}`);
   if (!res) return;
-  const posts = await res.json();
-  const post = posts.find(p => p.id === id);
-  if (!post) return;
+  const post = await res.json();
+  if (!post || post.error) return;
 
   const form = document.getElementById('blog-form');
   form.dataset.id = id;

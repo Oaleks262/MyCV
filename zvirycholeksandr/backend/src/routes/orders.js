@@ -10,6 +10,10 @@ const orders = new JsonDB('orders.json');
 router.post('/submit', async (req, res) => {
   const { siteType, formData } = req.body;
 
+  const validTypes = ['landing', 'business_card', 'menu'];
+  if (!validTypes.includes(siteType)) {
+    return res.status(400).json({ error: 'Невірний тип сайту' });
+  }
   if (!formData?.name || !formData?.email || !formData?.phone) {
     return res.status(400).json({ error: 'Заповніть обовʼязкові поля' });
   }

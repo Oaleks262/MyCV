@@ -41,6 +41,13 @@ router.get('/admin/all', auth, (req, res) => {
   res.json(blog.all().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 });
 
+// GET /api/blog/admin/:id — одна стаття по id для адміна
+router.get('/admin/:id', auth, (req, res) => {
+  const post = blog.findById(req.params.id);
+  if (!post) return res.status(404).json({ error: 'Not found' });
+  res.json(post);
+});
+
 // GET /api/blog/:slug — одна стаття по slug
 router.get('/:slug', (req, res) => {
   const post = blog.findOne({ slug: req.params.slug, isPublished: true });
