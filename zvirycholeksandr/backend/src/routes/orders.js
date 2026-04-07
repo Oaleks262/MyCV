@@ -35,14 +35,15 @@ router.post('/submit', async (req, res) => {
     console.error('Email confirmation error:', err.message)
   );
 
-  // Фонова обробка: Claude Haiku генерує промт → Telegram
+  // Фонова обробка: AI генерує промт → Telegram
   try {
     const prompt = await generatePrompt(siteType, formData);
     orders.update(order.id, { generatedPrompt: prompt, status: 'prompted' });
     await notifyTelegram(order, prompt);
   } catch (err) {
     console.error('AI/Telegram error:', err.message);
-    orders.update(order.id, { status: 'error', error: err.message });
+    // Залишаємо статус 'new' — замовлення валідне, тільки AI не спрацював
+    orders.update(order.id, { aiError: err.message });
   }
 });
 
