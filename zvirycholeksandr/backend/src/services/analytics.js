@@ -36,7 +36,11 @@ function analyticsMiddleware(req, res, next) {
   const skip = req.path.startsWith('/api')
     || req.path.startsWith('/uploads')
     || req.path.startsWith('/admin')
-    || /\.(css|js|png|jpg|jpeg|ico|svg|webp|woff2?|gif|map)$/i.test(req.path);
+    || /\.(css|js|png|jpg|jpeg|ico|svg|webp|woff2?|gif|map|txt|xml)$/i.test(req.path)
+    // Фільтруємо атаки сканерів і боти
+    || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi)$/i.test(req.path)
+    || /\/(\.git|\.env|wp-admin|wp-login|phpinfo|phpmyadmin|passwd|shadow|@fs)/i.test(req.path)
+    || /bot|crawler|spider|curl|wget|python|scanner/i.test(req.headers['user-agent'] || '');
 
   if (!skip) {
     const today = new Date().toISOString().split('T')[0];
