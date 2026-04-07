@@ -16,7 +16,8 @@ router.post('/submit', async (req, res) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email)) {
     return res.status(400).json({ error: 'Невірний формат email' });
   }
-  if (!/^[\+]?[\d\s\-\(\)]{7,15}$/.test(formData.phone)) {
+  const phoneDigits = formData.phone.replace(/\D/g, '');
+  if (phoneDigits.length < 10 || phoneDigits.length > 13) {
     return res.status(400).json({ error: 'Невірний формат телефону' });
   }
 
