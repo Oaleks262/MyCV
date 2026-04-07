@@ -123,7 +123,7 @@ document.getElementById('code-form').addEventListener('submit', async e => {
     }
 
     // Успіх — зберігаємо токен і переходимо в адмінку
-    localStorage.setItem('adminToken', data.token);
+    localStorage.setItem('admin_token', data.token);
     window.location.href = '/admin/index';
   } finally {
     btn.disabled = false;

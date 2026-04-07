@@ -46,30 +46,7 @@ function showToast(msg, type = 'success') {
   }, 3000);
 }
 
-/* ===== LOGIN PAGE ===== */
-const loginForm = document.getElementById('login-form');
-loginForm?.addEventListener('submit', async e => {
-  e.preventDefault();
-  const btn = loginForm.querySelector('button[type="submit"]');
-  btn.disabled = true;
-  btn.textContent = 'Вхід...';
-
-  try {
-    const res = await fetch(`${API}/admin/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: loginForm.password.value })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Помилка');
-    setToken(data.token);
-    window.location.href = '/admin/index';
-  } catch (err) {
-    document.getElementById('login-error').textContent = err.message;
-    btn.disabled = false;
-    btn.textContent = 'Увійти';
-  }
-});
+/* ===== LOGIN PAGE — логіка в login.html (2FA flow) ===== */
 
 /* ===== MOBILE SIDEBAR TOGGLE ===== */
 (function () {
