@@ -7,8 +7,8 @@
 const path = require('path');
 const fs = require('fs');
 const envPaths = [
-  path.join(__dirname, '../zvirycholeksandr/backend/.env'),
   path.join(__dirname, '../backend/.env'),
+  path.join(__dirname, '../zvirycholeksandr/backend/.env'),
 ];
 for (const p of envPaths) {
   if (fs.existsSync(p)) {

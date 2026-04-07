@@ -11,7 +11,7 @@ mkdir -p "$BACKUP_DIR"
 
 # Архівуємо data/ та uploads/
 tar -czf "$BACKUP_DIR/backup-$DATE.tar.gz" \
-  -C "$PROJECT_DIR/zvirycholeksandr/backend" \
+  -C "$PROJECT_DIR/backend" \
   data uploads \
   2>/dev/null
 
