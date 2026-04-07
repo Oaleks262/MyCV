@@ -3,15 +3,22 @@
  * Якщо сайт не відповідає — надсилає Telegram сповіщення
  * Запускати через PM2: pm2 start scripts/monitor.js --name monitor
  */
-// Шукаємо .env в кількох місцях
+// Завантажуємо .env з backend
 const path = require('path');
+const fs = require('fs');
 const envPaths = [
   path.join(__dirname, '../zvirycholeksandr/backend/.env'),
   path.join(__dirname, '../backend/.env'),
-  '/var/www/MyCV/zvirycholeksandr/zvirycholeksandr/backend/.env',
 ];
 for (const p of envPaths) {
-  if (require('fs').existsSync(p)) { require('dotenv').config({ path: p }); break; }
+  if (fs.existsSync(p)) {
+    // Парсимо .env вручну — не потребує dotenv модуля
+    fs.readFileSync(p, 'utf-8').split('\n').forEach(line => {
+      const [key, ...val] = line.split('=');
+      if (key && !key.startsWith('#')) process.env[key.trim()] = val.join('=').trim().replace(/^['"]|['"]$/g, '');
+    });
+    break;
+  }
 }
 const https = require('https');
 
