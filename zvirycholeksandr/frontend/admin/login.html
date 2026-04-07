@@ -13,6 +13,7 @@
 <div class="login-box">
   <div class="login-logo">zviry<span>ch</span>oleksandr <span style="color:#555;font-weight:400">admin</span></div>
 
+  <!-- Крок 1: пароль -->
   <form id="login-form">
     <div class="form-group">
       <label class="form-label">Пароль</label>
@@ -29,11 +30,114 @@
     <button type="submit" class="btn btn-primary" style="width:100%">Увійти</button>
   </form>
 
+  <!-- Крок 2: 2FA код -->
+  <form id="code-form" style="display:none">
+    <p style="color:#888;font-size:.875rem;margin-bottom:1.25rem;text-align:center">
+      📱 Код надіслано в Telegram.<br>Введіть його нижче — він діє 5 хвилин.
+    </p>
+    <div class="form-group">
+      <label class="form-label">Код підтвердження</label>
+      <input
+        type="text"
+        name="code"
+        class="form-control"
+        placeholder="123456"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        style="font-size:1.5rem;letter-spacing:.3em;text-align:center"
+        required
+      >
+    </div>
+    <div id="code-error" style="color:#ef4444;font-size:.85rem;margin-bottom:.75rem;min-height:1.2em"></div>
+    <button type="submit" class="btn btn-primary" style="width:100%">Підтвердити</button>
+    <button type="button" id="back-btn" class="btn btn-secondary" style="width:100%;margin-top:.5rem">← Назад</button>
+  </form>
+
   <p style="text-align:center;margin-top:1.5rem">
     <a href="/" style="color:#555;font-size:.85rem">← Повернутись на сайт</a>
   </p>
 </div>
 
 <script src="/js/admin.js"></script>
+<script>
+let currentSessionId = null;
+
+// Крок 1 — пароль
+document.getElementById('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  const errorEl = document.getElementById('login-error');
+  const password = e.target.password.value;
+
+  btn.disabled = true;
+  btn.textContent = 'Перевірка...';
+  errorEl.textContent = '';
+
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      errorEl.textContent = data.error || 'Помилка входу';
+      return;
+    }
+
+    // Пароль правильний — переходимо до кроку 2
+    currentSessionId = data.sessionId;
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('code-form').style.display = 'block';
+    document.querySelector('#code-form input[name=code]').focus();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Увійти';
+  }
+});
+
+// Крок 2 — код
+document.getElementById('code-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  const errorEl = document.getElementById('code-error');
+  const code = e.target.code.value.trim();
+
+  btn.disabled = true;
+  btn.textContent = 'Перевірка...';
+  errorEl.textContent = '';
+
+  try {
+    const res = await fetch('/api/admin/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: currentSessionId, code })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      errorEl.textContent = data.error || 'Невірний код';
+      return;
+    }
+
+    // Успіх — зберігаємо токен і переходимо в адмінку
+    localStorage.setItem('adminToken', data.token);
+    window.location.href = '/admin/index';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Підтвердити';
+  }
+});
+
+// Назад
+document.getElementById('back-btn').addEventListener('click', () => {
+  currentSessionId = null;
+  document.getElementById('code-form').style.display = 'none';
+  document.getElementById('code-error').textContent = '';
+  document.getElementById('login-form').style.display = 'block';
+});
+</script>
 </body>
 </html>

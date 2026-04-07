@@ -22,7 +22,14 @@ const loginLimiter = rateLimit({
 const orders = new JsonDB('orders.json');
 const adminFile = path.join(__dirname, '../../data/admin.json');
 
-// POST /api/admin/login
+// In-memory store для 2FA кодів: { sessionId: { code, expires } }
+const twoFACodes = new Map();
+
+function generateCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+// POST /api/admin/login — крок 1: перевірка пароля → надсилає 2FA код
 router.post('/login', loginLimiter, async (req, res) => {
   try {
     const { password } = req.body;
@@ -32,11 +39,56 @@ router.post('/login', loginLimiter, async (req, res) => {
     const valid = await bcrypt.compare(password, admin.passwordHash);
     if (!valid) return res.status(401).json({ error: 'Невірний пароль' });
 
-    const token = jwt.sign({ admin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token });
+    // Генеруємо 2FA код
+    const code = generateCode();
+    const sessionId = require('crypto').randomBytes(16).toString('hex');
+    twoFACodes.set(sessionId, { code, expires: Date.now() + 5 * 60 * 1000 }); // 5 хвилин
+
+    // Надсилаємо в Telegram
+    const https = require('https');
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (token && chatId) {
+      const body = JSON.stringify({
+        chat_id: chatId,
+        text: `🔐 *Код входу в адмінку:*\n\n\`${code}\`\n\n_Діє 5 хвилин_`,
+        parse_mode: 'Markdown'
+      });
+      const tgReq = https.request({
+        hostname: 'api.telegram.org',
+        path: `/bot${token}/sendMessage`,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
+      });
+      tgReq.write(body);
+      tgReq.end();
+    }
+
+    res.json({ requireCode: true, sessionId });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ error: 'Помилка сервера' });
   }
+});
+
+// POST /api/admin/verify-code — крок 2: перевірка 2FA коду → видає JWT
+router.post('/verify-code', loginLimiter, (req, res) => {
+  const { sessionId, code } = req.body;
+  if (!sessionId || !code) return res.status(400).json({ error: 'Невірний запит' });
+
+  const entry = twoFACodes.get(sessionId);
+  if (!entry) return res.status(401).json({ error: 'Сесія не знайдена або прострочена' });
+  if (Date.now() > entry.expires) {
+    twoFACodes.delete(sessionId);
+    return res.status(401).json({ error: 'Код прострочений. Спробуйте увійти знову.' });
+  }
+  if (entry.code !== String(code).trim()) {
+    return res.status(401).json({ error: 'Невірний код' });
+  }
+
+  twoFACodes.delete(sessionId);
+  const token = jwt.sign({ admin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  res.json({ token });
 });
 
 // POST /api/admin/logout — відкликаємо токен
