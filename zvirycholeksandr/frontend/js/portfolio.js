@@ -24,13 +24,10 @@ function renderGrid(items) {
     return;
   }
 
-  grid.innerHTML = items.map(item => {
+  grid.innerHTML = items.map((item, idx) => {
     const isDemo = item.siteType === 'demo';
-    const clickAttr = isDemo && item.liveUrl
-      ? `onclick="window.open('${item.liveUrl}','_blank')"`
-      : `onclick="openPortfolioPopup(${JSON.stringify(item).replace(/"/g, '&quot;')})"`;
     return `
-    <div class="portfolio-card fade-in" ${clickAttr}>
+    <div class="portfolio-card fade-in" data-idx="${idx}" data-demo="${isDemo ? item.liveUrl || '' : ''}">
       <div class="portfolio-card-img-wrap">
         ${item.screenshotUrl
           ? `<img class="portfolio-card-img" src="${item.screenshotUrl}" alt="${item.title}" loading="lazy">`
@@ -45,6 +42,19 @@ function renderGrid(items) {
       </div>
     </div>`;
   }).join('');
+
+  // Клік через event delegation
+  grid.onclick = e => {
+    const card = e.target.closest('.portfolio-card');
+    if (!card) return;
+    const demoUrl = card.dataset.demo;
+    if (demoUrl) {
+      window.open(demoUrl, '_blank', 'noopener');
+    } else {
+      const idx = parseInt(card.dataset.idx);
+      openPortfolioPopup(items[idx]);
+    }
+  };
 
   // Fade-in observer
   const observer = new IntersectionObserver(entries => {
