@@ -9,8 +9,20 @@ const app = express();
 const PORT = process.env.PORT || 1995;
 
 app.use(helmet({
-  contentSecurityPolicy: false,
-  hsts: { maxAge: 31536000, includeSubDomains: true }, // SSL є — вмикаємо HSTS
+  hsts: { maxAge: 31536000, includeSubDomains: true },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com', 'https://www.googletagmanager.com'],
+      connectSrc: ["'self'", 'https://www.google-analytics.com', 'https://region1.google-analytics.com'],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
 }));
 
 app.use(cors({

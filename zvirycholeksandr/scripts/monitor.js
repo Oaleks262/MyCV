@@ -3,7 +3,16 @@
  * Якщо сайт не відповідає — надсилає Telegram сповіщення
  * Запускати через PM2: pm2 start scripts/monitor.js --name monitor
  */
-require('dotenv').config({ path: __dirname + '/../zvirycholeksandr/backend/.env' });
+// Шукаємо .env в кількох місцях
+const path = require('path');
+const envPaths = [
+  path.join(__dirname, '../zvirycholeksandr/backend/.env'),
+  path.join(__dirname, '../backend/.env'),
+  '/var/www/MyCV/zvirycholeksandr/zvirycholeksandr/backend/.env',
+];
+for (const p of envPaths) {
+  if (require('fs').existsSync(p)) { require('dotenv').config({ path: p }); break; }
+}
 const https = require('https');
 
 const SITE_URL = process.env.SITE_URL || 'https://zvirycholeksandr.com.ua';
