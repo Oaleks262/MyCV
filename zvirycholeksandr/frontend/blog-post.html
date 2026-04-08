@@ -25,6 +25,16 @@
     gtag('js', new Date());
     gtag('config', 'G-46YFL5WZ82');
   </script>
+  <script>
+    // Canonical для блог-поста
+    const slug = new URLSearchParams(window.location.search).get('slug');
+    if (slug) {
+      const link = document.createElement('link');
+      link.rel = 'canonical';
+      link.href = 'https://zvirycholeksandr.com.ua/blog/' + slug;
+      document.head.appendChild(link);
+    }
+  </script>
 </head>
 <body>
 
