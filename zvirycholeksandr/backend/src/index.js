@@ -8,6 +8,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 1995;
 
+// Сервер за nginx proxy — довіряємо одному рівню проксі для коректного IP в rate-limit
+app.set('trust proxy', 1);
+
 app.use(helmet({
   hsts: { maxAge: 31536000, includeSubDomains: true },
   contentSecurityPolicy: {
