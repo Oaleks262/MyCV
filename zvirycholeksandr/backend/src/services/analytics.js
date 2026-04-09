@@ -21,6 +21,8 @@ function save(data) {
 
 function parseReferrer(ref) {
   if (!ref) return 'Прямий перехід';
+  // Ігноруємо внутрішні переходи з власного домену
+  if (/zvirycholeksandr\.com\.ua/i.test(ref)) return null;
   if (/google/i.test(ref))    return 'Google';
   if (/instagram/i.test(ref)) return 'Instagram';
   if (/facebook|fb\.com/i.test(ref)) return 'Facebook';
@@ -51,8 +53,8 @@ function analyticsMiddleware(req, res, next) {
       const data = load();
       if (!data[today]) data[today] = { total: 0, pages: {}, referrers: {} };
       data[today].total = (data[today].total || 0) + 1;
-      data[today].pages[page]       = (data[today].pages[page] || 0) + 1;
-      data[today].referrers[src]    = (data[today].referrers[src] || 0) + 1;
+      data[today].pages[page] = (data[today].pages[page] || 0) + 1;
+      if (src) data[today].referrers[src] = (data[today].referrers[src] || 0) + 1;
       save(data);
     } catch { /* не ламаємо сервер через статистику */ }
   }
