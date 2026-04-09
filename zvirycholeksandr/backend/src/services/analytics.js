@@ -40,7 +40,7 @@ function analyticsMiddleware(req, res, next) {
     // Фільтруємо атаки сканерів і боти
     || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi)$/i.test(req.path)
     || /\/(\.git|\.env|wp-admin|wp-login|phpinfo|phpmyadmin|passwd|shadow|@fs)/i.test(req.path)
-    || /bot|crawler|spider|curl|wget|python|scanner/i.test(req.headers['user-agent'] || '');
+    || /bot|crawler|spider|curl|wget|python|scanner|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|applebot|googlebot|bingbot|yandex|semrush|ahrefs|mj12bot|dotbot/i.test(req.headers['user-agent'] || '');
 
   if (!skip) {
     const today = new Date().toISOString().split('T')[0];
