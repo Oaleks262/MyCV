@@ -38,7 +38,7 @@ app.use(cors({
     if (!origin || allowed.includes(origin) || /^http:\/\/78\.27\.236\.157/.test(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(null, false); // відмовляємо без кидання помилки (не спамить Telegram)
     }
   },
   credentials: true,
