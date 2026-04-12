@@ -144,8 +144,14 @@
   margin-bottom: 1.25rem;
 }
 
+.blog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
 .blog-read-btn {
-  align-self: flex-start;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-accent);
@@ -156,6 +162,11 @@
 }
 
 .blog-card:hover .blog-read-btn { gap: 0.6rem; }
+
+.blog-card-views {
+  font-size: 0.78rem;
+  color: var(--color-text-dim);
+}
 
 /* ===== NO RESULTS ===== */
 .no-results {

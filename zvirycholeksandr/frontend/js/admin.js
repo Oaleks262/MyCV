@@ -370,7 +370,7 @@ async function loadAdminBlog() {
     const posts = await res.json();
 
     if (!posts.length) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:#888">Статей немає</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">Статей немає</td></tr>';
       return;
     }
 
@@ -378,6 +378,7 @@ async function loadAdminBlog() {
       <tr>
         <td>${post.title}</td>
         <td>${formatDate(post.createdAt)}</td>
+        <td style="text-align:center">${post.views ? `👁 ${post.views}` : '—'}</td>
         <td><span class="badge badge-${post.isPublished ? 'published' : 'draft'}">${post.isPublished ? 'Опубліковано' : 'Чернетка'}</span></td>
         <td>
           <button class="btn btn-secondary btn-sm" onclick="editBlogPost('${post.id}')">Редагувати</button>

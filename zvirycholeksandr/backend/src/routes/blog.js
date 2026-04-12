@@ -48,11 +48,13 @@ router.get('/admin/:id', auth, (req, res) => {
   res.json(post);
 });
 
-// GET /api/blog/:slug — одна стаття по slug
+// GET /api/blog/:slug — одна стаття по slug (збільшує лічильник переглядів)
 router.get('/:slug', (req, res) => {
   const post = blog.findOne({ slug: req.params.slug, isPublished: true });
   if (!post) return res.status(404).json({ error: 'Not found' });
-  res.json(post);
+  // Інкремент без await — не блокуємо відповідь
+  try { blog.update(post.id, { views: (post.views || 0) + 1 }); } catch {}
+  res.json({ ...post, views: (post.views || 0) + 1 });
 });
 
 function handleUpload(req, res, next) {

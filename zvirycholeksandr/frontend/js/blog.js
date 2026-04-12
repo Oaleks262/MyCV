@@ -42,7 +42,10 @@ function renderBlog(posts) {
         </div>
         <h2 class="blog-card-title">${post.title}</h2>
         <p class="blog-card-excerpt">${post.excerpt}</p>
-        <span class="blog-read-btn">Читати →</span>
+        <div class="blog-card-footer">
+          <span class="blog-read-btn">Читати →</span>
+          ${post.views ? `<span class="blog-card-views">👁 ${formatViews(post.views)}</span>` : ''}
+        </div>
       </div>
     </a>
   `).join('');
@@ -78,6 +81,11 @@ function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('uk-UA', {
     day: 'numeric', month: 'long', year: 'numeric'
   });
+}
+
+function formatViews(n) {
+  if (n >= 1000) return (n / 1000).toFixed(1).replace('.0', '') + 'k';
+  return String(n);
 }
 
 loadBlog();
@@ -123,7 +131,10 @@ function renderPost(post) {
   const coverEl = document.getElementById('post-cover');
   const contentEl = document.getElementById('post-content');
 
-  if (dateEl) dateEl.textContent = formatDate(post.publishedAt);
+  if (dateEl) {
+    dateEl.textContent = formatDate(post.publishedAt);
+    if (post.views) dateEl.textContent += ` · 👁 ${formatViews(post.views)} переглядів`;
+  }
   if (tagsEl) {
     tagsEl.innerHTML = (post.tags || []).map(t => `<span class="blog-tag">${t}</span>`).join('');
   }
