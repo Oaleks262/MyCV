@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Відгуки — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <style>
+    .review-row{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:.75rem}
+    .review-row-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+    .review-stars{color:#f59e0b;font-size:1rem;letter-spacing:1px}
+    .review-name{font-weight:600;font-size:.95rem}
+    .review-project{font-size:.8rem;color:#888}
+    .review-text{color:#aaa;font-size:.88rem;line-height:1.6;margin-bottom:.75rem}
+    .review-meta{font-size:.75rem;color:#555}
+    .badge-pending{background:#3a2a00;color:#f59e0b;padding:.2rem .6rem;border-radius:6px;font-size:.75rem}
+    .badge-approved{background:#0a2a0a;color:#4ade80;padding:.2rem .6rem;border-radius:6px;font-size:.75rem}
+    .review-actions{display:flex;gap:.5rem;margin-top:.75rem}
+    .btn-approve{padding:.35rem .9rem;background:#6c63ff;border:none;border-radius:6px;color:#fff;cursor:pointer;font-size:.82rem}
+    .btn-approve:hover{background:#5a52e0}
+    .btn-delete{padding:.35rem .9rem;background:#2a0a0a;border:1px solid #5a1a1a;border-radius:6px;color:#f87171;cursor:pointer;font-size:.82rem}
+    .btn-delete:hover{background:#3a1010}
+    .tab-row{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    .tab-btn{padding:.4rem 1rem;border:1px solid var(--border);border-radius:8px;background:none;color:#888;cursor:pointer;font-size:.85rem}
+    .tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <div class="admin-topbar">
+    <button class="admin-burger" id="admin-burger">&#9776;</button>
+    <span class="admin-topbar-logo">zviry<span>ch</span>oleksandr</span>
+  </div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">zviry<span>ch</span>oleksandr</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/index"><span class="nav-icon">📋</span> Замовлення</a>
+      <a href="/admin/portfolio"><span class="nav-icon">🖼️</span> Портфоліо</a>
+      <a href="/admin/blog"><span class="nav-icon">📝</span> Блог</a>
+      <a href="/admin/reviews" class="active"><span class="nav-icon">⭐</span> Відгуки</a>
+      <a href="/admin/stats"><span class="nav-icon">📊</span> Статистика</a>
+      <a href="/admin/settings"><span class="nav-icon">⚙️</span> Налаштування</a>
+      <a href="/" target="_blank"><span class="nav-icon">🌐</span> Сайт</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logout-btn">Вийти</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Відгуки</h1>
+      <p>Модерація та публікація відгуків клієнтів</p>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="showTab('pending',this)">Очікують</button>
+      <button class="tab-btn" onclick="showTab('approved',this)">Схвалені</button>
+      <button class="tab-btn" onclick="showTab('all',this)">Всі</button>
+    </div>
+
+    <div id="reviews-list"><p style="color:#666">Завантаження...</p></div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+<script>
+let allReviews = [];
+let currentTab = 'pending';
+
+async function loadReviews() {
+  const res = await apiRequest('/reviews/admin');
+  if (!res) return;
+  allReviews = await res.json();
+  renderTab(currentTab);
+}
+
+function showTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  const list = allReviews.filter(r =>
+    tab === 'all' ? true :
+    tab === 'pending' ? !r.approved :
+    r.approved
+  );
+
+  const el = document.getElementById('reviews-list');
+  if (!list.length) {
+    el.innerHTML = '<p style="color:#666;padding:1rem 0">Немає відгуків</p>';
+    return;
+  }
+
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const esc = s => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  el.innerHTML = list.map(r => `
+    <div class="review-row" id="rev-${r.id}">
+      <div class="review-row-header">
+        <span class="review-stars">${stars(r.rating)}</span>
+        <span class="review-name">${esc(r.name)}</span>
+        ${r.project ? `<span class="review-project">— ${esc(r.project)}</span>` : ''}
+        <span class="${r.approved ? 'badge-approved' : 'badge-pending'}">${r.approved ? 'Схвалено' : 'Очікує'}</span>
+      </div>
+      <p class="review-text">${esc(r.text)}</p>
+      <div class="review-meta">${new Date(r.createdAt).toLocaleString('uk-UA')}</div>
+      <div class="review-actions">
+        ${!r.approved ? `<button class="btn-approve" onclick="approveReview('${r.id}')">Схвалити</button>` : ''}
+        <button class="btn-delete" onclick="deleteReview('${r.id}')">Видалити</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function approveReview(id) {
+  const res = await apiRequest(`/reviews/admin/${id}/approve`, { method: 'PATCH' });
+  if (!res) return;
+  const updated = await res.json();
+  const idx = allReviews.findIndex(r => r.id === id);
+  if (idx !== -1) allReviews[idx] = updated;
+  renderTab(currentTab);
+}
+
+async function deleteReview(id) {
+  if (!confirm('Видалити відгук?')) return;
+  const res = await apiRequest(`/reviews/admin/${id}`, { method: 'DELETE' });
+  if (!res) return;
+  allReviews = allReviews.filter(r => r.id !== id);
+  renderTab(currentTab);
+}
+
+loadReviews();
+</script>
+</body>
+</html>

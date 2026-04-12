@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 1995;
@@ -59,6 +60,7 @@ const formLimiter = rateLimit({
 app.use('/api/orders', formLimiter, require('./routes/orders'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/blog', require('./routes/blog'));
+app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/settings', require('./routes/settings'));
 
 // Адмін роути (JWT захищені)
@@ -114,9 +116,40 @@ app.use(express.static(path.join(__dirname, '../../frontend'), {
   extensions: ['html'],
 }));
 
-// Fallback для SPA (blog-post)
+// Blog post — server-side OG meta tags для коректних превʼю в Telegram/Facebook
+const BLOG_POST_TEMPLATE = path.join(__dirname, '../../frontend/blog-post.html');
+const JsonDB = require('./db');
+const blogDB = new JsonDB('blog.json');
+const DOMAIN = 'https://zvirycholeksandr.com.ua';
+
+function escAttr(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 app.get('/blog/:slug', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/blog-post.html'));
+  try {
+    const post = blogDB.findOne({ slug: req.params.slug, isPublished: true });
+    if (!post) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+
+    let html = fs.readFileSync(BLOG_POST_TEMPLATE, 'utf-8');
+    const title  = escAttr(post.title);
+    const desc   = escAttr(post.excerpt || '');
+    const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image.jpg';
+    const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
+
+    html = html
+      .replace(/<title>[^<]*<\/title>/, `<title>${title} — zvirycholeksandr</title>`)
+      .replace(/(<meta name="description" content=")[^"]*(")/,    `$1${desc}$2`)
+      .replace(/(<meta property="og:title" content=")[^"]*(")/,   `$1${title}$2`)
+      .replace(/(<meta property="og:description" content=")[^"]*(")/,`$1${desc}$2`)
+      .replace(/(<meta property="og:image" content=")[^"]*(")/,   `$1${image}$2`)
+      .replace(/(<meta property="og:url" content=")[^"]*(")/,     `$1${url}$2`);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (e) {
+    res.sendFile(BLOG_POST_TEMPLATE);
+  }
 });
 
 // 404 — відправляємо красиву сторінку

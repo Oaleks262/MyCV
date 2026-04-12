@@ -256,3 +256,42 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     tri.classList.remove('is-clicking');
   });
 })();
+
+/* ===== REVIEWS ===== */
+(async function loadReviews() {
+  const grid = document.getElementById('reviews-grid');
+  if (!grid) return;
+
+  try {
+    const res = await fetch('/api/reviews');
+    if (!res.ok) throw new Error();
+    const list = await res.json();
+
+    if (!list.length) {
+      grid.innerHTML = '<p class="reviews-loading">Відгуків ще немає</p>';
+      return;
+    }
+
+    const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+
+    grid.innerHTML = list.map(r => `
+      <div class="review-card fade-in">
+        <div class="review-stars" aria-label="${r.rating} з 5">${stars(r.rating)}</div>
+        <p class="review-text">${r.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+        <div class="review-author">
+          <span class="review-name">${r.name.replace(/</g,'&lt;')}</span>
+          ${r.project ? `<span class="review-project">${r.project.replace(/</g,'&lt;')}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    grid.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  } catch {
+    grid.innerHTML = '';
+  }
+})();
