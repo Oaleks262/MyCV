@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Відгуки — zvirycholeksandr</title>
+  <meta name="description" content="Відгуки клієнтів про розробку сайтів від zvirycholeksandr">
+  <link rel="canonical" href="https://zvirycholeksandr.com.ua/reviews">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=5">
+  <style>
+    .reviews-page { max-width: 760px; margin: 0 auto; padding: 110px 1.25rem 80px; }
+    @media(min-width:768px){ .reviews-page{ padding: 140px 2rem 80px; } }
+
+    .reviews-page-title { font-size: 2rem; font-weight: 700; margin-bottom: .25rem; }
+    .reviews-page-sub   { color: var(--color-text-muted); margin-bottom: 3rem; font-size: .95rem; }
+
+    /* Форма */
+    .review-form-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .review-form-card h2 { font-size: 1.1rem; margin-bottom: 1.25rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: .82rem; color: var(--color-text-muted); margin-bottom: .4rem; }
+    .form-control {
+      width: 100%; padding: .65rem .9rem;
+      background: rgba(255,255,255,.04); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); color: var(--color-text);
+      font-size: .9rem; font-family: var(--font-body);
+      transition: border-color .2s; box-sizing: border-box;
+    }
+    .form-control:focus { outline: none; border-color: var(--color-accent); }
+    textarea.form-control { resize: vertical; min-height: 100px; }
+
+    /* Зірки */
+    .star-row { display: flex; gap: .25rem; margin-bottom: 1rem; }
+    .star-btn  {
+      font-size: 1.6rem; background: none; border: none; cursor: pointer;
+      color: #333; transition: color .15s, transform .1s; padding: 0;
+      line-height: 1;
+    }
+    .star-btn.active { color: #f59e0b; }
+    .star-btn:hover  { transform: scale(1.15); }
+
+    .btn-submit {
+      background: var(--color-accent); color: #fff; border: none;
+      border-radius: var(--radius-sm); padding: .7rem 1.75rem;
+      font-weight: 600; font-size: .95rem; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-submit:hover    { background: var(--color-accent-hover); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+    .form-success {
+      display: none;
+      background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.25);
+      border-radius: var(--radius-sm); padding: 1rem 1.25rem;
+      color: #4ade80; font-size: .9rem; margin-top: 1rem;
+    }
+    .form-error {
+      display: none;
+      color: #f87171; font-size: .85rem; margin-top: .5rem;
+    }
+
+    /* Список відгуків */
+    .reviews-list { display: flex; flex-direction: column; gap: 1rem; }
+    .review-card  {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+    }
+    .review-stars   { font-size: 1.1rem; color: #f59e0b; margin-bottom: .5rem; }
+    .review-text    { color: var(--color-text-muted); font-size: .9rem; line-height: 1.7; margin-bottom: .75rem; }
+    .review-author  { display: flex; flex-direction: column; gap: 2px; }
+    .review-name    { font-weight: 600; font-size: .9rem; }
+    .review-project { font-size: .78rem; color: var(--color-text-dim); }
+    .reviews-empty  { color: var(--color-text-muted); text-align: center; padding: 3rem 0; }
+  </style>
+</head>
+<body>
+<div class="bg-tint" aria-hidden="true"></div>
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="cursor-tri" id="cursor-tri"><span></span><span></span><span></span></div>
+
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+  <ul class="navbar-links" id="navbar-links">
+    <li><a href="/portfolio">Портфоліо</a></li>
+    <li><a href="/blog">Блог</a></li>
+    <li><a href="/#contacts">Контакти</a></li>
+    <li><button class="btn-nav" data-open-order>Замовити сайт</button></li>
+  </ul>
+  <button class="navbar-burger" id="navbar-burger" aria-label="Меню" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="reviews-page">
+  <h1 class="reviews-page-title">Відгуки клієнтів</h1>
+  <p class="reviews-page-sub">Реальні відгуки людей, для яких я розробляв сайти</p>
+
+  <!-- ФОРМА -->
+  <div class="review-form-card">
+    <h2>Залишити відгук</h2>
+    <div class="form-group">
+      <label class="form-label">Ваше ім'я *</label>
+      <input type="text" id="r-name" class="form-control" placeholder="Олена Коваль" maxlength="80">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Проєкт або бізнес</label>
+      <input type="text" id="r-project" class="form-control" placeholder="Лендінг для масажного салону" maxlength="120">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ваша оцінка *</label>
+      <div class="star-row" id="star-row">
+        <button class="star-btn" data-val="1">☆</button>
+        <button class="star-btn" data-val="2">☆</button>
+        <button class="star-btn" data-val="3">☆</button>
+        <button class="star-btn" data-val="4">☆</button>
+        <button class="star-btn" data-val="5">☆</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Відгук *</label>
+      <textarea id="r-text" class="form-control" placeholder="Розкажіть про свій досвід роботи..." maxlength="1000"></textarea>
+    </div>
+    <button class="btn-submit" id="r-submit" onclick="submitReview()">Надіслати відгук</button>
+    <div class="form-success" id="r-success">
+      Дякуємо! Ваш відгук отримано і буде опублікований після перевірки.
+    </div>
+    <div class="form-error" id="r-error"></div>
+  </div>
+
+  <!-- СПИСОК -->
+  <div id="reviews-list"><p class="reviews-empty">Завантаження...</p></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 zvirycholeksandr. Всі права захищені.</span>
+      <div class="footer-socials">
+        <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://github.com/oaleks262" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/order.js"></script>
+<script src="/js/main.js"></script>
+<script>
+/* ===== STARS ===== */
+let selectedRating = 0;
+const starBtns = document.querySelectorAll('.star-btn');
+
+starBtns.forEach(btn => {
+  btn.addEventListener('mouseover', () => highlightStars(+btn.dataset.val));
+  btn.addEventListener('mouseout',  () => highlightStars(selectedRating));
+  btn.addEventListener('click', () => {
+    selectedRating = +btn.dataset.val;
+    highlightStars(selectedRating);
+  });
+});
+
+function highlightStars(n) {
+  starBtns.forEach(b => {
+    b.textContent = +b.dataset.val <= n ? '★' : '☆';
+    b.classList.toggle('active', +b.dataset.val <= n);
+  });
+}
+
+/* ===== SUBMIT ===== */
+async function submitReview() {
+  const name    = document.getElementById('r-name').value.trim();
+  const project = document.getElementById('r-project').value.trim();
+  const text    = document.getElementById('r-text').value.trim();
+  const errEl   = document.getElementById('r-error');
+  errEl.style.display = 'none';
+
+  if (!name)           return showErr("Введіть ваше ім'я");
+  if (!selectedRating) return showErr('Виберіть оцінку');
+  if (!text)           return showErr('Напишіть відгук');
+
+  const btn = document.getElementById('r-submit');
+  btn.disabled = true;
+  btn.textContent = 'Надсилання...';
+
+  try {
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, project, text, rating: selectedRating }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Помилка');
+
+    document.getElementById('r-success').style.display = 'block';
+    document.getElementById('r-name').value = '';
+    document.getElementById('r-project').value = '';
+    document.getElementById('r-text').value = '';
+    selectedRating = 0;
+    highlightStars(0);
+    btn.textContent = 'Надіслати відгук';
+    btn.disabled = false;
+  } catch (e) {
+    showErr(e.message);
+    btn.disabled = false;
+    btn.textContent = 'Надіслати відгук';
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('r-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+/* ===== LOAD REVIEWS ===== */
+(async function loadReviews() {
+  const container = document.getElementById('reviews-list');
+  try {
+    const res = await fetch('/api/reviews');
+    const list = await res.json();
+
+    if (!list.length) {
+      container.innerHTML = '<p class="reviews-empty">Відгуків ще немає — будьте першим!</p>';
+      return;
+    }
+
+    const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+    const esc   = s => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    container.innerHTML = '<div class="reviews-list">' + list.map(r => `
+      <div class="review-card">
+        <div class="review-stars">${stars(r.rating)}</div>
+        <p class="review-text">${esc(r.text)}</p>
+        <div class="review-author">
+          <span class="review-name">${esc(r.name)}</span>
+          ${r.project ? `<span class="review-project">${esc(r.project)}</span>` : ''}
+        </div>
+      </div>
+    `).join('') + '</div>';
+  } catch {
+    container.innerHTML = '';
+  }
+})();
+</script>
+</body>
+</html>

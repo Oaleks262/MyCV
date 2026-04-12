@@ -137,6 +137,17 @@ async function sendCompleteWorkEmail(order, { siteUrl, message, credentials }) {
       ${msgBlock}
       ${credBlock}
 
+      <div style="background:#f8f7ff;border:1px solid #e5e0ff;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:center">
+        <p style="margin:0 0 0.75rem;color:#555;font-size:0.88rem;line-height:1.5">
+          Якщо вам сподобалась робота — буду дуже вдячний за короткий відгук.<br>
+          Це займе лише хвилину і дуже допоможе!
+        </p>
+        <a href="https://zvirycholeksandr.com.ua/reviews"
+           style="display:inline-block;background:#8b5cf6;color:#fff;padding:0.6rem 1.4rem;border-radius:6px;font-weight:600;font-size:0.85rem;text-decoration:none">
+          ⭐ Залишити відгук
+        </a>
+      </div>
+
       <p style="color:#888;font-size:0.85rem;line-height:1.6;margin:0 0 1.5rem">
         Якщо хочете щось змінити або у вас є питання — відповідайте на цей лист або пишіть у Telegram.
         Я завжди на зв'язку.

@@ -56,6 +56,21 @@
       <p>Модерація та публікація відгуків клієнтів</p>
     </div>
 
+    <!-- ПОСИЛАННЯ ДЛЯ КЛІЄНТА -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div>
+        <div style="font-size:.78rem;color:#888;margin-bottom:.2rem">Посилання для клієнта</div>
+        <span id="review-link" style="font-size:.9rem;color:var(--accent)">https://zvirycholeksandr.com.ua/reviews</span>
+      </div>
+      <button onclick="copyLink()" style="padding:.35rem .9rem;background:var(--accent);border:none;border-radius:6px;color:#fff;cursor:pointer;font-size:.82rem;white-space:nowrap">
+        Копіювати
+      </button>
+      <a href="https://zvirycholeksandr.com.ua/reviews" target="_blank"
+         style="padding:.35rem .9rem;border:1px solid var(--border);border-radius:6px;color:#888;font-size:.82rem;text-decoration:none;white-space:nowrap">
+        Відкрити →
+      </a>
+    </div>
+
     <div class="tab-row">
       <button class="tab-btn active" onclick="showTab('pending',this)">Очікують</button>
       <button class="tab-btn" onclick="showTab('approved',this)">Схвалені</button>
@@ -137,6 +152,15 @@ async function deleteReview(id) {
 }
 
 loadReviews();
+
+function copyLink() {
+  const url = 'https://zvirycholeksandr.com.ua/reviews';
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Скопійовано!';
+    setTimeout(() => btn.textContent = 'Копіювати', 2000);
+  });
+}
 </script>
 </body>
 </html>
