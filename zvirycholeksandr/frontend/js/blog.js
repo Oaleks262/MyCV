@@ -28,7 +28,7 @@ function renderBlog(posts) {
   noResults?.classList.remove('visible');
 
   grid.innerHTML = posts.map(post => `
-    <a href="/blog-post?slug=${post.slug}" class="blog-card fade-in">
+    <a href="/blog/${post.slug}" class="blog-card fade-in">
       ${post.coverUrl
         ? `<img class="blog-card-cover" src="${post.coverUrl}" alt="${post.title}" loading="lazy">`
         : `<div class="blog-card-cover-placeholder">📝</div>`
@@ -92,8 +92,9 @@ loadBlog();
 
 /* ===== BLOG POST PAGE ===== */
 async function loadBlogPost() {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
+  // Підтримуємо обидва формати: /blog/slug і /blog-post?slug=...
+  const pathMatch = window.location.pathname.match(/\/blog\/(.+)/);
+  const slug = pathMatch ? pathMatch[1] : new URLSearchParams(window.location.search).get('slug');
   if (!slug) {
     showPostError();
     return;

@@ -139,11 +139,12 @@ app.get('/blog/:slug', (req, res) => {
 
     html = html
       .replace(/<title>[^<]*<\/title>/, `<title>${title} — zvirycholeksandr</title>`)
-      .replace(/(<meta name="description" content=")[^"]*(")/,    `$1${desc}$2`)
-      .replace(/(<meta property="og:title" content=")[^"]*(")/,   `$1${title}$2`)
-      .replace(/(<meta property="og:description" content=")[^"]*(")/,`$1${desc}$2`)
-      .replace(/(<meta property="og:image" content=")[^"]*(")/,   `$1${image}$2`)
-      .replace(/(<meta property="og:url" content=")[^"]*(")/,     `$1${url}$2`);
+      .replace(/(<meta name="description" content=")[^"]*(")/,        `$1${desc}$2`)
+      .replace(/(<meta property="og:title" content=")[^"]*(")/,       `$1${title}$2`)
+      .replace(/(<meta property="og:description" content=")[^"]*(")/,  `$1${desc}$2`)
+      .replace(/(<meta property="og:image" content=")[^"]*(")/,        `$1${image}$2`)
+      .replace(/(<meta property="og:url" content=")[^"]*(")/,          `$1${url}$2`)
+      .replace(/(<link rel="canonical" href=")[^"]*(")/,               `$1${url}$2`);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(html);
