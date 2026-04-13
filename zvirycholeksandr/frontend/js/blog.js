@@ -163,6 +163,54 @@ function renderPost(post) {
   // Показати контент
   document.getElementById('post-loading')?.remove();
   document.getElementById('post-wrap')?.classList.remove('hidden');
+
+  // Завантажити пов'язані статті
+  loadRelatedPosts(post);
+}
+
+async function loadRelatedPosts(currentPost) {
+  const container = document.getElementById('related-posts');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/blog');
+    if (!res.ok) return;
+    const all = await res.json();
+
+    // Виключаємо поточну статтю
+    const others = all.filter(p => p.slug !== currentPost.slug);
+    if (!others.length) return;
+
+    // Сортуємо: спочатку ті що мають спільні теги, потім решта
+    const currentTags = new Set(currentPost.tags || []);
+    const sorted = others.sort((a, b) => {
+      const aMatch = (a.tags || []).filter(t => currentTags.has(t)).length;
+      const bMatch = (b.tags || []).filter(t => currentTags.has(t)).length;
+      return bMatch - aMatch;
+    }).slice(0, 3);
+
+    const cards = sorted.map(p => `
+      <a href="/blog/${p.slug}" class="related-card">
+        ${p.coverUrl
+          ? `<img class="related-card-img" src="${p.coverUrl}" alt="${p.title}" loading="lazy">`
+          : `<div class="related-card-img related-card-placeholder">📝</div>`}
+        <div class="related-card-body">
+          ${(p.tags||[]).slice(0,1).map(t=>`<span class="blog-tag">${t}</span>`).join('')}
+          <p class="related-card-title">${p.title}</p>
+          <span class="related-card-date">${formatDate(p.publishedAt)}</span>
+        </div>
+      </a>
+    `).join('');
+
+    container.innerHTML = `
+      <div class="related-posts">
+        <h3 class="related-posts-title">Інші статті</h3>
+        <div class="related-grid">${cards}</div>
+        <div style="text-align:center;margin-top:1.5rem">
+          <a href="/blog" class="btn-secondary" style="display:inline-flex">Всі статті →</a>
+        </div>
+      </div>`;
+  } catch {}
 }
 
 function showPostError() {
