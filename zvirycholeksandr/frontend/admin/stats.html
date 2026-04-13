@@ -124,11 +124,20 @@ async function loadStats(days = 7, btn) {
   }).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
 
   // Топ сторінок
-  const pageNames = { '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог', '/terms': 'Умови', '/privacy': 'Конфіденційність' };
+  const pageNames = {
+    '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог',
+    '/terms': 'Умови', '/privacy': 'Конфіденційність',
+    '/blog-post': 'Блог (стара URL)', '/reviews': 'Відгуки', '/sitemap.xml': 'Sitemap',
+  };
+  function pageName(p) {
+    if (pageNames[p]) return pageNames[p];
+    if (p.startsWith('/blog/')) return '📄 ' + p.replace('/blog/', '');
+    return p;
+  }
   const maxPage = Math.max(...Object.values(data.pages), 1);
   document.getElementById('pages-chart').innerHTML = Object.entries(data.pages).slice(0,8).map(([p, n]) =>
     `<div class="bar-row">
-      <div class="bar-label" title="${p}">${pageNames[p] || p}</div>
+      <div class="bar-label" title="${p}">${pageName(p)}</div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(n/maxPage*100)}%"></div></div>
       <div class="bar-val">${n}</div>
     </div>`

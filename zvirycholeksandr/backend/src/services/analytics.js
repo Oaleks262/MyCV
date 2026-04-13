@@ -21,8 +21,10 @@ function save(data) {
 
 function parseReferrer(ref) {
   if (!ref) return 'Прямий перехід';
-  // Ігноруємо внутрішні переходи з власного домену
+  // Ігноруємо внутрішні переходи з власного домену та локального IP
   if (/zvirycholeksandr\.com\.ua/i.test(ref)) return null;
+  if (/78\.27\.236\.157/.test(ref)) return null;
+  if (/localhost|127\.0\.0\.1/.test(ref)) return null;
   if (/google/i.test(ref))    return 'Google';
   if (/instagram/i.test(ref)) return 'Instagram';
   if (/facebook|fb\.com/i.test(ref)) return 'Facebook';
