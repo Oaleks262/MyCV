@@ -88,7 +88,10 @@ let currentTab = 'pending';
 
 async function loadReviews() {
   const res = await apiRequest('/reviews/admin');
-  if (!res) return;
+  if (!res) {
+    document.getElementById('reviews-list').innerHTML = '<p style="color:#f87171">Не вдалося завантажити. Оновіть сторінку.</p>';
+    return;
+  }
   allReviews = await res.json();
   renderTab(currentTab);
 }
