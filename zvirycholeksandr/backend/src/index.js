@@ -56,11 +56,18 @@ const formLimiter = rateLimit({
   message: { error: 'Забагато запитів, спробуйте пізніше' }
 });
 
+// Rate limit для відгуків (3 на день)
+const reviewLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000,
+  max: 3,
+  message: { error: 'Ви вже залишили відгук сьогодні' }
+});
+
 // Публічні роути
 app.use('/api/orders', formLimiter, require('./routes/orders'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/blog', require('./routes/blog'));
-app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/reviews', reviewLimiter, require('./routes/reviews'));
 app.use('/api/settings', require('./routes/settings'));
 
 // Адмін роути (JWT захищені)
