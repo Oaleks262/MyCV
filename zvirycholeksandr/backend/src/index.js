@@ -67,7 +67,7 @@ const reviewLimiter = rateLimit({
 app.use('/api/orders', formLimiter, require('./routes/orders'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/blog', require('./routes/blog'));
-app.use('/api/reviews', reviewLimiter, require('./routes/reviews'));
+app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/settings', require('./routes/settings'));
 
 // Адмін роути (JWT захищені)

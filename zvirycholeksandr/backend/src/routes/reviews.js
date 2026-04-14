@@ -1,8 +1,16 @@
 const router = require('express').Router();
+const rateLimit = require('express-rate-limit');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 
 const reviews = new JsonDB('reviews.json');
+
+// Обмеження тільки для публічного відправлення відгуку (3 на день)
+const submitLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000,
+  max: 3,
+  message: { error: 'Ви вже залишили відгук сьогодні' }
+});
 
 // GET /api/reviews — публічний список схвалених відгуків
 router.get('/', (req, res) => {
@@ -12,7 +20,7 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/reviews — відправити відгук (публічно, без авторизації)
-router.post('/', (req, res) => {
+router.post('/', submitLimiter, (req, res) => {
   const { name, project, text, rating } = req.body;
   if (!name || !text) return res.status(400).json({ error: "Ім'я та текст обов'язкові" });
   if (name.length > 80 || text.length > 1000) return res.status(400).json({ error: 'Занадто довгий текст' });
