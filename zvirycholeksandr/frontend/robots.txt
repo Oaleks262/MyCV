@@ -1,4 +1,33 @@
+# Легітимні пошуковики — дозволяємо з обмеженням швидкості
+User-agent: Googlebot
+Crawl-delay: 5
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 10
+Allow: /
+
+# Відомі скрапери та SEO-боти — забороняємо повністю
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: scraperforce
+Disallow: /
+
+# Всі інші — дозволяємо публічні сторінки, закриваємо адмінку
 User-agent: *
+Crawl-delay: 10
+Disallow: /admin/
+Disallow: /api/
 Allow: /
 
 Sitemap: https://zvirycholeksandr.com.ua/sitemap.xml
