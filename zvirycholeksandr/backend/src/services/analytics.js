@@ -31,6 +31,8 @@ function parseReferrer(ref) {
   if (/t\.me|telegram/i.test(ref))   return 'Telegram';
   if (/youtube/i.test(ref))   return 'YouTube';
   if (/bing/i.test(ref))      return 'Bing';
+  // Фільтруємо відомі скрапери та спам-реферери
+  if (/scraperforce|semrush|ahrefs|moz\.com|majestic|similarweb|serpstat|spyfu/i.test(ref)) return null;
   try { return new URL(ref).hostname; }
   catch { return 'Інше'; }
 }
