@@ -118,6 +118,13 @@ ${urls.join('')}
 // Статичні файли — завантажені зображення
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// 301 redirect: старий /blog-post?slug=X → новий /blog/X (SEO: прибираємо дублі)
+app.get('/blog-post', (req, res) => {
+  const slug = req.query.slug;
+  if (slug) return res.redirect(301, `/blog/${slug}`);
+  return res.redirect(301, '/blog');
+});
+
 // Фронтенд — extensions дозволяє відкривати сторінки без .html
 app.use(express.static(path.join(__dirname, '../../frontend'), {
   extensions: ['html'],
