@@ -118,6 +118,15 @@ ${urls.join('')}
 // Статичні файли — завантажені зображення
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// 301 redirect: trailing slash → без слешу (напр. /blog/ → /blog)
+app.use((req, res, next) => {
+  if (req.path.length > 1 && req.path.endsWith('/')) {
+    const query = req.url.slice(req.path.length);
+    return res.redirect(301, req.path.slice(0, -1) + query);
+  }
+  next();
+});
+
 // 301 redirect: старий /blog-post?slug=X → новий /blog/X (SEO: прибираємо дублі)
 app.get('/blog-post', (req, res) => {
   const slug = req.query.slug;
