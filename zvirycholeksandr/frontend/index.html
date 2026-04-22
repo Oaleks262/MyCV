@@ -58,15 +58,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"></noscript>
-  <link rel="stylesheet" href="/css/style.css?v=5">
-  <link rel="stylesheet" href="/css/portfolio.css?v=2">
-  <!-- Google Analytics (замініть G-46YFL5WZ82 на свій ID) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-46YFL5WZ82"></script>
+  <link rel="stylesheet" href="/css/style.css?v=6">
+  <!-- Google Analytics — завантажуємо після load щоб не блокувати рендер -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-46YFL5WZ82');
+    window.addEventListener('load', function() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-46YFL5WZ82';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-46YFL5WZ82');
+    });
   </script>
   <link rel="canonical" href="https://zvirycholeksandr.com.ua/">
 </head>
