@@ -42,10 +42,11 @@ function analyticsMiddleware(req, res, next) {
   const skip = req.path.startsWith('/api')
     || req.path.startsWith('/uploads')
     || req.path.startsWith('/admin')
+    || req.path === '/blog-post'  // редіректи на нові URL не рахуємо
     || /\.(css|js|png|jpg|jpeg|ico|svg|webp|woff2?|gif|map|txt|xml)$/i.test(req.path)
     // Фільтруємо атаки сканерів і боти
-    || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi)$/i.test(req.path)
-    || /\/(\.git|\.env|wp-admin|wp-login|phpinfo|phpmyadmin|passwd|shadow|@fs)/i.test(req.path)
+    || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi|old|bkp|backup|tmp|swp|ini|cfg|conf|log)$/i.test(req.path)
+    || /\/(\.git|\.env|wp-admin|wp-login|wp-config|phpinfo|phpmyadmin|passwd|shadow|@fs|actuator|\.well-known\/sensitive)/i.test(req.path)
     // URL з кодованими символами — ін'єкції (%22=лапки, %27=апостроф, %3C=<, %3E=>)
     || /%22|%27|%3[Cc]|%3[Ee]|%00|%0[Aa]|%0[Dd]/i.test(req.path)
     || /bot|crawler|spider|curl|wget|python|scanner|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|applebot|googlebot|bingbot|yandex|semrush|ahrefs|mj12bot|dotbot/i.test(req.headers['user-agent'] || '');
