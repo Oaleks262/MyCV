@@ -126,8 +126,12 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // 301 redirect: trailing slash → без слешу (напр. /blog/ → /blog)
 app.use((req, res, next) => {
   if (req.path.length > 1 && req.path.endsWith('/')) {
-    const query = req.url.slice(req.path.length);
-    return res.redirect(301, req.path.slice(0, -1) + query);
+    const withoutSlash = req.path.slice(0, -1);
+    const htmlFile = path.join(__dirname, '../../frontend', withoutSlash + '.html');
+    if (fs.existsSync(htmlFile)) {
+      const query = req.url.slice(req.path.length);
+      return res.redirect(301, withoutSlash + query);
+    }
   }
   next();
 });
