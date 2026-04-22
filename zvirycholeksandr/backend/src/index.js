@@ -6,6 +6,11 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
+if (!process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET not set in .env');
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 1995;
 
@@ -39,7 +44,7 @@ app.use(cors({
       'http://localhost:3000',
       'http://localhost:1995',
     ];
-    if (!origin || allowed.includes(origin) || /^http:\/\/78\.27\.236\.157/.test(origin)) {
+    if (!origin || allowed.includes(origin) || origin === 'http://78.27.236.157') {
       callback(null, true);
     } else {
       callback(null, false); // відмовляємо без кидання помилки (не спамить Telegram)
@@ -151,6 +156,9 @@ function escAttr(str) {
 
 app.get('/blog/:slug', (req, res) => {
   try {
+    if (!/^[a-z0-9\-]+$/.test(req.params.slug)) {
+      return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+    }
     const post = blogDB.findOne({ slug: req.params.slug, isPublished: true });
     if (!post) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
 

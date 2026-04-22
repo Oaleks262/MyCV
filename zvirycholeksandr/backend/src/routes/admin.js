@@ -98,7 +98,7 @@ router.post('/logout', auth, (req, res) => {
 });
 
 // POST /api/admin/change-password
-router.post('/change-password', auth, async (req, res) => {
+router.post('/change-password', loginLimiter, auth, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Всі поля обов\'язкові' });
@@ -135,7 +135,13 @@ router.get('/orders/:id', auth, (req, res) => {
 
 // PATCH /api/admin/orders/:id — оновити статус або промт
 router.patch('/orders/:id', auth, (req, res) => {
-  const updated = orders.update(req.params.id, req.body);
+  const { status, prompt, notes } = req.body;
+  const patch = {};
+  if (status !== undefined) patch.status = String(status).slice(0, 50);
+  if (prompt !== undefined) patch.prompt = String(prompt).slice(0, 5000);
+  if (notes !== undefined) patch.notes = String(notes).slice(0, 2000);
+  if (!Object.keys(patch).length) return res.status(400).json({ error: 'Немає полів для оновлення' });
+  const updated = orders.update(req.params.id, patch);
   if (!updated) return res.status(404).json({ error: 'Not found' });
   res.json(updated);
 });
