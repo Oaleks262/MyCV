@@ -81,7 +81,7 @@ async function loadBlogPreview() {
     const posts = await res.json();
 
     container.innerHTML = posts.slice(0, 3).map(post => `
-      <a href="/blog-post?slug=${post.slug}" class="card fade-in">
+      <a href="/blog/${post.slug}" class="card fade-in">
         ${post.coverUrl
           ? `<img class="card-img" src="${post.coverUrl}" alt="${post.title}" loading="lazy">`
           : `<div class="card-img-placeholder">📝</div>`

@@ -160,7 +160,7 @@ function escAttr(str) {
 
 app.get('/blog/:slug', (req, res) => {
   try {
-    if (!/^[a-z0-9\-]+$/.test(req.params.slug)) {
+    if (!/^[a-zA-Z0-9\-_]+$/.test(req.params.slug)) {
       return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
     }
     const post = blogDB.findOne({ slug: req.params.slug, isPublished: true });

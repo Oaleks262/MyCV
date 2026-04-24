@@ -10,7 +10,7 @@
   <style>
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
     .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
-    .stat-card-num{font-size:2rem;font-weight:700;color:var(--accent)}
+    .stat-card-num{font-size:2rem;font-weight:700;color:#6c63ff}
     .stat-card-lbl{font-size:.8rem;color:#888;margin-top:.25rem}
     .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
     @media(max-width:640px){.charts-row{grid-template-columns:1fr}}
@@ -19,17 +19,20 @@
     .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
     .bar-label{font-size:.78rem;color:#888;width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .bar-wrap{flex:1;background:#2a2a3a;border-radius:4px;height:8px;overflow:hidden}
-    .bar-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .5s ease}
+    .bar-fill{height:100%;border-radius:4px;background:#6c63ff;transition:width .5s ease}
+    .bar-fill-red{height:100%;border-radius:4px;background:#ef4444;transition:width .5s ease}
+    .bar-fill-purple{height:100%;border-radius:4px;background:#8b5cf6;transition:width .5s ease}
     .bar-val{font-size:.75rem;color:#888;min-width:28px;text-align:right}
     .day-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:.5rem}
     .day-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
-    .day-lbl{font-size:.6rem;color:#666;white-space:nowrap;overflow:hidden}
-    .day-bar{width:100%;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px;transition:height .4s ease;opacity:.8}
+    .day-bar{width:100%;background:#6c63ff;border-radius:2px 2px 0 0;min-height:2px;transition:height .4s ease;opacity:.8}
     .day-bar:hover{opacity:1}
     .day-lbl{font-size:.6rem;color:#666;text-align:center;white-space:nowrap}
     .period-btns{display:flex;gap:.5rem;margin-bottom:1.5rem}
     .period-btn{padding:.35rem .85rem;border:1px solid var(--border);border-radius:6px;background:none;color:#888;cursor:pointer;font-size:.8rem}
-    .period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .period-btn.active{background:#6c63ff;border-color:#6c63ff;color:#fff}
+    .show-all-btn{display:block;width:100%;margin-top:.75rem;padding:.4rem;background:none;border:1px solid #2a2a3a;border-radius:6px;color:#666;font-size:.78rem;cursor:pointer;text-align:center;transition:color .2s,border-color .2s}
+    .show-all-btn:hover{color:#aaa;border-color:#555}
   </style>
 </head>
 <body>
@@ -72,6 +75,7 @@
       <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-lbl">Сьогодні</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-avg">—</div><div class="stat-card-lbl">Середньо / день</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-sources">—</div><div class="stat-card-lbl">Джерел трафіку</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-bots" style="color:#ef4444">—</div><div class="stat-card-lbl">Запитів ботів/сканерів</div></div>
     </div>
 
     <div class="chart-card" style="margin-bottom:1.5rem">
@@ -83,17 +87,71 @@
       <div class="chart-card">
         <h3>📄 Топ сторінок</h3>
         <div id="pages-chart"></div>
+        <button class="show-all-btn" id="pages-more-btn" onclick="showAllPages()" style="display:none">Показати всі →</button>
       </div>
       <div class="chart-card">
         <h3>🌐 Джерела трафіку</h3>
         <div id="referrers-chart"></div>
+        <button class="show-all-btn" id="refs-more-btn" onclick="showAllRefs()" style="display:none">Показати всі →</button>
       </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:1.5rem" id="bots-section" hidden>
+      <h3>🤖 Боти / сканери</h3>
+      <div id="bots-chart"></div>
+      <button class="show-all-btn" id="bots-more-btn" onclick="showAllBots()" style="display:none">Показати всі →</button>
     </div>
   </main>
 </div>
 
 <script src="/js/admin.js"></script>
 <script>
+const PAGE_SIZE = 5;
+let _allPages = [], _allRefs = [], _allBots = [];
+
+function isBot(path) {
+  if (/\.(php|old|bak|backup|env|sql|gz|zip|tar|ini|cfg|conf|log|asp|aspx|jsp|cgi|sh|py|rb)$/i.test(path)) return true;
+  if (/^\/(wp-|wordpress|phpmyadmin|pma|xmlrpc|cgi-bin|\.well-known\/sensitive|actuator|admin\.php|login\.php)/i.test(path)) return true;
+  if (/^\.[^/]/.test(path.replace(/^\//, ''))) return true;
+  if (/\/(config|setup|install|shell|cmd|exec|eval)/i.test(path)) return true;
+  return false;
+}
+
+const pageNames = {
+  '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог',
+  '/terms': 'Умови', '/privacy': 'Конфіденційність',
+  '/blog-post': 'Блог (стара URL)', '/reviews': 'Відгуки', '/sitemap.xml': 'Sitemap',
+};
+function pageName(p) {
+  if (pageNames[p]) return pageNames[p];
+  if (p.startsWith('/blog/')) return '📄 ' + p.replace('/blog/', '');
+  return p;
+}
+
+function renderBars(entries, container, fillClass, labelFn, max) {
+  container.innerHTML = entries.map(([k, n]) =>
+    `<div class="bar-row">
+      <div class="bar-label" title="${k}">${labelFn(k)}</div>
+      <div class="bar-wrap"><div class="${fillClass}" style="width:${Math.round(n/max*100)}%"></div></div>
+      <div class="bar-val">${n}</div>
+    </div>`
+  ).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+}
+
+function showAllPages() {
+  renderBars(_allPages, document.getElementById('pages-chart'), 'bar-fill', pageName, Math.max(..._allPages.map(([,v])=>v),1));
+  document.getElementById('pages-more-btn').style.display = 'none';
+}
+function showAllRefs() {
+  const srcIcons = { 'Google':'🔍','Instagram':'📷','Facebook':'👤','Telegram':'✈️','YouTube':'▶️','Прямий перехід':'🔗','Bing':'🔍' };
+  renderBars(_allRefs, document.getElementById('referrers-chart'), 'bar-fill-purple', r => (srcIcons[r]||'🌐')+' '+r, Math.max(..._allRefs.map(([,v])=>v),1));
+  document.getElementById('refs-more-btn').style.display = 'none';
+}
+function showAllBots() {
+  renderBars(_allBots, document.getElementById('bots-chart'), 'bar-fill-red', p => p, Math.max(..._allBots.map(([,v])=>v),1));
+  document.getElementById('bots-more-btn').style.display = 'none';
+}
+
 async function loadStats(days = 7, btn) {
   document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -106,17 +164,26 @@ async function loadStats(days = 7, btn) {
   const today = new Date().toISOString().split('T')[0];
   const todayVal = data.daily[today] || 0;
   const days_ = Object.keys(data.daily).length || 1;
+
+  // Розділяємо сторінки на реальні та боти/сканери
+  const allPageEntries = Object.entries(data.pages).sort(([,a],[,b]) => b - a);
+  _allPages = allPageEntries.filter(([p]) => !isBot(p));
+  _allBots  = allPageEntries.filter(([p]) =>  isBot(p));
+
+  const botTotal = _allBots.reduce((s,[,n]) => s+n, 0);
+
   document.getElementById('s-total').textContent   = data.total;
   document.getElementById('s-today').textContent   = todayVal;
   document.getElementById('s-avg').textContent     = Math.round(data.total / days_);
   document.getElementById('s-sources').textContent = Object.keys(data.referrers).length;
+  document.getElementById('s-bots').textContent    = botTotal;
 
   // Графік по днях
   const sorted = Object.entries(data.daily).sort(([a],[b]) => a.localeCompare(b)).slice(-days);
   const maxDay = Math.max(...sorted.map(([,v]) => v), 1);
   document.getElementById('day-chart').innerHTML = sorted.map(([date, val]) => {
     const h = Math.max(4, Math.round((val / maxDay) * 76));
-    const lbl = date.slice(5); // MM-DD
+    const lbl = date.slice(5);
     return `<div class="day-col" title="${date}: ${val}">
       <div class="day-bar" style="height:${h}px"></div>
       <div class="day-lbl">${lbl}</div>
@@ -124,35 +191,33 @@ async function loadStats(days = 7, btn) {
   }).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
 
   // Топ сторінок
-  const pageNames = {
-    '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог',
-    '/terms': 'Умови', '/privacy': 'Конфіденційність',
-    '/blog-post': 'Блог (стара URL)', '/reviews': 'Відгуки', '/sitemap.xml': 'Sitemap',
-  };
-  function pageName(p) {
-    if (pageNames[p]) return pageNames[p];
-    if (p.startsWith('/blog/')) return '📄 ' + p.replace('/blog/', '');
-    return p;
-  }
-  const maxPage = Math.max(...Object.values(data.pages), 1);
-  document.getElementById('pages-chart').innerHTML = Object.entries(data.pages).slice(0,8).map(([p, n]) =>
-    `<div class="bar-row">
-      <div class="bar-label" title="${p}">${pageName(p)}</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(n/maxPage*100)}%"></div></div>
-      <div class="bar-val">${n}</div>
-    </div>`
-  ).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+  const maxPage = Math.max(..._allPages.map(([,v])=>v), 1);
+  const pagesEl = document.getElementById('pages-chart');
+  const pagesBtn = document.getElementById('pages-more-btn');
+  renderBars(_allPages.slice(0, PAGE_SIZE), pagesEl, 'bar-fill', pageName, maxPage);
+  pagesBtn.style.display = _allPages.length > PAGE_SIZE ? 'block' : 'none';
 
-  // Джерела
-  const srcIcons = { 'Google':'🔍', 'Instagram':'📷', 'Facebook':'👤', 'Telegram':'✈️', 'YouTube':'▶️', 'Прямий перехід':'🔗', 'Bing':'🔍' };
-  const maxRef = Math.max(...Object.values(data.referrers), 1);
-  document.getElementById('referrers-chart').innerHTML = Object.entries(data.referrers).slice(0,8).map(([r, n]) =>
-    `<div class="bar-row">
-      <div class="bar-label" title="${r}">${srcIcons[r] || '🌐'} ${r}</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(n/maxRef*100)}%;background:#8b5cf6"></div></div>
-      <div class="bar-val">${n}</div>
-    </div>`
-  ).join('') || '<p style="color:#666;font-size:.85rem">Даних ще немає</p>';
+  // Джерела трафіку
+  _allRefs = Object.entries(data.referrers).sort(([,a],[,b]) => b - a);
+  const srcIcons = { 'Google':'🔍','Instagram':'📷','Facebook':'👤','Telegram':'✈️','YouTube':'▶️','Прямий перехід':'🔗','Bing':'🔍' };
+  const maxRef = Math.max(..._allRefs.map(([,v])=>v), 1);
+  const refsEl = document.getElementById('referrers-chart');
+  const refsBtn = document.getElementById('refs-more-btn');
+  renderBars(_allRefs.slice(0, PAGE_SIZE), refsEl, 'bar-fill-purple', r => (srcIcons[r]||'🌐')+' '+r, maxRef);
+  refsBtn.style.display = _allRefs.length > PAGE_SIZE ? 'block' : 'none';
+
+  // Боти / сканери
+  const botsSection = document.getElementById('bots-section');
+  const botsEl = document.getElementById('bots-chart');
+  const botsBtn = document.getElementById('bots-more-btn');
+  if (_allBots.length > 0) {
+    botsSection.hidden = false;
+    const maxBot = Math.max(..._allBots.map(([,v])=>v), 1);
+    renderBars(_allBots.slice(0, PAGE_SIZE), botsEl, 'bar-fill-red', p => p, maxBot);
+    botsBtn.style.display = _allBots.length > PAGE_SIZE ? 'block' : 'none';
+  } else {
+    botsSection.hidden = true;
+  }
 }
 
 loadStats(7);
