@@ -120,8 +120,11 @@ ${urls.join('')}
 </urlset>`);
 });
 
-// Статичні файли — завантажені зображення
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Статичні файли — завантажені зображення (кеш 30 днів)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+  maxAge: '30d',
+  immutable: true,
+}));
 
 // 301 redirect: trailing slash → без слешу (напр. /blog/ → /blog)
 app.use((req, res, next) => {
@@ -143,9 +146,16 @@ app.get('/blog-post', (req, res) => {
   return res.redirect(301, '/blog');
 });
 
-// Фронтенд — extensions дозволяє відкривати сторінки без .html
+// Фронтенд — CSS/JS/зображення кешуються на 7 днів, HTML — ні (щоб оновлення доходили)
 app.use(express.static(path.join(__dirname, '../../frontend'), {
   extensions: ['html'],
+  setHeaders(res, filePath) {
+    if (/\.(css|js|woff2?|png|jpg|jpeg|webp|svg|ico|gif)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
+    } else if (/\.html$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
 }));
 
 // Blog post — server-side OG meta tags для коректних превʼю в Telegram/Facebook
@@ -172,6 +182,35 @@ app.get('/blog/:slug', (req, res) => {
     const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image.jpg';
     const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
 
+    // Article Schema + FAQ Schema (якщо є поле faq у пості)
+    const articleSchema = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.title,
+      description: post.excerpt || '',
+      image: image,
+      url: url,
+      datePublished: post.publishedAt || post.createdAt,
+      dateModified: post.updatedAt || post.publishedAt || post.createdAt,
+      author: { '@type': 'Person', name: 'Олександр Звірич', url: DOMAIN },
+      publisher: { '@type': 'Person', name: 'Олександр Звірич', url: DOMAIN },
+    });
+
+    let schemaBlock = `<script type="application/ld+json">${articleSchema}</script>`;
+
+    if (Array.isArray(post.faq) && post.faq.length) {
+      const faqSchema = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: post.faq.map(item => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      });
+      schemaBlock += `\n<script type="application/ld+json">${faqSchema}</script>`;
+    }
+
     html = html
       .replace(/<title>[^<]*<\/title>/, `<title>${title} — zvirycholeksandr</title>`)
       .replace(/(<meta name="description" content=")[^"]*(")/,        `$1${desc}$2`)
@@ -179,7 +218,8 @@ app.get('/blog/:slug', (req, res) => {
       .replace(/(<meta property="og:description" content=")[^"]*(")/,  `$1${desc}$2`)
       .replace(/(<meta property="og:image" content=")[^"]*(")/,        `$1${image}$2`)
       .replace(/(<meta property="og:url" content=")[^"]*(")/,          `$1${url}$2`)
-      .replace(/(<link rel="canonical" href=")[^"]*(")/,               `$1${url}$2`);
+      .replace(/(<link rel="canonical" href=")[^"]*(")/,               `$1${url}$2`)
+      .replace('</head>', `${schemaBlock}\n</head>`);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(html);
