@@ -110,11 +110,9 @@ const PAGE_SIZE = 5;
 let _allPages = [], _allRefs = [], _allBots = [];
 
 function isBot(path) {
-  if (/\.(php|old|bak|backup|env|sql|gz|zip|tar|ini|cfg|conf|log|asp|aspx|jsp|cgi|sh|py|rb)$/i.test(path)) return true;
-  if (/^\/(wp-|wordpress|phpmyadmin|pma|xmlrpc|cgi-bin|\.well-known\/sensitive|actuator|admin\.php|login\.php)/i.test(path)) return true;
-  if (/^\.[^/]/.test(path.replace(/^\//, ''))) return true;
-  if (/\/(config|setup|install|shell|cmd|exec|eval)/i.test(path)) return true;
-  return false;
+  const valid = ['/', '/portfolio', '/blog', '/reviews', '/privacy', '/terms', '/sitemap.xml'];
+  if (valid.includes(path) || path.startsWith('/blog/')) return false;
+  return true;
 }
 
 const pageNames = {
