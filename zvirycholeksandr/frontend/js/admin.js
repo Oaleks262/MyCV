@@ -415,13 +415,19 @@ async function saveBlogPost(e) {
   const id = form.dataset.id;
   const formData = new FormData();
 
+  const faq = Array.from(document.querySelectorAll('#faq-rows .faq-row')).map(row => ({
+    q: row.querySelector('.faq-q').value.trim(),
+    a: row.querySelector('.faq-a').value.trim(),
+  })).filter(item => item.q && item.a);
+
   const data = {
     slug: form.slug.value,
     title: form.title.value,
     excerpt: form.excerpt.value,
     content: form.content.value,
     tags: form.tags.value.split(',').map(t => t.trim()).filter(Boolean),
-    isPublished: form.isPublished.checked
+    isPublished: form.isPublished.checked,
+    faq,
   };
 
   formData.append('data', JSON.stringify(data));
@@ -456,6 +462,11 @@ async function editBlogPost(id) {
   form.content.value = post.content || '';
   form.tags.value = (post.tags || []).join(', ');
   form.isPublished.checked = post.isPublished;
+  const faqContainer = document.getElementById('faq-rows');
+  if (faqContainer) {
+    faqContainer.innerHTML = '';
+    (post.faq || []).forEach(item => addFaqRow(item.q, item.a));
+  }
   document.getElementById('blog-modal-title').textContent = 'Редагувати статтю';
   openModal('blog-modal');
 }
@@ -464,6 +475,8 @@ function openAddBlog() {
   const form = document.getElementById('blog-form');
   form?.reset();
   delete form?.dataset.id;
+  const faqContainer = document.getElementById('faq-rows');
+  if (faqContainer) faqContainer.innerHTML = '';
   document.getElementById('blog-modal-title').textContent = 'Нова стаття';
   openModal('blog-modal');
 }

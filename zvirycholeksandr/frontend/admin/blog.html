@@ -136,6 +136,12 @@
             style="max-width:300px;display:none;margin-top:.5rem"
             onerror="this.style.display='none'" onload="this.style.display='block'">
         </div>
+        <div class="form-group">
+          <label class="form-label">FAQ (питання & відповіді для Google)</label>
+          <div id="faq-rows"></div>
+          <button type="button" class="btn btn-secondary btn-sm" style="margin-top:.5rem"
+            onclick="addFaqRow()">+ Додати питання</button>
+        </div>
         <div class="form-check">
           <input type="checkbox" name="isPublished" id="isPublished">
           <label for="isPublished" style="font-size:.875rem">Опублікувати статтю</label>
@@ -149,8 +155,27 @@
   </div>
 </div>
 
+<style>
+.faq-row { display:flex; gap:.5rem; margin-bottom:.5rem; align-items:flex-start; }
+.faq-row .faq-fields { flex:1; display:flex; flex-direction:column; gap:.25rem; }
+.faq-row .faq-q { font-size:.875rem; }
+.faq-row .faq-a { font-size:.875rem; resize:vertical; min-height:56px; }
+.faq-row .faq-del { padding:.25rem .5rem; font-size:.8rem; flex-shrink:0; margin-top:.15rem; }
+</style>
 <script src="/js/admin.js"></script>
 <script>
+function addFaqRow(q, a) {
+  const row = document.createElement('div');
+  row.className = 'faq-row';
+  row.innerHTML = `
+    <div class="faq-fields">
+      <input type="text" class="form-control faq-q" placeholder="Питання" value="${(q||'').replace(/"/g,'&quot;')}">
+      <textarea class="form-control faq-a" placeholder="Відповідь">${a||''}</textarea>
+    </div>
+    <button type="button" class="btn btn-secondary btn-sm faq-del" onclick="this.closest('.faq-row').remove()">✕</button>`;
+  document.getElementById('faq-rows').appendChild(row);
+}
+
 function getContentEl() {
   return document.getElementById('md-content') || document.querySelector('[name="content"]');
 }
