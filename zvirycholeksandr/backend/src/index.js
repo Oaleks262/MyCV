@@ -19,6 +19,7 @@ app.set('trust proxy', 1);
 
 app.use(helmet({
   hsts: { maxAge: 31536000, includeSubDomains: true },
+  xContentTypeOptions: false, // встановлюється nginx — уникаємо дубля
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
