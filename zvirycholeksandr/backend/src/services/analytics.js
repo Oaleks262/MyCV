@@ -39,17 +39,19 @@ function parseReferrer(ref) {
 
 // Middleware — записує перегляди сторінок
 function analyticsMiddleware(req, res, next) {
+  const ua = req.headers['user-agent'] || '';
   const skip = req.path.startsWith('/api')
     || req.path.startsWith('/uploads')
     || req.path.startsWith('/admin')
-    || req.path === '/blog-post'  // редіректи на нові URL не рахуємо
+    || req.path === '/blog-post'
     || /\.(css|js|png|jpg|jpeg|ico|svg|webp|woff2?|gif|map|txt|xml)$/i.test(req.path)
-    // Фільтруємо атаки сканерів і боти
-    || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi|old|bkp|backup|tmp|swp|ini|cfg|conf|log)$/i.test(req.path)
-    || /\/(\.git|\.env|wp-admin|wp-login|wp-config|phpinfo|phpmyadmin|passwd|shadow|@fs|actuator|\.well-known\/sensitive)/i.test(req.path)
-    // URL з кодованими символами — ін'єкції (%22=лапки, %27=апостроф, %3C=<, %3E=>)
+    // Розширений фільтр шляхів сканерів
+    || /\.(php|asp|aspx|env|git|bak|sql|sh|cgi|old|bkp|backup|tmp|swp|ini|cfg|conf|log|zip|gz|tar|py|rb|yml|yaml|json|toml|lock|jar|war|ear)$/i.test(req.path)
+    || /\/(\.git|\.env|wp-admin|wp-login|wp-config|phpinfo|phpmyadmin|passwd|shadow|@fs|actuator|\.well-known\/sensitive|config|setup|install)/i.test(req.path)
     || /%22|%27|%3[Cc]|%3[Ee]|%00|%0[Aa]|%0[Dd]/i.test(req.path)
-    || /bot|crawler|spider|curl|wget|python|scanner|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|applebot|googlebot|bingbot|yandex|semrush|ahrefs|mj12bot|dotbot/i.test(req.headers['user-agent'] || '');
+    // Порожній або підозрілий UA — реальні браузери завжди надсилають UA
+    || !ua
+    || /bot|crawler|spider|curl|wget|python|scanner|go-http-client|java|ruby|okhttp|libwww|zgrab|masscan|nmap|axios|node-fetch|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|applebot|googlebot|bingbot|yandex|semrush|ahrefs|mj12bot|dotbot/i.test(ua);
 
   if (!skip) {
     const today = new Date().toISOString().split('T')[0];
