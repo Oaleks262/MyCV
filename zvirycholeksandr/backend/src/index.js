@@ -121,6 +121,23 @@ ${urls.join('')}
 </urlset>`);
 });
 
+// Захист HTML-файлів адмінки — перевіряємо httpOnly cookie до видачі статики
+const jwt = require('jsonwebtoken');
+app.use('/admin', (req, res, next) => {
+  if (req.path === '/login' || req.path === '/login.html') return next();
+  const raw = req.headers.cookie || '';
+  const match = raw.split(';').find(c => c.trim().startsWith('admin_auth='));
+  const token = match?.trim().slice('admin_auth='.length);
+  if (!token) return res.redirect('/admin/login');
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.setHeader('Set-Cookie', 'admin_auth=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0');
+    return res.redirect('/admin/login');
+  }
+});
+
 // Статичні файли — завантажені зображення (кеш 30 днів)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
   maxAge: '30d',

@@ -88,12 +88,24 @@ router.post('/verify-code', loginLimiter, (req, res) => {
 
   twoFACodes.delete(sessionId);
   const token = jwt.sign({ admin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  // httpOnly cookie — захист HTML-файлів адмінки на рівні сервера
+  res.setHeader('Set-Cookie', [
+    `admin_auth=${token}`,
+    'HttpOnly',
+    'SameSite=Strict',
+    'Path=/',
+    'Max-Age=604800',
+    'Secure',
+  ].join('; '));
+
   res.json({ token });
 });
 
 // POST /api/admin/logout — відкликаємо токен
 router.post('/logout', auth, (req, res) => {
   invalidateToken(req.token);
+  res.setHeader('Set-Cookie', 'admin_auth=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0');
   res.json({ success: true });
 });
 
