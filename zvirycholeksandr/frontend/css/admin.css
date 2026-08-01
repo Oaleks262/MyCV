@@ -596,3 +596,76 @@ select.form-control { cursor: pointer; }
   .detail-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ===== ADMIN REBRAND 2026 ===== */
+:root {
+  --admin-accent: #587400;
+  --admin-bg: #f2efe8;
+  --admin-surface: #e8e4db;
+  --admin-border: rgba(11, 11, 12, .72);
+  --admin-text: #0b0b0c;
+  --admin-muted: #5f5d58;
+}
+
+body { line-height: 1.45; }
+button, input, textarea, select { font-family: inherit; }
+:focus-visible { outline: 3px solid #587400; outline-offset: 3px; }
+
+.login-box,
+.admin-sidebar,
+.admin-topbar,
+.stat-card,
+.table-wrap,
+.detail-card,
+.form-card,
+.modal-content,
+.toast,
+.upload-area {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.login-box { border: 1px solid #0b0b0c; }
+.login-logo span,
+.sidebar-logo span,
+.admin-topbar-logo span { display: inline-block; background: #d7ff3a; color: #0b0b0c; line-height: .75; }
+
+.admin-sidebar { border-right-color: #0b0b0c; }
+.sidebar-logo { border-bottom-color: #0b0b0c; letter-spacing: -.04em; }
+.sidebar-nav a { border-bottom: 1px solid rgba(11, 11, 12, .12); }
+.sidebar-nav a:hover,
+.sidebar-nav a.active { color: #0b0b0c; background: #d7ff3a; border-right: 0; }
+
+.admin-header { padding-bottom: 1.5rem; border-bottom: 1px solid #0b0b0c; }
+.admin-header h1 { font-size: clamp(2rem, 4vw, 4.5rem); font-weight: 500; letter-spacing: -.055em; }
+.stat-card-value { color: #0b0b0c; }
+.stat-card:nth-child(2n) { background: #d7ff3a; }
+
+th { background: #d7ff3a; color: #0b0b0c; }
+td { border-bottom-color: rgba(11, 11, 12, .18); }
+tr:hover td { background: rgba(215, 255, 58, .34); }
+
+.form-control,
+input,
+textarea,
+select {
+  background: rgba(255, 255, 255, .28) !important;
+  color: #0b0b0c !important;
+  border-color: #0b0b0c !important;
+  border-radius: 0 !important;
+}
+
+.btn-primary,
+.login-box button[type="submit"] {
+  border-radius: 0 !important;
+  background: #0b0b0c !important;
+  color: #f2efe8 !important;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.btn-primary:hover,
+.login-box button[type="submit"]:hover { background: #d7ff3a !important; color: #0b0b0c !important; }
+
+.contact-links a { color: #415700; }
+.badge { border-radius: 0; color: #0b0b0c; border: 1px solid currentColor; }
+.sidebar-overlay { background: rgba(11, 11, 12, .58); }
