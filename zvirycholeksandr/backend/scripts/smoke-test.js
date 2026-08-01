@@ -1,27 +1,49 @@
 const baseUrl = String(process.env.SMOKE_BASE_URL || 'http://127.0.0.1:1995').replace(/\/$/, '');
 
-const checks = [
+const staticChecks = [
   ['Головна', '/', 200, 'чому варто обрати вас'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
-  ['Портфоліо SSR', '/portfolio', 200, 'portfolio-card-link'],
-  ['Сторінка роботи', '/portfolio/masazh-oleny', 200, 'CreativeWork'],
-  ['Блог SSR', '/blog/yak-zrobyty-lending-dlya-masazhysta', 200, 'article:published_time'],
   ['Sitemap', '/sitemap.xml', 200, '/services/business-site'],
 ];
 
+async function check(name, pathname, expectedStatus, expectedText) {
+  try {
+    const response = await fetch(baseUrl + pathname);
+    const body = await response.text();
+    const ok = response.status === expectedStatus && body.includes(expectedText);
+    console.log(`${ok ? '✓' : '✗'} ${name}: HTTP ${response.status}${body.includes(expectedText) ? '' : ' · відсутній контрольний текст'}`);
+    return ok ? 0 : 1;
+  } catch (error) {
+    console.log(`✗ ${name}: ${error.message}`);
+    return 1;
+  }
+}
+
 async function run() {
   let failed = 0;
-  for (const [name, pathname, expectedStatus, expectedText] of checks) {
-    try {
-      const response = await fetch(baseUrl + pathname);
-      const body = await response.text();
-      const ok = response.status === expectedStatus && body.includes(expectedText);
-      console.log(`${ok ? '✓' : '✗'} ${name}: HTTP ${response.status}${body.includes(expectedText) ? '' : ' · відсутній контрольний текст'}`);
-      if (!ok) failed += 1;
-    } catch (error) {
-      console.log(`✗ ${name}: ${error.message}`);
-      failed += 1;
-    }
+  for (const args of staticChecks) failed += await check(...args);
+
+  try {
+    const portfolioResponse = await fetch(baseUrl + '/api/portfolio');
+    const portfolio = await portfolioResponse.json();
+    const item = Array.isArray(portfolio) && portfolio.find(entry => entry.slug);
+    if (!item) throw new Error('немає опублікованої роботи з slug');
+    failed += await check('Портфоліо SSR', '/portfolio', 200, `href="/portfolio/${item.slug}"`);
+    failed += await check('Сторінка роботи', `/portfolio/${encodeURIComponent(item.slug)}`, 200, 'CreativeWork');
+  } catch (error) {
+    console.log(`✗ Портфоліо SSR: ${error.message}`);
+    failed += 2;
+  }
+
+  try {
+    const blogResponse = await fetch(baseUrl + '/api/blog');
+    const posts = await blogResponse.json();
+    const post = Array.isArray(posts) && posts.find(entry => entry.slug);
+    if (!post) throw new Error('немає опублікованої статті з slug');
+    failed += await check('Блог SSR', `/blog/${encodeURIComponent(post.slug)}`, 200, 'article:published_time');
+  } catch (error) {
+    console.log(`✗ Блог SSR: ${error.message}`);
+    failed += 1;
   }
 
   try {
