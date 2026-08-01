@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: 'zvirycholeksandr',
     script: 'src/index.js',
-    cwd: './backend',
+    cwd: __dirname,
     instances: 1,
     autorestart: true,
     max_memory_restart: '300M',

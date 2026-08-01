@@ -14,16 +14,51 @@ Required:
 
 ## 2. Deploy
 
+Before the first deploy of this version, move runtime data outside the Git checkout. Replace `<APP_USER>` and `<APP_GROUP>` with the account that runs PM2:
+
+```bash
+cd /var/www/MyCV/zvirycholeksandr
+sudo install -d -m 700 -o <APP_USER> -g <APP_GROUP> /var/lib/zvirycholeksandr/data
+sudo install -d -m 700 -o <APP_USER> -g <APP_GROUP> /var/backups/zvirycholeksandr
+cp -a backend/data/. /var/lib/zvirycholeksandr/data/
+```
+
+Set these values in `backend/.env`:
+
+```dotenv
+DATA_DIR=/var/lib/zvirycholeksandr/data
+BACKUP_DIR=/var/backups/zvirycholeksandr
+```
+
+Verify the copied data before touching the checkout:
+
+```bash
+node scripts/verify-data.js /var/lib/zvirycholeksandr/data
+BACKUP_DIR=/var/backups/zvirycholeksandr DATA_DIR=/var/lib/zvirycholeksandr/data ./scripts/backup.sh
+```
+
+If `git status --short` shows modified files under `backend/data`, keep a recoverable Git stash after the external copy:
+
+```bash
+git stash push -m pre-deploy-runtime-data -- backend/data
+```
+
+Then deploy the reviewed branch:
+
 ```bash
 cd /var/www/MyCV
+git fetch origin
+git switch codex/lead-growth-foundation
 git pull --ff-only
 cd zvirycholeksandr/backend
 pnpm install --frozen-lockfile --prod
-pm2 reload ../ecosystem.config.js --update-env
+pm2 startOrReload ecosystem.config.js --update-env
+pm2 save
 sudo nginx -t
-sudo systemctl reload nginx
 SMOKE_BASE_URL=https://zvirycholeksandr.com.ua pnpm test:smoke
 ```
+
+The repository's `nginx.conf` is a reference file. Do not copy it over the active server config blindly. Apply nginx changes separately only after comparing them with the active virtual host and running `nginx -t`.
 
 Run the exact package-manager binary available on the server if `pnpm` is not globally installed.
 
