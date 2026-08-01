@@ -2,7 +2,7 @@
  * Скрипт для встановлення пароля адміна
  * Використання: node scripts/set-admin-password.js YOUR_PASSWORD
  */
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 

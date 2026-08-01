@@ -11,6 +11,8 @@ burger?.addEventListener('click', () => {
   const isOpen = navLinks?.classList.toggle('open');
   burger.classList.toggle('open');
   burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  burger.setAttribute('aria-label', isOpen ? 'Закрити меню' : 'Відкрити меню');
+  document.body.classList.toggle('nav-open', Boolean(isOpen));
 });
 
 // Закрити меню при кліку на будь-який елемент всередині (посилання або кнопки)
@@ -19,7 +21,19 @@ navLinks?.querySelectorAll('a, button').forEach(el => {
     navLinks.classList.remove('open');
     burger?.classList.remove('open');
     burger?.setAttribute('aria-expanded', 'false');
+    burger?.setAttribute('aria-label', 'Відкрити меню');
+    document.body.classList.remove('nav-open');
   });
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !navLinks?.classList.contains('open')) return;
+  navLinks.classList.remove('open');
+  burger?.classList.remove('open');
+  burger?.setAttribute('aria-expanded', 'false');
+  burger?.setAttribute('aria-label', 'Відкрити меню');
+  document.body.classList.remove('nav-open');
+  burger?.focus();
 });
 
 /* ===== FADE IN ANIMATIONS ===== */
@@ -37,6 +51,15 @@ const observer = new IntersectionObserver(
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 /* ===== PORTFOLIO PREVIEW ===== */
 async function loadPortfolioPreview() {
   const container = document.getElementById('portfolio-preview');
@@ -47,21 +70,33 @@ async function loadPortfolioPreview() {
     if (!res.ok) throw new Error('Failed to load');
     const items = await res.json();
 
-    container.innerHTML = items.slice(0, 3).map(item => `
-      <div class="card fade-in" onclick="openPortfolioCard(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+    const previewItems = items.slice(0, 3);
+    container.innerHTML = previewItems.map((item, index) => `
+      <article class="card fade-in" role="button" tabindex="0" data-item-index="${index}" aria-label="Відкрити кейс: ${escapeHTML(item.title)}">
         <div class="card-img-wrap">
           ${item.screenshotUrl
-            ? `<img class="card-img" src="${item.screenshotUrl}" alt="${item.title}" loading="lazy">`
+            ? `<img class="card-img" src="${escapeHTML(item.screenshotUrl)}" alt="${escapeHTML(item.title)}" loading="lazy">`
             : `<div class="card-img-placeholder">🖥️</div>`
           }
         </div>
         <div class="card-body">
-          <div class="card-tag">${siteTypeLabel(item.siteType)}</div>
-          <h3 class="card-title">${item.title}</h3>
-          <p class="card-text">${item.niche}</p>
+          <div class="card-tag">${escapeHTML(siteTypeLabel(item.siteType))}</div>
+          <h3 class="card-title">${escapeHTML(item.title)}</h3>
+          <p class="card-text">${escapeHTML(item.niche)}</p>
         </div>
-      </div>
+      </article>
     `).join('');
+
+    container.querySelectorAll('[data-item-index]').forEach(card => {
+      const item = previewItems[Number(card.dataset.itemIndex)];
+      card.addEventListener('click', () => openPortfolioCard(item));
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openPortfolioCard(item);
+        }
+      });
+    });
 
     // Refresh observer for newly added elements
     container.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
@@ -81,16 +116,16 @@ async function loadBlogPreview() {
     const posts = await res.json();
 
     container.innerHTML = posts.slice(0, 3).map(post => `
-      <a href="/blog/${post.slug}" class="card fade-in">
+      <a href="/blog/${encodeURIComponent(post.slug)}" class="card fade-in">
         ${post.coverUrl
-          ? `<img class="card-img" src="${post.coverUrl}" alt="${post.title}" loading="lazy">`
+          ? `<img class="card-img" src="${escapeHTML(post.coverUrl)}" alt="${escapeHTML(post.title)}" loading="lazy">`
           : `<div class="card-img-placeholder">📝</div>`
         }
         <div class="card-body">
-          <div class="card-tag">${formatDate(post.publishedAt)}</div>
-          <h3 class="card-title">${post.title}</h3>
-          <p class="card-text">${post.excerpt}</p>
-          ${post.tags?.length ? `<div class="card-tags">${post.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : ''}
+          <div class="card-tag">${escapeHTML(formatDate(post.publishedAt))}</div>
+          <h3 class="card-title">${escapeHTML(post.title)}</h3>
+          <p class="card-text">${escapeHTML(post.excerpt)}</p>
+          ${post.tags?.length ? `<div class="card-tags">${post.tags.slice(0,3).map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
         </div>
         <div class="card-footer">
           <span class="card-link">Читати →</span>
@@ -277,10 +312,10 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     grid.innerHTML = list.map(r => `
       <div class="review-card fade-in">
         <div class="review-stars" aria-label="${r.rating} з 5">${stars(r.rating)}</div>
-        <p class="review-text">${r.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+        <p class="review-text">${escapeHTML(r.text)}</p>
         <div class="review-author">
-          <span class="review-name">${r.name.replace(/</g,'&lt;')}</span>
-          ${r.project ? `<span class="review-project">${r.project.replace(/</g,'&lt;')}</span>` : ''}
+          <span class="review-name">${escapeHTML(r.name)}</span>
+          ${r.project ? `<span class="review-project">${escapeHTML(r.project)}</span>` : ''}
         </div>
       </div>
     `).join('');

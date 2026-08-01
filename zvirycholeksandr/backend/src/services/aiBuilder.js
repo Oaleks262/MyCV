@@ -13,7 +13,12 @@ ABOUT: max 5 sentences + bullet facts with numbers.
 SERVICES: outcome + duration + price per each service.
   Good: "Deep tissue massage — relieves chronic tension · 60 min · 800 UAH"
 
-REVIEWS: generate 3 realistic ones — quote + name + age + specific result.
+REVIEWS: never invent testimonials, names, ratings, credentials or results.
+  If verified reviews were not provided, create a clearly labeled placeholder section
+  for the client to fill or omit the section entirely.
+
+CLAIMS: do not invent percentages, client counts, years of experience or medical/business outcomes.
+  Use only facts supplied by the client and mark missing proof as content needed.
 
 CTA: action button after every 1-2 sections. Form: max 3 fields.
 Messengers: Telegram + Viber buttons.

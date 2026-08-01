@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <meta name="robots" content="{{ROBOTS}}">
+  <meta name="description" content="{{DESCRIPTION}}">
+  <link rel="canonical" href="{{CANONICAL}}">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESCRIPTION}}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:image" content="https://zvirycholeksandr.com.ua/og-image.jpg">
+  <meta property="og:locale" content="uk_UA">
+  <meta property="og:site_name" content="Олександр Звірич — створення сайтів">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{DESCRIPTION}}">
+  <meta name="twitter:image" content="https://zvirycholeksandr.com.ua/og-image.jpg">
+  <link rel="icon" type="image/png" href="/favicon.PNG">
+  <link rel="apple-touch-icon" href="/favicon.PNG">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/css/service-page.css?v=3">
+  {{SCHEMA}}
+  <script>
+    window.addEventListener('load', function() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-46YFL5WZ82';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function(){dataLayer.push(arguments);};
+      gtag('js', new Date());
+      gtag('config', 'G-46YFL5WZ82');
+    });
+  </script>
+</head>
+<body data-service-type="{{SITE_TYPE}}">
+  <a class="skip-link" href="#main">До основного вмісту</a>
+  <header class="service-nav">
+    <a class="brand" href="/" aria-label="Олександр Звірич — головна">zvirych<span>o</span>leksandr</a>
+    <nav aria-label="Основна навігація">
+      <a href="/portfolio">Роботи</a>
+      <a href="/blog">Блог</a>
+      <a class="nav-cta" href="#brief">Обговорити проєкт →</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="service-hero">
+      <p class="eyebrow">{{EYEBROW}}</p>
+      <h1>{{H1}}</h1>
+      <div class="hero-grid">
+        <p class="hero-lead">{{LEAD}}</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#brief">Отримати оцінку →</a>
+          <a class="button button-light" href="/portfolio">Переглянути роботи</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="service-facts" aria-label="Основні умови">
+      <article><span>Вартість</span><strong>{{PRICE}}</strong></article>
+      <article><span>Строк</span><strong>{{DURATION}}</strong></article>
+      <article><span>Формат</span><strong>Напряму з розробником</strong></article>
+    </section>
+
+    <section class="service-section split-section">
+      <header><p class="eyebrow">Що входить</p><h2>Від структури<br>до запуску.</h2></header>
+      <ul class="deliverables">{{DELIVERABLES}}</ul>
+    </section>
+
+    <section class="service-section audience-section">
+      <p class="eyebrow">Кому підійде</p>
+      <div class="audience-grid">{{IDEAL_FOR}}</div>
+    </section>
+
+    <section class="service-section process-section">
+      <header><p class="eyebrow">Процес</p><h2>Чотири зрозумілі етапи.</h2></header>
+      <ol class="steps-grid">{{STEPS}}</ol>
+    </section>
+
+    <section class="service-section faq-section">
+      <header><p class="eyebrow">Коротко про важливе</p><h2>Запитання перед стартом.</h2></header>
+      <div class="faq-list">{{FAQ_VISIBLE}}</div>
+    </section>
+
+    <section class="lead-section" id="brief">
+      <div>
+        <p class="eyebrow">Наступний крок</p>
+        <h2>Опишіть задачу.<br>Я відповім із планом.</h2>
+        <p>Без автоматичного продажу й дзвінків менеджера. Перегляну інформацію особисто та відповім протягом 24 годин.</p>
+      </div>
+      <div class="lead-card">
+        <form id="service-lead-form" novalidate>
+          <div class="hp-field" aria-hidden="true"><label>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label></div>
+          <label>Ваше ім’я<input name="name" autocomplete="name" required maxlength="120"></label>
+          <label>{{BUSINESS_LABEL}}<input name="business" required maxlength="180"></label>
+          <label>Телефон<input name="phone" type="tel" autocomplete="tel" placeholder="+380 XX XXX XX XX" required maxlength="40"></label>
+          <label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required maxlength="254"></label>
+          <label>Коротко про задачу<textarea name="about" rows="4" maxlength="2000"></textarea></label>
+          <p class="form-note">Надсилаючи форму, ви погоджуєтесь із <a href="/privacy" target="_blank">політикою конфіденційності</a>.</p>
+          <p class="form-error" id="service-form-error" role="alert"></p>
+          <div class="form-fallback" id="service-form-fallback" hidden>
+            <p>Форма тимчасово недоступна. Напишіть мені напряму — відповім особисто.</p>
+            <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Написати в Telegram →</a>
+          </div>
+          <button class="button button-signal" type="submit">Надіслати запит →</button>
+        </form>
+        <div class="form-success" id="service-form-success" tabindex="-1" hidden>
+          <span>✓</span><h3>Запит отримано</h3><p>Відповім протягом 24 годин і запропоную наступний крок.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="/">zvirych<span>o</span>leksandr</a>
+    <p>Сайти для малого бізнесу у Львові та по Україні.</p>
+    <nav aria-label="Послуги">
+      <a href="/services/landing">Лендінг</a>
+      <a href="/services/business-site">Сайт-візитка</a>
+      <a href="/services/qr-menu">QR-меню</a>
+    </nav>
+    <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
+  </footer>
+  <script src="/js/service-lead.js?v=2" defer></script>
+</body>
+</html>

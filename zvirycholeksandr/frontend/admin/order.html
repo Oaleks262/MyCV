@@ -6,7 +6,7 @@
   <title>Деталі замовлення — Адмінка</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <link rel="stylesheet" href="/css/admin.css?v=4">
 </head>
 <body>
 <div class="admin-layout">
@@ -76,6 +76,14 @@
             <span class="detail-row-label">Дата</span>
             <span class="detail-row-value" id="order-date"></span>
           </div>
+          <div class="detail-row">
+            <span class="detail-row-label">Перша відповідь</span>
+            <span class="detail-row-value" id="order-first-contact">Ще не зафіксована</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row-label">Доставка</span>
+            <span class="detail-row-value" id="order-delivery"></span>
+          </div>
         </div>
 
         <div class="detail-card">
@@ -90,9 +98,13 @@
           <div class="form-group">
             <select id="order-status-select" class="form-control">
               <option value="new">Новий</option>
-              <option value="prompted">В обробці</option>
+              <option value="prompted">Новий (старий статус)</option>
+              <option value="contacted">Зв’язались</option>
+              <option value="qualified">Кваліфікований</option>
               <option value="in_progress">В роботі</option>
               <option value="done">Виконано</option>
+              <option value="lost">Не реалізовано</option>
+              <option value="spam">Спам</option>
               <option value="error">Помилка</option>
             </select>
           </div>
@@ -100,6 +112,26 @@
             <button class="btn btn-primary" onclick="saveOrderStatus()">Зберегти статус</button>
             <button class="btn btn-danger" onclick="deleteOrderDetail()">Видалити замовлення</button>
           </div>
+        </div>
+
+        <div class="detail-card" style="margin-top:1.5rem">
+          <h3>Наступний контакт</h3>
+          <div class="form-group">
+            <label class="form-label" for="order-follow-up">Нагадати</label>
+            <input id="order-follow-up" type="datetime-local" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="order-notes">Нотатки</label>
+            <textarea id="order-notes" class="form-control" rows="5" placeholder="Що обговорили, бюджет, заперечення, наступний крок…"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveLeadManagement()">Зберегти нагадування</button>
+        </div>
+
+        <div class="detail-card" style="margin-top:1.5rem">
+          <h3>Джерело заявки</h3>
+          <div class="detail-row"><span class="detail-row-label">Сторінка</span><span class="detail-row-value detail-break" id="order-landing">—</span></div>
+          <div class="detail-row"><span class="detail-row-label">UTM</span><span class="detail-row-value detail-break" id="order-source">—</span></div>
+          <div class="detail-row"><span class="detail-row-label">Referrer</span><span class="detail-row-value detail-break" id="order-referrer">—</span></div>
         </div>
       </div>
 

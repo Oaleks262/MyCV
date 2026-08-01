@@ -1,10 +1,8 @@
-# Легітимні пошуковики — дозволяємо з обмеженням швидкості
+# Легітимні пошуковики
 User-agent: Googlebot
-Crawl-delay: 5
 Allow: /
 
 User-agent: Bingbot
-Crawl-delay: 10
 Allow: /
 
 # Відомі скрапери та SEO-боти — забороняємо повністю
@@ -25,7 +23,6 @@ Disallow: /
 
 # Всі інші — дозволяємо публічні сторінки, закриваємо адмінку
 User-agent: *
-Crawl-delay: 10
 Disallow: /admin/
 Disallow: /api/
 Allow: /

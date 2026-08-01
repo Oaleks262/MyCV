@@ -1,6 +1,31 @@
 /* ===== BLOG PAGE ===== */
 let allPosts = [];
 
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function sanitizeRenderedHTML(html) {
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  template.content.querySelectorAll('script,style,iframe,object,embed,form,input,button,link,meta').forEach(el => el.remove());
+  template.content.querySelectorAll('*').forEach(el => {
+    [...el.attributes].forEach(attr => {
+      const name = attr.name.toLowerCase();
+      const value = attr.value.trim().toLowerCase();
+      if (name.startsWith('on') || name === 'style' || ((name === 'href' || name === 'src') && value.startsWith('javascript:'))) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  return template.innerHTML;
+}
+
 async function loadBlog() {
   const grid = document.getElementById('blog-grid');
   if (!grid) return;
@@ -28,20 +53,20 @@ function renderBlog(posts) {
   noResults?.classList.remove('visible');
 
   grid.innerHTML = posts.map(post => `
-    <a href="/blog/${post.slug}" class="blog-card fade-in">
+    <a href="/blog/${encodeURIComponent(post.slug)}" class="blog-card fade-in">
       ${post.coverUrl
-        ? `<img class="blog-card-cover" src="${post.coverUrl}" alt="${post.title}" loading="lazy">`
+        ? `<img class="blog-card-cover" src="${escapeHTML(post.coverUrl)}" alt="${escapeHTML(post.title)}" loading="lazy">`
         : `<div class="blog-card-cover-placeholder">📝</div>`
       }
       <div class="blog-card-body">
         <div class="blog-card-meta">
           <span class="blog-card-date">${formatDate(post.publishedAt)}</span>
           <div class="blog-card-tags">
-            ${(post.tags || []).slice(0, 2).map(t => `<span class="blog-tag">${t}</span>`).join('')}
+            ${(post.tags || []).slice(0, 2).map(t => `<span class="blog-tag">${escapeHTML(t)}</span>`).join('')}
           </div>
         </div>
-        <h2 class="blog-card-title">${post.title}</h2>
-        <p class="blog-card-excerpt">${post.excerpt}</p>
+        <h2 class="blog-card-title">${escapeHTML(post.title)}</h2>
+        <p class="blog-card-excerpt">${escapeHTML(post.excerpt)}</p>
         <div class="blog-card-footer">
           <span class="blog-read-btn">Читати →</span>
           ${post.views ? `<span class="blog-card-views">👁 ${formatViews(post.views)}</span>` : ''}
@@ -137,7 +162,7 @@ function renderPost(post) {
     if (post.views) dateEl.textContent += ` · 👁 ${formatViews(post.views)} переглядів`;
   }
   if (tagsEl) {
-    tagsEl.innerHTML = (post.tags || []).map(t => `<span class="blog-tag">${t}</span>`).join('');
+    tagsEl.innerHTML = (post.tags || []).map(t => `<span class="blog-tag">${escapeHTML(t)}</span>`).join('');
   }
   if (titleEl) titleEl.textContent = post.title;
 
@@ -153,7 +178,7 @@ function renderPost(post) {
   // Markdown → HTML через marked.js
   if (contentEl) {
     if (typeof marked !== 'undefined') {
-      contentEl.innerHTML = marked.parse(post.content || '');
+      contentEl.innerHTML = sanitizeRenderedHTML(marked.parse(post.content || ''));
     } else {
       // Fallback: просто текст
       contentEl.textContent = post.content || '';
@@ -190,13 +215,13 @@ async function loadRelatedPosts(currentPost) {
     }).slice(0, 3);
 
     const cards = sorted.map(p => `
-      <a href="/blog/${p.slug}" class="related-card">
+      <a href="/blog/${encodeURIComponent(p.slug)}" class="related-card">
         ${p.coverUrl
-          ? `<img class="related-card-img" src="${p.coverUrl}" alt="${p.title}" loading="lazy">`
+          ? `<img class="related-card-img" src="${escapeHTML(p.coverUrl)}" alt="${escapeHTML(p.title)}" loading="lazy">`
           : `<div class="related-card-img related-card-placeholder">📝</div>`}
         <div class="related-card-body">
-          ${(p.tags||[]).slice(0,1).map(t=>`<span class="blog-tag">${t}</span>`).join('')}
-          <p class="related-card-title">${p.title}</p>
+          ${(p.tags||[]).slice(0,1).map(t=>`<span class="blog-tag">${escapeHTML(t)}</span>`).join('')}
+          <p class="related-card-title">${escapeHTML(p.title)}</p>
           <span class="related-card-date">${formatDate(p.publishedAt)}</span>
         </div>
       </a>

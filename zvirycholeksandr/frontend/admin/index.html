@@ -6,7 +6,7 @@
   <title>Замовлення — Адмінка</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <link rel="stylesheet" href="/css/admin.css?v=4">
 </head>
 <body>
 <div class="admin-layout">
@@ -67,8 +67,8 @@
         <div class="stat-card-value" id="stat-new">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-label">В обробці</div>
-        <div class="stat-card-value" id="stat-prompted">—</div>
+        <div class="stat-card-label">Без відповіді понад 24 год</div>
+        <div class="stat-card-value" id="stat-overdue">—</div>
       </div>
       <div class="stat-card">
         <div class="stat-card-label">Виконано</div>
@@ -83,8 +83,12 @@
         <select id="status-filter" class="filter-select">
           <option value="">Всі статуси</option>
           <option value="new">Нові</option>
-          <option value="prompted">В обробці</option>
+          <option value="contacted">Зв’язались</option>
+          <option value="qualified">Кваліфіковані</option>
+          <option value="in_progress">В роботі</option>
           <option value="done">Виконані</option>
+          <option value="lost">Не реалізовано</option>
+          <option value="spam">Спам</option>
         </select>
       </div>
       <table>
@@ -92,13 +96,15 @@
           <tr>
             <th>Дата</th>
             <th>Клієнт</th>
+            <th>Контакт</th>
             <th>Тип</th>
             <th>Статус</th>
+            <th>Реакція</th>
             <th>Дії</th>
           </tr>
         </thead>
         <tbody id="orders-tbody">
-          <tr><td colspan="5" style="text-align:center;padding:2rem;color:#888">Завантаження...</td></tr>
+          <tr><td colspan="7" style="text-align:center;padding:2rem;color:#888">Завантаження...</td></tr>
         </tbody>
       </table>
     </div>

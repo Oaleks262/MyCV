@@ -6,7 +6,11 @@
 const fs   = require('fs');
 const path = require('path');
 
-const DATA_FILE = path.join(__dirname, '../../data/analytics.json');
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, '../../data');
+fs.mkdirSync(DATA_DIR, { recursive: true });
+const DATA_FILE = path.join(DATA_DIR, 'analytics.json');
 
 function load() {
   try { return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8')); }
@@ -17,6 +21,16 @@ function save(data) {
   const tmp = DATA_FILE + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(data));
   fs.renameSync(tmp, DATA_FILE);
+}
+
+function ensureDay(data, date) {
+  if (!data[date]) data[date] = { total: 0, pages: {}, referrers: {}, leads: 0, leadSources: {}, leadPages: {} };
+  data[date].pages ||= {};
+  data[date].referrers ||= {};
+  data[date].leadSources ||= {};
+  data[date].leadPages ||= {};
+  data[date].leads ||= 0;
+  return data[date];
 }
 
 function parseReferrer(ref) {
@@ -60,10 +74,10 @@ function analyticsMiddleware(req, res, next) {
 
     try {
       const data = load();
-      if (!data[today]) data[today] = { total: 0, pages: {}, referrers: {} };
-      data[today].total = (data[today].total || 0) + 1;
-      data[today].pages[page] = (data[today].pages[page] || 0) + 1;
-      if (src) data[today].referrers[src] = (data[today].referrers[src] || 0) + 1;
+      const day = ensureDay(data, today);
+      day.total = (day.total || 0) + 1;
+      day.pages[page] = (day.pages[page] || 0) + 1;
+      if (src) day.referrers[src] = (day.referrers[src] || 0) + 1;
       save(data);
     } catch { /* не ламаємо сервер через статистику */ }
   }
@@ -71,10 +85,25 @@ function analyticsMiddleware(req, res, next) {
   next();
 }
 
+function trackLead(meta = {}) {
+  const today = new Date().toISOString().split('T')[0];
+  const page = String(meta.currentPage || meta.landingPage || '/').split('?')[0].slice(0, 200) || '/';
+  const source = String(meta.utmSource || parseReferrer(meta.referrer) || 'Прямий перехід').slice(0, 120);
+
+  try {
+    const data = load();
+    const day = ensureDay(data, today);
+    day.leads += 1;
+    day.leadPages[page] = (day.leadPages[page] || 0) + 1;
+    day.leadSources[source] = (day.leadSources[source] || 0) + 1;
+    save(data);
+  } catch { /* заявка не повинна падати через статистику */ }
+}
+
 // Повертає агреговані дані за останні N днів
 function getStats(days = 30) {
   const data = load();
-  const result = { daily: {}, pages: {}, referrers: {}, total: 0 };
+  const result = { daily: {}, pages: {}, referrers: {}, total: 0, leads: 0, leadSources: {}, leadPages: {}, conversionRate: 0 };
 
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
@@ -83,18 +112,26 @@ function getStats(days = 30) {
     if (new Date(date) < cutoff) continue;
     result.daily[date] = day.total || 0;
     result.total += day.total || 0;
+    result.leads += day.leads || 0;
 
     for (const [p, n] of Object.entries(day.pages || {}))
       result.pages[p] = (result.pages[p] || 0) + n;
     for (const [r, n] of Object.entries(day.referrers || {}))
       result.referrers[r] = (result.referrers[r] || 0) + n;
+    for (const [r, n] of Object.entries(day.leadSources || {}))
+      result.leadSources[r] = (result.leadSources[r] || 0) + n;
+    for (const [p, n] of Object.entries(day.leadPages || {}))
+      result.leadPages[p] = (result.leadPages[p] || 0) + n;
   }
 
   // Сортуємо
   result.pages = Object.fromEntries(Object.entries(result.pages).sort((a,b) => b[1]-a[1]).slice(0,10));
   result.referrers = Object.fromEntries(Object.entries(result.referrers).sort((a,b) => b[1]-a[1]));
+  result.leadSources = Object.fromEntries(Object.entries(result.leadSources).sort((a,b) => b[1]-a[1]));
+  result.leadPages = Object.fromEntries(Object.entries(result.leadPages).sort((a,b) => b[1]-a[1]));
+  result.conversionRate = result.total ? Number(((result.leads / result.total) * 100).toFixed(1)) : 0;
 
   return result;
 }
 
-module.exports = { analyticsMiddleware, getStats };
+module.exports = { analyticsMiddleware, getStats, trackLead };

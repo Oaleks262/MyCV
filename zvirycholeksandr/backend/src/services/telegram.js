@@ -9,6 +9,7 @@ function esc(t) {
 }
 
 async function send(text) {
+  if (!BOT_TOKEN || !CHAT_ID) return { ok: false, skipped: true, reason: 'telegram_not_configured' };
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
       chat_id: CHAT_ID,
@@ -27,7 +28,12 @@ async function send(text) {
     }, res => {
       let d = '';
       res.on('data', c => d += c);
-      res.on('end', () => resolve(JSON.parse(d)));
+      res.on('end', () => {
+        let result;
+        try { result = JSON.parse(d); } catch { return reject(new Error(`Telegram HTTP ${res.statusCode}`)); }
+        if (!result.ok) return reject(new Error(result.description || `Telegram HTTP ${res.statusCode}`));
+        resolve(result);
+      });
     });
     req.on('error', reject);
     req.write(body);
@@ -36,6 +42,7 @@ async function send(text) {
 }
 
 async function notifyTelegram(order, prompt) {
+  if (!BOT_TOKEN || !CHAT_ID) return { sent: false, reason: 'telegram_not_configured' };
   const f = order.formData;
   const typeMap = {
     landing: '🎯 Лендінг',
@@ -72,6 +79,7 @@ async function notifyTelegram(order, prompt) {
     await send(chunk);
     await new Promise(r => setTimeout(r, 400));
   }
+  return { sent: true };
 }
 
 async function notifyError(err, context = 'server') {

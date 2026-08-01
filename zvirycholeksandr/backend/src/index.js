@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
+const SERVICE_PAGES = require('./content/services');
+const JsonDB = require('./db');
 
 if (!process.env.JWT_SECRET) {
   console.error('FATAL: JWT_SECRET not set in .env');
@@ -55,6 +57,24 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '1mb' })); // Upload йде через multipart, не JSON
 
+app.get('/api/health', (req, res) => {
+  const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(__dirname, '../data');
+  let storage = 'ok';
+  try {
+    fs.accessSync(dataDir, fs.constants.R_OK | fs.constants.W_OK);
+  } catch {
+    storage = 'unavailable';
+  }
+  const healthy = storage === 'ok';
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(healthy ? 200 : 503).json({
+    status: healthy ? 'ok' : 'degraded',
+    checks: { storage },
+    timestamp: new Date().toISOString(),
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
+});
+
 // Rate limit для публічних форм (5 запитів на годину)
 const formLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -82,39 +102,58 @@ app.use('/api/admin', require('./routes/admin'));
 const { analyticsMiddleware } = require('./services/analytics');
 app.use(analyticsMiddleware);
 app.get('/sitemap.xml', (req, res) => {
-  const JsonDB = require('./db');
   const blog = new JsonDB('blog.json');
+  const portfolio = new JsonDB('portfolio.json');
   const DOMAIN = 'https://zvirycholeksandr.com.ua';
-  const now = new Date().toISOString().split('T')[0];
-
+  const xml = value => String(value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+  const dateOnly = value => {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date.toISOString().split('T')[0];
+  };
+  const frontendDir = path.join(__dirname, '../../frontend');
   const staticPages = [
-    { url: '/', priority: '1.0', freq: 'weekly' },
-    { url: '/portfolio', priority: '0.8', freq: 'monthly' },
-    { url: '/blog', priority: '0.8', freq: 'daily' },
-    { url: '/terms', priority: '0.3', freq: 'yearly' },
-    { url: '/privacy', priority: '0.3', freq: 'yearly' },
+    { url: '/', file: 'index.html' },
+    { url: '/portfolio', file: 'portfolio.html' },
+    { url: '/blog', file: 'blog.html' },
+    { url: '/reviews', file: 'reviews.html' },
+    ...Object.values(SERVICE_PAGES).map(service => ({ url: `/services/${service.slug}`, file: 'service.html' })),
   ];
 
   const posts = blog.all({ isPublished: true });
+  const cases = portfolio.all({ isVisible: true }).filter(item => item.slug);
 
   const urls = [
-    ...staticPages.map(p => `
+    ...staticPages.map(p => {
+      let lastmod = null;
+      try { lastmod = dateOnly(fs.statSync(path.join(frontendDir, p.file)).mtime); } catch {}
+      return `
   <url>
-    <loc>${DOMAIN}${p.url}</loc>
-    <lastmod>${now}</lastmod>
-    <changefreq>${p.freq}</changefreq>
-    <priority>${p.priority}</priority>
-  </url>`),
-    ...posts.map(p => `
+    <loc>${xml(DOMAIN + p.url)}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
+  </url>`;
+    }),
+    ...posts.map(p => {
+      const lastmod = dateOnly(p.updatedAt || p.publishedAt || p.createdAt);
+      return `
   <url>
-    <loc>${DOMAIN}/blog/${p.slug}</loc>
-    <lastmod>${(p.updatedAt || p.createdAt || now).split('T')[0]}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>`),
+    <loc>${xml(`${DOMAIN}/blog/${encodeURIComponent(p.slug)}`)}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
+      </url>`;
+    }),
+    ...cases.map(item => {
+      const lastmod = dateOnly(item.updatedAt || item.createdAt);
+      return `
+  <url>
+    <loc>${xml(`${DOMAIN}/portfolio/${encodeURIComponent(item.slug)}`)}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
+  </url>`;
+    }),
   ];
 
   res.setHeader('Content-Type', 'application/xml');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join('')}
@@ -164,6 +203,216 @@ app.get('/blog-post', (req, res) => {
   return res.redirect(301, '/blog');
 });
 
+// SEO-посадкові сторінки послуг — HTML генерується на сервері.
+const SERVICE_PAGE_TEMPLATE = path.join(__dirname, '../../frontend/service.html');
+
+function renderServicePage(service) {
+  const DOMAIN = 'https://zvirycholeksandr.com.ua';
+  const canonical = `${DOMAIN}/services/${service.slug}`;
+  const deliverables = service.deliverables.map((item, index) =>
+    `<li><span>${String(index + 1).padStart(2, '0')}</span>${escAttr(item)}</li>`
+  ).join('');
+  const idealFor = service.idealFor.map((item, index) =>
+    `<article><span>${String(index + 1).padStart(2, '0')}</span><h3>${escAttr(item)}</h3></article>`
+  ).join('');
+  const steps = service.steps.map(([number, title, text]) =>
+    `<li><span>${escAttr(number)}</span><h3>${escAttr(title)}</h3><p>${escAttr(text)}</p></li>`
+  ).join('');
+  const faqVisible = service.faqs.map(([question, answer]) =>
+    `<details><summary>${escAttr(question)}</summary><p>${escAttr(answer)}</p></details>`
+  ).join('');
+  const minPrice = service.price.replace(/\D/g, '');
+  const schema = safeJsonLd({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        name: service.eyebrow.split('/')[0].trim(),
+        description: service.metaDescription,
+        url: canonical,
+        provider: { '@type': 'ProfessionalService', '@id': `${DOMAIN}/#business`, name: 'Олександр Звірич — створення сайтів' },
+        areaServed: ['Львів', 'Україна'],
+        offers: { '@type': 'Offer', priceSpecification: { '@type': 'PriceSpecification', minPrice, priceCurrency: 'UAH' } },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: service.faqs.map(([question, answer]) => ({
+          '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer },
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Головна', item: `${DOMAIN}/` },
+          { '@type': 'ListItem', position: 2, name: service.eyebrow.split('/')[0].trim(), item: canonical },
+        ],
+      },
+    ],
+  });
+
+  const replacements = {
+    '{{TITLE}}': escAttr(service.title),
+    '{{ROBOTS}}': 'index, follow',
+    '{{DESCRIPTION}}': escAttr(service.metaDescription),
+    '{{CANONICAL}}': canonical,
+    '{{SCHEMA}}': `<script type="application/ld+json">${schema}</script>`,
+    '{{SITE_TYPE}}': escAttr(service.siteType),
+    '{{EYEBROW}}': escAttr(service.eyebrow),
+    '{{H1}}': escAttr(service.h1),
+    '{{LEAD}}': escAttr(service.lead),
+    '{{PRICE}}': escAttr(service.price),
+    '{{DURATION}}': escAttr(service.duration),
+    '{{BUSINESS_LABEL}}': escAttr(service.businessLabel),
+    '{{DELIVERABLES}}': deliverables,
+    '{{IDEAL_FOR}}': idealFor,
+    '{{STEPS}}': steps,
+    '{{FAQ_VISIBLE}}': faqVisible,
+  };
+
+  let html = fs.readFileSync(SERVICE_PAGE_TEMPLATE, 'utf-8');
+  for (const [token, value] of Object.entries(replacements)) html = html.split(token).join(value);
+  return html;
+}
+
+app.get(['/service', '/service.html'], (req, res) => res.redirect(301, '/services/landing'));
+app.get('/services/:slug', (req, res) => {
+  const service = SERVICE_PAGES[req.params.slug];
+  if (!service) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+  res.setHeader('Cache-Control', 'no-cache');
+  res.type('html').send(renderServicePage(service));
+});
+
+// Окремі індексовані сторінки робіт — без вигаданих метрик або відгуків.
+const PORTFOLIO_CASE_TEMPLATE = path.join(__dirname, '../../frontend/portfolio-case.html');
+const portfolioDB = new JsonDB('portfolio.json');
+
+function caseTypeLabel(item) {
+  if (item.siteType === 'landing') return 'Лендінг';
+  if (item.siteType === 'business_card') return 'Сайт-візитка';
+  if (item.siteType === 'menu') return 'Онлайн-меню';
+  return 'Демо-концепт';
+}
+
+function caseServiceUrl(item) {
+  if (item.siteType === 'landing') return '/services/landing';
+  if (item.siteType === 'business_card') return '/services/business-site';
+  if (item.siteType === 'menu') return '/services/qr-menu';
+  const text = `${item.niche} ${item.description}`.toLowerCase();
+  if (/меню|кафе|бар/.test(text)) return '/services/qr-menu';
+  if (/масаж|психолог|лендінг/.test(text)) return '/services/landing';
+  return '/services/business-site';
+}
+
+function caseFeatures(item) {
+  const common = ['Адаптивна структура для мобільних і десктопних екранів'];
+  if (item.siteType === 'landing') return [...common, 'Послідовна подача послуги та переваг', 'Сценарій переходу до запису або заявки', 'Технічна SEO-основа для локального пошуку'];
+  if (item.siteType === 'business_card') return [...common, 'Структура послуг, робіт і контактів', 'Зрозумілий маршрут до звернення', 'Компоненти, які можна розширювати новими матеріалами'];
+  if (item.siteType === 'menu') return [...common, 'Зручне групування позицій меню', 'Швидкий перегляд пропозиції з телефона', 'Контактна інформація та сценарій для гостя'];
+  return [...common, 'Демонстрація структури для обраної ніші', 'Інтерфейс ключових блоків і сценаріїв', 'Основа для адаптації під реальний контент бізнесу'];
+}
+
+function safeCaseLink(value) {
+  const link = String(value || '');
+  if (link.startsWith('/')) return link;
+  try {
+    const parsed = new URL(link);
+    return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '/portfolio';
+  } catch {
+    return '/portfolio';
+  }
+}
+
+function renderPortfolioCase(item) {
+  const DOMAIN = 'https://zvirycholeksandr.com.ua';
+  const canonical = `${DOMAIN}/portfolio/${item.slug}`;
+  const type = caseTypeLabel(item);
+  const isDemo = item.siteType === 'demo';
+  const kind = isDemo ? 'Демо' : 'Проєкт';
+  const image = item.screenshotUrl
+    ? (item.screenshotUrl.startsWith('http') ? item.screenshotUrl : DOMAIN + item.screenshotUrl)
+    : `${DOMAIN}/og-image.jpg`;
+  const schema = safeJsonLd({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CreativeWork',
+        name: item.title,
+        description: item.description,
+        url: canonical,
+        image,
+        creator: { '@type': 'Person', '@id': `${DOMAIN}/#person`, name: 'Олександр Звірич' },
+        keywords: [item.niche, type, ...(item.technologies || [])],
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Головна', item: `${DOMAIN}/` },
+          { '@type': 'ListItem', position: 2, name: 'Роботи', item: `${DOMAIN}/portfolio` },
+          { '@type': 'ListItem', position: 3, name: item.title, item: canonical },
+        ],
+      },
+    ],
+  });
+  const replacements = {
+    '{{TITLE}}': escAttr(`${item.title} — ${type}`),
+    '{{DESCRIPTION}}': escAttr(String(item.description || '').slice(0, 180)),
+    '{{DESCRIPTION_TEXT}}': escAttr(item.description),
+    '{{CANONICAL}}': canonical,
+    '{{IMAGE}}': escAttr(image),
+    '{{SCHEMA}}': `<script type="application/ld+json">${schema}</script>`,
+    '{{KIND}}': kind,
+    '{{TYPE}}': escAttr(type),
+    '{{H1}}': escAttr(item.title),
+    '{{NICHE}}': escAttr(item.niche),
+    '{{TECH_TEXT}}': escAttr((item.technologies || []).join(' / ')),
+    '{{LIVE_URL}}': escAttr(safeCaseLink(item.liveUrl)),
+    '{{LIVE_LABEL}}': isDemo ? 'демо' : 'сайт',
+    '{{SERVICE_URL}}': caseServiceUrl(item),
+    '{{FEATURES}}': caseFeatures(item).map(feature => `<li>${escAttr(feature)}</li>`).join(''),
+  };
+  let html = fs.readFileSync(PORTFOLIO_CASE_TEMPLATE, 'utf8');
+  for (const [token, value] of Object.entries(replacements)) html = html.split(token).join(value);
+  return html;
+}
+
+function renderPortfolioIndex() {
+  const items = portfolioDB.all({ isVisible: true }).filter(item => item.slug);
+  const cards = items.map(item => `
+    <article class="portfolio-card fade-in visible">
+      <a class="portfolio-card-link" href="/portfolio/${encodeURIComponent(item.slug)}" aria-label="Відкрити роботу: ${escAttr(item.title)}">
+        <div class="portfolio-card-img-wrap">
+          ${item.screenshotUrl
+            ? `<img class="portfolio-card-img" src="${escAttr(item.screenshotUrl)}" alt="${escAttr(item.title)}" loading="lazy">`
+            : '<div class="portfolio-card-placeholder" aria-hidden="true">🖥️</div>'}
+          <div class="portfolio-card-overlay">Переглянути роботу →</div>
+        </div>
+        <div class="portfolio-card-body">
+          <div class="portfolio-card-type">${escAttr(caseTypeLabel(item))}</div>
+          <div class="portfolio-card-title">${escAttr(item.title)}</div>
+          <div class="portfolio-card-niche">${escAttr(item.niche)}</div>
+        </div>
+      </a>
+    </article>`).join('');
+  const template = fs.readFileSync(path.join(__dirname, '../../frontend/portfolio.html'), 'utf8');
+  return template.replace('<div class="spinner" style="grid-column:1/-1"></div>', cards);
+}
+
+app.get('/portfolio', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.type('html').send(renderPortfolioIndex());
+});
+
+app.get('/portfolio/:slug', (req, res) => {
+  if (!/^[a-z0-9-]+$/.test(req.params.slug)) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+  const item = portfolioDB.findOne({ slug: req.params.slug, isVisible: true });
+  if (!item) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
+  res.setHeader('Cache-Control', 'no-cache');
+  res.type('html').send(renderPortfolioCase(item));
+});
+
+app.get(['/portfolio-case', '/portfolio-case.html'], (req, res) => res.redirect(301, '/portfolio'));
+app.get('/blog-post.html', (req, res) => res.redirect(301, '/blog'));
+
 // Фронтенд — CSS/JS/зображення кешуються на 7 днів, HTML — ні (щоб оновлення доходили)
 app.use(express.static(path.join(__dirname, '../../frontend'), {
   extensions: ['html'],
@@ -176,14 +425,59 @@ app.use(express.static(path.join(__dirname, '../../frontend'), {
   },
 }));
 
+// Зберігаємо SEO-сигнали та старі зовнішні посилання після виправлення транслітерації.
+app.get('/blog/yak-zrobyty-lending-dlya-masozhysta', (req, res) => {
+  res.redirect(301, '/blog/yak-zrobyty-lending-dlya-masazhysta');
+});
+
 // Blog post — server-side OG meta tags для коректних превʼю в Telegram/Facebook
 const BLOG_POST_TEMPLATE = path.join(__dirname, '../../frontend/blog-post.html');
-const JsonDB = require('./db');
 const blogDB = new JsonDB('blog.json');
 const DOMAIN = 'https://zvirycholeksandr.com.ua';
 
 function escAttr(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function safeJsonLd(value) {
+  return JSON.stringify(value).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+}
+
+function renderInlineMarkdown(value) {
+  return escAttr(value)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+
+function renderMarkdown(value) {
+  const output = [];
+  let listOpen = false;
+  const closeList = () => {
+    if (listOpen) output.push('</ul>');
+    listOpen = false;
+  };
+
+  for (const rawLine of String(value || '').split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line) { closeList(); continue; }
+    const heading = line.match(/^(#{2,4})\s+(.+)$/);
+    if (heading) {
+      closeList();
+      const level = heading[1].length;
+      output.push(`<h${level}>${renderInlineMarkdown(heading[2])}</h${level}>`);
+      continue;
+    }
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    if (bullet) {
+      if (!listOpen) { output.push('<ul>'); listOpen = true; }
+      output.push(`<li>${renderInlineMarkdown(bullet[1])}</li>`);
+      continue;
+    }
+    closeList();
+    output.push(`<p>${renderInlineMarkdown(line)}</p>`);
+  }
+  closeList();
+  return output.join('\n');
 }
 
 app.get('/blog/:slug', (req, res) => {
@@ -201,7 +495,7 @@ app.get('/blog/:slug', (req, res) => {
     const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
 
     // Article Schema + FAQ Schema (якщо є поле faq у пості)
-    const articleSchema = JSON.stringify({
+    const articleSchema = safeJsonLd({
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: post.title,
@@ -214,10 +508,15 @@ app.get('/blog/:slug', (req, res) => {
       publisher: { '@type': 'Person', name: 'Олександр Звірич', url: DOMAIN },
     });
 
-    let schemaBlock = `<script type="application/ld+json">${articleSchema}</script>`;
+    const articleMeta = [
+      (post.publishedAt || post.createdAt) ? `<meta property="article:published_time" content="${escAttr(post.publishedAt || post.createdAt)}">` : '',
+      (post.updatedAt || post.publishedAt || post.createdAt) ? `<meta property="article:modified_time" content="${escAttr(post.updatedAt || post.publishedAt || post.createdAt)}">` : '',
+      ...(Array.isArray(post.tags) ? post.tags.map(tag => `<meta property="article:tag" content="${escAttr(tag)}">`) : []),
+    ].filter(Boolean).join('\n');
+    let schemaBlock = `${articleMeta}\n<script type="application/ld+json">${articleSchema}</script>`;
 
     if (Array.isArray(post.faq) && post.faq.length) {
-      const faqSchema = JSON.stringify({
+      const faqSchema = safeJsonLd({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
         mainEntity: post.faq.map(item => ({
@@ -229,6 +528,12 @@ app.get('/blog/:slug', (req, res) => {
       schemaBlock += `\n<script type="application/ld+json">${faqSchema}</script>`;
     }
 
+    const tags = Array.isArray(post.tags) ? post.tags : [];
+    const publishedDate = post.publishedAt || post.createdAt;
+    const renderedContent = renderMarkdown(post.content);
+    const renderedTags = tags.map(tag => `<span class="blog-tag">${escAttr(tag)}</span>`).join('');
+    const renderedDate = publishedDate ? new Date(publishedDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
     html = html
       .replace(/<title>[^<]*<\/title>/, `<title>${title} — zvirycholeksandr</title>`)
       .replace(/(<meta name="description" content=")[^"]*(")/,        `$1${desc}$2`)
@@ -236,7 +541,19 @@ app.get('/blog/:slug', (req, res) => {
       .replace(/(<meta property="og:description" content=")[^"]*(")/,  `$1${desc}$2`)
       .replace(/(<meta property="og:image" content=")[^"]*(")/,        `$1${image}$2`)
       .replace(/(<meta property="og:url" content=")[^"]*(")/,          `$1${url}$2`)
+      .replace(/(<meta name="twitter:title" content=")[^"]*(")/,       `$1${title}$2`)
+      .replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${desc}$2`)
+      .replace(/(<meta name="twitter:image" content=")[^"]*(")/,       `$1${image}$2`)
       .replace(/(<link rel="canonical" href=")[^"]*(")/,               `$1${url}$2`)
+      .replace('<div id="post-loading" class="post-wrap" style="text-align:center">', '<div id="post-loading" class="post-wrap hidden" style="text-align:center">')
+      .replace('<div id="post-wrap" class="post-wrap hidden">', '<div id="post-wrap" class="post-wrap">')
+      .replace('<div class="post-tags" id="post-tags"></div>', `<div class="post-tags" id="post-tags">${renderedTags}</div>`)
+      .replace('<p class="post-date" id="post-date"></p>', `<p class="post-date" id="post-date">${escAttr(renderedDate)}</p>`)
+      .replace('<h1 class="post-title" id="post-title"></h1>', `<h1 class="post-title" id="post-title">${title}</h1>`)
+      .replace('<img class="post-cover" id="post-cover" src="" alt="" loading="lazy">', post.coverUrl
+        ? `<img class="post-cover" id="post-cover" src="${image}" alt="${title}" loading="eager">`
+        : '<img class="post-cover hidden" id="post-cover" src="" alt="">')
+      .replace('<div class="post-content" id="post-content"></div>', `<div class="post-content" id="post-content">${renderedContent}</div>`)
       .replace('</head>', `${schemaBlock}\n</head>`);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

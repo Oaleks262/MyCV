@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{CANONICAL}}">
+  <link rel="icon" type="image/png" href="/favicon.PNG">
+  <link rel="apple-touch-icon" href="/favicon.PNG">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESCRIPTION}}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:image" content="{{IMAGE}}">
+  <meta property="og:locale" content="uk_UA">
+  <meta property="og:site_name" content="zvirycholeksandr">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{DESCRIPTION}}">
+  <meta name="twitter:image" content="{{IMAGE}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=11">
+  <link rel="stylesheet" href="/css/portfolio-case.css?v=1">
+  {{SCHEMA}}
+</head>
+<body>
+  <nav class="navbar" id="navbar" aria-label="Головна навігація">
+    <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+    <ul class="navbar-links" id="navbar-links">
+      <li><a href="/services/landing">Послуги</a></li>
+      <li><a href="/portfolio">Роботи</a></li>
+      <li><a href="/blog">Блог</a></li>
+      <li><a class="case-nav-cta" href="{{SERVICE_URL}}#lead-form">Обговорити проєкт →</a></li>
+    </ul>
+    <button class="navbar-burger" id="navbar-burger" aria-label="Відкрити меню" aria-expanded="false" aria-controls="navbar-links">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <main>
+    <article>
+      <header class="case-hero">
+        <div class="case-wrap">
+          <a class="case-back" href="/portfolio">← Усі роботи</a>
+          <p class="case-eyebrow">{{KIND}} / {{TYPE}}</p>
+          <h1>{{H1}}</h1>
+          <p class="case-lead">{{DESCRIPTION_TEXT}}</p>
+          <div class="case-meta" aria-label="Характеристики проєкту">
+            <div><span>Ніша</span><strong>{{NICHE}}</strong></div>
+            <div><span>Формат</span><strong>{{TYPE}}</strong></div>
+            <div><span>Стек</span><strong>{{TECH_TEXT}}</strong></div>
+          </div>
+          <div class="case-actions">
+            <a class="case-button case-button-primary" href="{{LIVE_URL}}" target="_blank" rel="noopener">Переглянути {{LIVE_LABEL}} →</a>
+            <a class="case-button" href="{{SERVICE_URL}}#lead-form">Хочу схожий сайт</a>
+          </div>
+        </div>
+      </header>
+
+      <section class="case-section">
+        <div class="case-wrap case-two-col">
+          <div>
+            <p class="case-eyebrow">Що реалізовано</p>
+            <h2>Основа проєкту</h2>
+          </div>
+          <ul class="case-features">{{FEATURES}}</ul>
+        </div>
+      </section>
+
+      <section class="case-cta">
+        <div class="case-wrap case-cta-inner">
+          <div>
+            <p class="case-eyebrow">Ваш проєкт</p>
+            <h2>Потрібен сайт із такою логікою?</h2>
+            <p>Коротко опишіть задачу. Я відповім із запитаннями, реалістичним строком і наступним кроком.</p>
+          </div>
+          <a class="case-button case-button-primary" href="{{SERVICE_URL}}#lead-form">Обговорити проєкт →</a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="case-footer">
+    <div class="case-wrap">
+      <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+      <nav aria-label="Посилання в підвалі"><a href="/portfolio">Роботи</a><a href="/blog">Блог</a><a href="/privacy">Конфіденційність</a></nav>
+      <span>© 2026</span>
+    </div>
+  </footer>
+  <script src="/js/main.js?v=11"></script>
+</body>
+</html>

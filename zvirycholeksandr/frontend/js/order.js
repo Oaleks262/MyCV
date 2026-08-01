@@ -53,43 +53,164 @@ const SITE_TYPES = {
 
 let currentStep = 1;
 let selectedType = null;
+let orderTrigger = null;
+let orderStartedAt = 0;
+
+const LEAD_ATTRIBUTION_KEY = 'mycv_lead_attribution';
+
+function getLeadAttribution() {
+  const params = new URLSearchParams(window.location.search);
+  const incoming = {
+    landingPage: `${window.location.pathname}${window.location.search}`.slice(0, 500),
+    referrer: document.referrer.slice(0, 500),
+    utmSource: (params.get('utm_source') || '').slice(0, 120),
+    utmMedium: (params.get('utm_medium') || '').slice(0, 120),
+    utmCampaign: (params.get('utm_campaign') || '').slice(0, 160),
+    utmContent: (params.get('utm_content') || '').slice(0, 160),
+    utmTerm: (params.get('utm_term') || '').slice(0, 160),
+    gclid: (params.get('gclid') || '').slice(0, 200),
+  };
+
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(LEAD_ATTRIBUTION_KEY) || 'null');
+    if (saved) return saved;
+    sessionStorage.setItem(LEAD_ATTRIBUTION_KEY, JSON.stringify(incoming));
+  } catch { /* storage може бути вимкнений */ }
+
+  return incoming;
+}
+
+const leadAttribution = getLeadAttribution();
+
+function trackOrderEvent(eventName, params = {}) {
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', eventName, params);
+  }
+}
+
+function getOrderFocusableElements() {
+  const overlay = document.getElementById('order-popup');
+  if (!overlay) return [];
+  return [...overlay.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.disabled && el.tabIndex >= 0 && el.offsetParent !== null);
+}
+
+function ensureOrderHoneypot() {
+  if (document.getElementById('order-website')) return;
+  const box = document.querySelector('.order-popup-box');
+  if (!box) return;
+  const holder = document.createElement('div');
+  holder.className = 'order-honeypot';
+  holder.setAttribute('aria-hidden', 'true');
+  holder.innerHTML = '<label>Ваш сайт<input type="text" id="order-website" name="website" tabindex="-1" autocomplete="off"></label>';
+  box.prepend(holder);
+}
+
+function ensureOrderProgressLabel() {
+  if (document.getElementById('order-step-label')) return;
+  const indicator = document.querySelector('.step-indicator');
+  if (!indicator) return;
+  indicator.setAttribute('aria-label', 'Прогрес форми');
+  const label = document.createElement('span');
+  label.className = 'step-label';
+  label.id = 'order-step-label';
+  label.setAttribute('aria-live', 'polite');
+  label.textContent = 'Крок 1 із 4';
+  indicator.prepend(label);
+}
+
+function ensureOrderSubmitError() {
+  if (document.getElementById('order-submit-error')) return;
+  const actions = document.querySelector('.order-step[data-step="3"] .order-btn-row');
+  if (!actions) return;
+  const error = document.createElement('div');
+  error.id = 'order-submit-error';
+  error.className = 'order-submit-error';
+  error.hidden = true;
+  error.setAttribute('role', 'alert');
+  const message = document.createElement('p');
+  const fallback = document.createElement('a');
+  fallback.href = 'https://t.me/zvirycholeksandr';
+  fallback.target = '_blank';
+  fallback.rel = 'noopener';
+  fallback.textContent = 'Написати в Telegram →';
+  error.append(message, fallback);
+  actions.before(error);
+}
 
 function openOrderPopup() {
   const overlay = document.getElementById('order-popup');
   if (!overlay) return;
+  ensureOrderHoneypot();
+  ensureOrderProgressLabel();
+  ensureOrderSubmitError();
+  orderTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   currentStep = 1;
   selectedType = null;
+  orderStartedAt = Date.now();
+  const honeypot = document.getElementById('order-website');
+  if (honeypot) honeypot.value = '';
+  document.querySelectorAll('.site-type-card').forEach(card => {
+    card.classList.remove('selected');
+    card.setAttribute('aria-pressed', 'false');
+  });
   showStep(1);
   overlay.classList.add('active');
+  overlay.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  trackOrderEvent('order_form_open', { page_path: window.location.pathname });
+  setTimeout(() => overlay.querySelector('.order-popup-close')?.focus({ preventScroll: true }), 100);
 }
 
 function closeOrderPopup() {
   const overlay = document.getElementById('order-popup');
   overlay?.classList.remove('active');
+  overlay?.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  orderTrigger?.focus();
+  orderTrigger = null;
 }
 
 function showStep(step) {
   currentStep = step;
   document.querySelectorAll('.order-step').forEach(el => {
-    el.style.display = el.dataset.step == step ? 'block' : 'none';
+    const isActive = el.dataset.step == step;
+    el.classList.toggle('active', isActive);
+    el.style.display = isActive ? '' : 'none';
   });
   updateStepIndicator(step);
+  document.querySelector('.order-popup-box')?.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateStepIndicator(step) {
   document.querySelectorAll('.step-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i + 1 <= step);
   });
+  const label = document.getElementById('order-step-label');
+  if (label) label.textContent = step === 4 ? 'Готово' : `Крок ${step} із 4`;
+  if (step < 4) trackOrderEvent('order_form_step', { step, site_type: selectedType || 'not_selected' });
 }
 
 // Крок 1: вибір типу сайту
 document.querySelectorAll('.site-type-card').forEach(card => {
+  if (card.tagName !== 'BUTTON') {
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+  }
+  card.setAttribute('aria-pressed', 'false');
   card.addEventListener('click', () => {
-    document.querySelectorAll('.site-type-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.site-type-card').forEach(c => {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
     card.classList.add('selected');
+    card.setAttribute('aria-pressed', 'true');
     selectedType = card.dataset.type;
+  });
+  card.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    card.click();
   });
 });
 
@@ -117,6 +238,7 @@ function goToStep2() {
   // Підключаємо маску до поля телефону
   document.querySelector('#order-form input[type="tel"]')
     ?.addEventListener('input', phoneMask);
+  document.querySelector('#order-form input, #order-form select, #order-form textarea')?.focus();
 }
 
 // Крок 2: динамічна форма
@@ -126,11 +248,12 @@ function buildStep2Form() {
 
   const config = SITE_TYPES[selectedType];
   container.innerHTML = config.fields.map(field => {
+    const fieldId = `order-field-${field.name}`;
     if (field.type === 'textarea') {
       return `
         <div class="order-field">
-          <label class="order-label">${field.label}</label>
-          <textarea name="${field.name}" class="order-input" rows="3" ${field.required ? 'required' : ''}></textarea>
+          <label class="order-label" for="${fieldId}">${field.label}</label>
+          <textarea id="${fieldId}" name="${field.name}" class="order-input" rows="3" ${field.required ? 'required' : ''}></textarea>
         </div>`;
     }
     if (field.type === 'select') {
@@ -139,16 +262,16 @@ function buildStep2Form() {
       ).join('');
       return `
         <div class="order-field">
-          <label class="order-label">${field.label}</label>
-          <select name="${field.name}" class="order-input">
+          <label class="order-label" for="${fieldId}">${field.label}</label>
+          <select id="${fieldId}" name="${field.name}" class="order-input">
             ${options}
           </select>
         </div>`;
     }
     return `
       <div class="order-field">
-        <label class="order-label">${field.label}</label>
-        <input type="${field.type}" name="${field.name}" class="order-input"
+        <label class="order-label" for="${fieldId}">${field.label}</label>
+        <input id="${fieldId}" type="${field.type}" name="${field.name}" class="order-input"
           ${field.required ? 'required' : ''}
           ${field.type === 'tel'   ? 'placeholder="+380 XX XXX XX XX"' : ''}
           ${field.type === 'email' ? 'placeholder="example@gmail.com"' : ''}
@@ -212,6 +335,8 @@ function goToStep3() {
     `;
   }
   showStep(3);
+  summary?.setAttribute('tabindex', '-1');
+  summary?.focus();
 }
 
 function getFormData() {
@@ -226,14 +351,26 @@ function getFormData() {
 
 async function submitOrder() {
   const btn = document.getElementById('submit-order-btn');
+  const errorBox = document.getElementById('order-submit-error');
+  if (errorBox) errorBox.hidden = true;
   if (btn) { btn.disabled = true; btn.textContent = 'Надсилання...'; }
 
   try {
     const formData = getFormData();
+    const meta = {
+      ...leadAttribution,
+      currentPage: `${window.location.pathname}${window.location.search}`.slice(0, 500),
+      formDurationMs: orderStartedAt ? Date.now() - orderStartedAt : 0,
+    };
     const res = await fetch('/api/orders/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ siteType: selectedType, formData })
+      body: JSON.stringify({
+        siteType: selectedType,
+        formData,
+        meta,
+        website: document.getElementById('order-website')?.value || '',
+      })
     });
 
     if (!res.ok) {
@@ -242,8 +379,19 @@ async function submitOrder() {
     }
 
     showStep(4); // Success step
+    trackOrderEvent('generate_lead', { currency: 'UAH', site_type: selectedType });
+    const successHeading = document.querySelector('.order-step[data-step="4"] h3');
+    successHeading?.setAttribute('tabindex', '-1');
+    successHeading?.focus();
   } catch (err) {
-    alert(`Помилка: ${err.message}`);
+    if (errorBox) {
+      const message = errorBox.querySelector('p');
+      if (message) message.textContent = `${err.message}. Спробуйте ще раз або напишіть напряму.`;
+      errorBox.hidden = false;
+      errorBox.focus?.();
+    } else {
+      alert(`Помилка: ${err.message}`);
+    }
     if (btn) { btn.disabled = false; btn.textContent = 'Надіслати замовлення'; }
   }
 }
@@ -254,7 +402,27 @@ document.getElementById('order-popup')?.addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeOrderPopup();
+  const overlay = document.getElementById('order-popup');
+  if (!overlay?.classList.contains('active')) return;
+
+  if (e.key === 'Escape') {
+    closeOrderPopup();
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusable = getOrderFocusableElements();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 });
 
 // Кнопки "Замовити сайт" з усіх сторінок

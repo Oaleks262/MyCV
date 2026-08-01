@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.PNG">
+  <link rel="apple-touch-icon" href="/favicon.PNG">
   <title>Блог про розробку сайтів у Львові — zvirycholeksandr</title>
   <meta name="robots" content="index, follow">
   <meta name="description" content="Статті про розробку сайтів, SEO та маркетинг для малого бізнесу у Львові та Україні.">
+  <meta property="og:title" content="Блог про сайти та SEO — Олександр Звірич">
+  <meta property="og:description" content="Практичні матеріали про сайти, SEO та залучення клієнтів для малого бізнесу.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zvirycholeksandr.com.ua/blog">
+  <meta property="og:image" content="https://zvirycholeksandr.com.ua/og-image.jpg">
+  <meta property="og:locale" content="uk_UA">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css?v=6">
+  <link rel="stylesheet" href="/css/style.css?v=11">
   <link rel="stylesheet" href="/css/blog.css?v=3">
   <!-- Google Analytics (замініть G-46YFL5WZ82 на свій ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-46YFL5WZ82"></script>
@@ -24,29 +31,11 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Про що цей блог?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Блог про розробку сайтів, SEO та digital-маркетинг для малого бізнесу. Статті про те, як отримати більше клієнтів з інтернету та зробити сайт, який продає." }
-      },
-      {
-        "@type": "Question",
-        "name": "Для кого цей блог?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Для підприємців, фахівців та власників малого бізнесу, які хочуть краще розуміти, як працюють сайти, SEO та онлайн-просування." }
-      },
-      {
-        "@type": "Question",
-        "name": "Скільки коштує розробка сайту для малого бізнесу?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Лендінг — від 10 000 грн, сайт-візитка — від 15 000 грн, онлайн-меню для кафе — від 4 000 грн. Детальніше про послуги — на головній сторінці." }
-      },
-      {
-        "@type": "Question",
-        "name": "Чи можу я замовити сайт після читання блогу?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Так. Якщо вирішите замовити сайт — натисніть кнопку «Замовити сайт» або перейдіть на головну та залиште заявку. Відповідаю протягом 24 годин." }
-      }
-    ]
+    "@type": "Blog",
+    "name": "Блог про сайти та SEO",
+    "description": "Практичні матеріали про сайти, SEO та маркетинг для малого бізнесу.",
+    "url": "https://zvirycholeksandr.com.ua/blog",
+    "author": { "@type": "Person", "name": "Олександр Звірич", "url": "https://zvirycholeksandr.com.ua/" }
   }
   </script>
 </head>
@@ -144,11 +133,11 @@
 </footer>
 
 <!-- ORDER POPUP -->
-<div id="order-popup" role="dialog" aria-modal="true" aria-label="Форма замовлення">
+<div id="order-popup" role="dialog" aria-modal="true" aria-label="Форма замовлення" aria-hidden="true">
   <div class="order-popup-box">
     <div class="order-popup-header">
       <h2>Замовити сайт</h2>
-      <button class="order-popup-close" onclick="closeOrderPopup()" aria-label="Закрити">✕</button>
+      <button class="order-popup-close" onclick="closeOrderPopup()" aria-label="Закрити форму"><span>Закрити</span><b aria-hidden="true">×</b></button>
     </div>
     <div class="step-indicator">
       <div class="step-dot active"></div>
@@ -204,8 +193,8 @@
   </div>
 </div>
 
-<script src="/js/order.js"></script>
-<script src="/js/main.js"></script>
-<script src="/js/blog.js"></script>
+<script src="/js/order.js?v=13"></script>
+<script src="/js/main.js?v=11"></script>
+<script src="/js/blog.js?v=2"></script>
 </body>
 </html>

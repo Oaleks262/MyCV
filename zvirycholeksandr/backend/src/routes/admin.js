@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +21,19 @@ const loginLimiter = rateLimit({
 
 const orders = new JsonDB('orders.json');
 const adminFile = path.join(__dirname, '../../data/admin.json');
+const ORDER_STATUSES = new Set(['new', 'prompted', 'contacted', 'qualified', 'in_progress', 'done', 'lost', 'spam', 'error']);
+
+function cleanText(value, max) {
+  return String(value ?? '').replace(/\u0000/g, '').trim().slice(0, max);
+}
+
+function cleanFormData(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return Object.fromEntries(Object.entries(value).slice(0, 30).map(([key, fieldValue]) => [
+    cleanText(key, 80),
+    cleanText(fieldValue, 4000),
+  ]));
+}
 
 // In-memory store для 2FA кодів: { sessionId: { code, expires } }
 const twoFACodes = new Map();
@@ -147,11 +160,33 @@ router.get('/orders/:id', auth, (req, res) => {
 
 // PATCH /api/admin/orders/:id — оновити статус або промт
 router.patch('/orders/:id', auth, (req, res) => {
-  const { status, prompt, notes } = req.body;
+  const current = orders.findById(req.params.id);
+  if (!current) return res.status(404).json({ error: 'Not found' });
+  const { status, prompt, generatedPrompt, notes, formData, nextFollowUpAt } = req.body || {};
   const patch = {};
-  if (status !== undefined) patch.status = String(status).slice(0, 50);
-  if (prompt !== undefined) patch.prompt = String(prompt).slice(0, 5000);
-  if (notes !== undefined) patch.notes = String(notes).slice(0, 2000);
+  if (status !== undefined) {
+    if (!ORDER_STATUSES.has(status)) return res.status(400).json({ error: 'Невірний статус' });
+    patch.status = status;
+    const now = new Date().toISOString();
+    if (!current.firstContactAt && ['contacted', 'qualified', 'in_progress', 'done'].includes(status)) patch.firstContactAt = now;
+    if (['done', 'lost'].includes(status)) patch.closedAt = now;
+  }
+  const promptValue = generatedPrompt !== undefined ? generatedPrompt : prompt;
+  if (promptValue !== undefined) patch.generatedPrompt = cleanText(promptValue, 12000);
+  if (notes !== undefined) patch.notes = cleanText(notes, 4000);
+  if (formData !== undefined) {
+    const cleaned = cleanFormData(formData);
+    if (!cleaned) return res.status(400).json({ error: 'Невірні дані клієнта' });
+    patch.formData = cleaned;
+  }
+  if (nextFollowUpAt !== undefined) {
+    if (nextFollowUpAt === '' || nextFollowUpAt === null) patch.nextFollowUpAt = null;
+    else {
+      const followUp = new Date(nextFollowUpAt);
+      if (Number.isNaN(followUp.getTime())) return res.status(400).json({ error: 'Невірна дата нагадування' });
+      patch.nextFollowUpAt = followUp.toISOString();
+    }
+  }
   if (!Object.keys(patch).length) return res.status(400).json({ error: 'Немає полів для оновлення' });
   const updated = orders.update(req.params.id, patch);
   if (!updated) return res.status(404).json({ error: 'Not found' });
@@ -173,7 +208,13 @@ router.post('/orders/:id/complete', auth, async (req, res) => {
     const order = orders.findById(req.params.id);
     if (!order) return res.status(404).json({ error: 'Not found' });
 
-    await sendCompleteWorkEmail(order, { siteUrl, message: message || '', credentials: credentials || '' });
+    const result = await sendCompleteWorkEmail(order, { siteUrl, message: message || '', credentials: credentials || '' });
+    if (!result?.sent) {
+      return res.status(503).json({ error: 'Email не надіслано: перевірте SMTP-налаштування' });
+    }
+    orders.update(order.id, {
+      completionEmail: { status: 'sent', sentAt: new Date().toISOString(), siteUrl: cleanText(siteUrl, 500) },
+    });
     res.json({ ok: true });
   } catch (err) {
     console.error('complete email error:', err);

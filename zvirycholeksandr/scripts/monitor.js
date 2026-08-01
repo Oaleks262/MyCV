@@ -23,6 +23,7 @@ for (const p of envPaths) {
 const https = require('https');
 
 const SITE_URL = process.env.SITE_URL || 'https://zvirycholeksandr.com.ua';
+const HEALTH_URL = process.env.SITE_HEALTH_URL || `${SITE_URL.replace(/\/$/, '')}/api/health`;
 const CHECK_INTERVAL = 5 * 60 * 1000; // 5 хвилин
 const TIMEOUT = 10 * 1000; // 10 секунд
 
@@ -53,9 +54,15 @@ async function sendTelegram(text) {
 // --- Перевірка сайту ---
 function checkSite() {
   return new Promise((resolve) => {
-    const req = https.get(SITE_URL, { timeout: TIMEOUT }, (res) => {
-      resolve({ ok: res.statusCode < 500, status: res.statusCode });
-      res.resume();
+    const req = https.get(HEALTH_URL, { timeout: TIMEOUT }, (res) => {
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => { if (body.length < 10000) body += chunk; });
+      res.on('end', () => {
+        let health = null;
+        try { health = JSON.parse(body); } catch {}
+        resolve({ ok: res.statusCode === 200 && health?.status === 'ok', status: res.statusCode, health });
+      });
     });
     req.on('error', (err) => resolve({ ok: false, status: 0, error: err.message }));
     req.on('timeout', () => { req.destroy(); resolve({ ok: false, status: 0, error: 'timeout' }); });
@@ -74,7 +81,7 @@ async function monitor() {
     console.error(`[${now}] SITE DOWN — status: ${result.status || result.error}`);
     await sendTelegram(
       `🔴 *Сайт недоступний!*\n\n` +
-      `🌐 ${SITE_URL}\n` +
+      `🌐 ${HEALTH_URL}\n` +
       `📋 Статус: ${result.status || result.error}\n` +
       `🕐 Час: ${now}`
     );
@@ -95,6 +102,6 @@ async function monitor() {
 }
 
 // Запуск
-console.log(`Monitor started — checking ${SITE_URL} every 5 minutes`);
+console.log(`Monitor started — checking ${HEALTH_URL} every 5 minutes`);
 monitor();
 setInterval(monitor, CHECK_INTERVAL);

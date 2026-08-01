@@ -6,7 +6,7 @@
   <title>Статистика — Адмінка</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <link rel="stylesheet" href="/css/admin.css?v=4">
   <style>
     .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
     .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
@@ -72,6 +72,8 @@
 
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-card-num" id="s-total">—</div><div class="stat-card-lbl">Переглядів за період</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-leads">—</div><div class="stat-card-lbl">Отримано заявок</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-conversion">—</div><div class="stat-card-lbl">Конверсія у заявку</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-lbl">Сьогодні</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-avg">—</div><div class="stat-card-lbl">Середньо / день</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-sources">—</div><div class="stat-card-lbl">Джерел трафіку</div></div>
@@ -96,6 +98,17 @@
       </div>
     </div>
 
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>🎯 Сторінки, що дали заявки</h3>
+        <div id="lead-pages-chart"></div>
+      </div>
+      <div class="chart-card">
+        <h3>🚀 Джерела заявок</h3>
+        <div id="lead-sources-chart"></div>
+      </div>
+    </div>
+
     <div class="chart-card" style="margin-bottom:1.5rem" id="bots-section" hidden>
       <h3>🤖 Боти / сканери</h3>
       <div id="bots-chart"></div>
@@ -109,14 +122,24 @@
 const PAGE_SIZE = 5;
 let _allPages = [], _allRefs = [], _allBots = [];
 
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function isBot(path) {
-  const valid = ['/', '/portfolio', '/blog', '/reviews', '/privacy', '/terms', '/sitemap.xml'];
+  const valid = ['/', '/portfolio', '/blog', '/reviews', '/privacy', '/terms', '/sitemap.xml', '/services/landing', '/services/business-site', '/services/qr-menu'];
   if (valid.includes(path) || path.startsWith('/blog/')) return false;
   return true;
 }
 
 const pageNames = {
   '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог',
+  '/services/landing': 'Лендінг', '/services/business-site': 'Сайт-візитка', '/services/qr-menu': 'QR-меню',
   '/terms': 'Умови', '/privacy': 'Конфіденційність',
   '/blog-post': 'Блог (стара URL)', '/reviews': 'Відгуки', '/sitemap.xml': 'Sitemap',
 };
@@ -129,7 +152,7 @@ function pageName(p) {
 function renderBars(entries, container, fillClass, labelFn, max) {
   container.innerHTML = entries.map(([k, n]) =>
     `<div class="bar-row">
-      <div class="bar-label" title="${k}">${labelFn(k)}</div>
+      <div class="bar-label" title="${escapeHTML(k)}">${escapeHTML(labelFn(k))}</div>
       <div class="bar-wrap"><div class="${fillClass}" style="width:${Math.round(n/max*100)}%"></div></div>
       <div class="bar-val">${n}</div>
     </div>`
@@ -171,6 +194,8 @@ async function loadStats(days = 7, btn) {
   const botTotal = _allBots.reduce((s,[,n]) => s+n, 0);
 
   document.getElementById('s-total').textContent   = data.total;
+  document.getElementById('s-leads').textContent   = data.leads || 0;
+  document.getElementById('s-conversion').textContent = `${data.conversionRate || 0}%`;
   document.getElementById('s-today').textContent   = todayVal;
   document.getElementById('s-avg').textContent     = Math.round(data.total / days_);
   document.getElementById('s-sources').textContent = Object.keys(data.referrers).length;
@@ -216,6 +241,11 @@ async function loadStats(days = 7, btn) {
   } else {
     botsSection.hidden = true;
   }
+
+  const leadPages = Object.entries(data.leadPages || {});
+  const leadSources = Object.entries(data.leadSources || {});
+  renderBars(leadPages, document.getElementById('lead-pages-chart'), 'bar-fill', pageName, Math.max(...leadPages.map(([,v])=>v), 1));
+  renderBars(leadSources, document.getElementById('lead-sources-chart'), 'bar-fill-purple', r => r, Math.max(...leadSources.map(([,v])=>v), 1));
 }
 
 loadStats(7);

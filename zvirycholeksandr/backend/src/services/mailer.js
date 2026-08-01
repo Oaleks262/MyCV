@@ -32,14 +32,33 @@ const typeLabels = {
   menu:         'Онлайн-меню',
 };
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function safeHttpUrl(value) {
+  try {
+    const url = new URL(String(value));
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '#';
+  } catch {
+    return '#';
+  }
+}
+
 async function sendOrderConfirmation(order) {
-  if (!ENABLED) return; // email не налаштовано — мовчки пропускаємо
+  if (!ENABLED) return { sent: false, reason: 'smtp_not_configured' };
 
-  const name  = order.formData?.name || order.formData?.cafeName || 'Клієнт';
+  const name  = escapeHtml(order.formData?.name || order.formData?.cafeName || 'Клієнт');
   const email = order.formData?.email;
-  if (!email) return;
+  if (!email) return { sent: false, reason: 'email_missing' };
 
-  const type  = typeLabels[order.siteType] || order.siteType;
+  const type  = escapeHtml(typeLabels[order.siteType] || order.siteType);
+  const orderId = escapeHtml(order.id);
 
   await transporter.sendMail({
     from:    process.env.SMTP_FROM || process.env.SMTP_USER,
@@ -65,7 +84,7 @@ async function sendOrderConfirmation(order) {
       <div style="background:#f8f7ff;border:1px solid #e5e0ff;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem">
         <div style="font-size:0.8rem;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Ваша заявка</div>
         <div style="color:#0d0d1a;font-weight:600">${type}</div>
-        <div style="color:#888;font-size:0.85rem;margin-top:0.25rem">№ ${order.id}</div>
+        <div style="color:#888;font-size:0.85rem;margin-top:0.25rem">№ ${orderId}</div>
       </div>
       <p style="color:#555;font-size:0.88rem;line-height:1.6;margin:0 0 1.5rem">
         Якщо виникнуть питання — пишіть у Telegram або відповідайте на цей лист.
@@ -82,26 +101,28 @@ async function sendOrderConfirmation(order) {
 </body>
 </html>`,
   });
+  return { sent: true };
 }
 
 async function sendCompleteWorkEmail(order, { siteUrl, message, credentials }) {
-  if (!ENABLED) return;
+  if (!ENABLED) return { sent: false, reason: 'smtp_not_configured' };
 
-  const name  = order.formData?.name || order.formData?.cafeName || 'Клієнт';
+  const name  = escapeHtml(order.formData?.name || order.formData?.cafeName || 'Клієнт');
   const email = order.formData?.email;
-  if (!email) return;
+  if (!email) return { sent: false, reason: 'email_missing' };
 
-  const type = typeLabels[order.siteType] || order.siteType;
+  const type = escapeHtml(typeLabels[order.siteType] || order.siteType);
+  const safeSiteUrl = safeHttpUrl(siteUrl);
 
   const credBlock = credentials
     ? `<div style="background:#f0f9f0;border:1px solid #c3e6c3;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem">
         <div style="font-size:0.8rem;color:#555;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">Дані для входу</div>
-        <div style="font-family:monospace;color:#0d0d1a;font-size:0.9rem;white-space:pre-wrap">${credentials}</div>
+        <div style="font-family:monospace;color:#0d0d1a;font-size:0.9rem;white-space:pre-wrap">${escapeHtml(credentials)}</div>
        </div>`
     : '';
 
   const msgBlock = message
-    ? `<p style="color:#555;line-height:1.6;margin:0 0 1.5rem;padding:1rem;background:#f8f8f8;border-radius:8px;border-left:3px solid #8b5cf6">${message}</p>`
+    ? `<p style="color:#555;line-height:1.6;margin:0 0 1.5rem;padding:1rem;background:#f8f8f8;border-radius:8px;border-left:3px solid #8b5cf6">${escapeHtml(message)}</p>`
     : '';
 
   await transporter.sendMail({
@@ -127,11 +148,11 @@ async function sendCompleteWorkEmail(order, { siteUrl, message, credentials }) {
       </p>
 
       <div style="text-align:center;margin-bottom:1.75rem">
-        <a href="${siteUrl}"
+        <a href="${safeSiteUrl}"
            style="display:inline-block;background:#8b5cf6;color:#fff;padding:1rem 2rem;border-radius:8px;font-weight:700;font-size:1rem;text-decoration:none;letter-spacing:-0.01em">
           👉 Відкрити сайт
         </a>
-        <div style="margin-top:0.6rem;font-size:0.78rem;color:#aaa">${siteUrl}</div>
+        <div style="margin-top:0.6rem;font-size:0.78rem;color:#aaa">${escapeHtml(safeSiteUrl)}</div>
       </div>
 
       ${msgBlock}
@@ -160,6 +181,7 @@ async function sendCompleteWorkEmail(order, { siteUrl, message, credentials }) {
 </body>
 </html>`,
   });
+  return { sent: true };
 }
 
 module.exports = { sendOrderConfirmation, sendCompleteWorkEmail };

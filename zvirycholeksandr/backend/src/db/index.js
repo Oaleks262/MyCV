@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DATA_DIR = path.join(__dirname, '../../data');
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, '../../data');
+fs.mkdirSync(DATA_DIR, { recursive: true });
 
 function readFile(filename) {
   const filepath = path.join(DATA_DIR, filename);
