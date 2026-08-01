@@ -20,7 +20,8 @@ function readFile(filename) {
 function writeFile(filename, data) {
   const filepath = path.join(DATA_DIR, filename);
   const tmp = filepath + '.tmp';
-  fs.writeFileSync(tmp, JSON.stringify(data, null, 2));
+  fs.writeFileSync(tmp, JSON.stringify(data, null, 2), { mode: 0o600 });
+  fs.chmodSync(tmp, 0o600);
   fs.renameSync(tmp, filepath);
 }
 

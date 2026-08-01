@@ -20,7 +20,10 @@ const loginLimiter = rateLimit({
 });
 
 const orders = new JsonDB('orders.json');
-const adminFile = path.join(__dirname, '../../data/admin.json');
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, '../../data');
+const adminFile = path.join(DATA_DIR, 'admin.json');
 const ORDER_STATUSES = new Set(['new', 'prompted', 'contacted', 'qualified', 'in_progress', 'done', 'lost', 'spam', 'error']);
 
 function cleanText(value, max) {
@@ -134,7 +137,10 @@ router.post('/change-password', loginLimiter, auth, async (req, res) => {
     if (!valid) return res.status(401).json({ error: 'Невірний поточний пароль' });
 
     admin.passwordHash = await bcrypt.hash(newPassword, 12);
-    fs.writeFileSync(adminFile, JSON.stringify(admin));
+    const temporary = `${adminFile}.tmp`;
+    fs.writeFileSync(temporary, JSON.stringify(admin), { mode: 0o600 });
+    fs.chmodSync(temporary, 0o600);
+    fs.renameSync(temporary, adminFile);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Помилка сервера' });

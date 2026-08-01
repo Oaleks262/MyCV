@@ -36,10 +36,9 @@ function readArray(filename) {
 }
 
 function atomicWrite(filepath, records) {
-  const mode = fs.statSync(filepath).mode & 0o777;
   const temporary = `${filepath}.tmp`;
-  fs.writeFileSync(temporary, `${JSON.stringify(records, null, 2)}\n`, { mode });
-  fs.chmodSync(temporary, mode);
+  fs.writeFileSync(temporary, `${JSON.stringify(records, null, 2)}\n`, { mode: 0o600 });
+  fs.chmodSync(temporary, 0o600);
   fs.renameSync(temporary, filepath);
 }
 
@@ -60,6 +59,7 @@ function migratePortfolio() {
   }
 
   if (changed) atomicWrite(filepath, records);
+  else fs.chmodSync(filepath, 0o600);
   console.log(`portfolio.json: додано slug для ${changed} записів`);
 }
 
@@ -73,6 +73,7 @@ function migrateBlog() {
     }
   }
   if (changed) atomicWrite(filepath, records);
+  else fs.chmodSync(filepath, 0o600);
   console.log(`blog.json: виправлено slug для ${changed} записів`);
 }
 

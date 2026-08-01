@@ -3,14 +3,21 @@ const fs = require('fs');
 const path = require('path');
 const auth = require('../middleware/auth');
 
-const FILE = path.join(__dirname, '../../data/settings.json');
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, '../../data');
+fs.mkdirSync(DATA_DIR, { recursive: true });
+const FILE = path.join(DATA_DIR, 'settings.json');
 
 function read() {
   return JSON.parse(fs.readFileSync(FILE, 'utf-8'));
 }
 
 function write(data) {
-  fs.writeFileSync(FILE, JSON.stringify(data, null, 2), 'utf-8');
+  const temporary = `${FILE}.tmp`;
+  fs.writeFileSync(temporary, JSON.stringify(data, null, 2), { mode: 0o600 });
+  fs.chmodSync(temporary, 0o600);
+  fs.renameSync(temporary, FILE);
 }
 
 // GET /api/settings — публічний (фронтенд підвантажує при старті)

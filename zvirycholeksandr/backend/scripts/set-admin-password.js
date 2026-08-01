@@ -13,7 +13,14 @@ if (!password) {
 }
 
 bcrypt.hash(password, 10).then(hash => {
-  const adminFile = path.join(__dirname, '../data/admin.json');
-  fs.writeFileSync(adminFile, JSON.stringify({ passwordHash: hash }, null, 2));
+  const dataDir = process.env.DATA_DIR
+    ? path.resolve(process.env.DATA_DIR)
+    : path.join(__dirname, '../data');
+  fs.mkdirSync(dataDir, { recursive: true });
+  const adminFile = path.join(dataDir, 'admin.json');
+  const temporary = `${adminFile}.tmp`;
+  fs.writeFileSync(temporary, JSON.stringify({ passwordHash: hash }, null, 2), { mode: 0o600 });
+  fs.chmodSync(temporary, 0o600);
+  fs.renameSync(temporary, adminFile);
   console.log('✓ Пароль встановлено успішно');
 });
