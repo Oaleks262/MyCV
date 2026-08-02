@@ -425,9 +425,14 @@ app.use(express.static(path.join(__dirname, '../../frontend'), {
   },
 }));
 
-// Зберігаємо SEO-сигнали та старі зовнішні посилання після виправлення транслітерації.
-app.get('/blog/yak-zrobyty-lending-dlya-masozhysta', (req, res) => {
-  res.redirect(301, '/blog/yak-zrobyty-lending-dlya-masazhysta');
+// Зберігаємо SEO-сигнали та старі зовнішні посилання після зміни slug.
+const BLOG_LEGACY_REDIRECTS = {
+  'yak-zrobyty-lending-dlya-masozhysta': 'yak-zrobyty-lending-dlya-masazhysta',
+  'online-menu-qr-cafe-reasons': 'online-menu-qr-cafe-5-prychyn',
+};
+
+Object.entries(BLOG_LEGACY_REDIRECTS).forEach(([from, to]) => {
+  app.get(`/blog/${from}`, (req, res) => res.redirect(301, `/blog/${to}`));
 });
 
 // Blog post — server-side OG meta tags для коректних превʼю в Telegram/Facebook
@@ -443,10 +448,26 @@ function safeJsonLd(value) {
   return JSON.stringify(value).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 }
 
-function renderInlineMarkdown(value) {
+function renderTextFormatting(value) {
   return escAttr(value)
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+
+function renderInlineMarkdown(value) {
+  const source = String(value || '');
+  const linkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g;
+  let output = '';
+  let cursor = 0;
+  let match;
+
+  while ((match = linkPattern.exec(source))) {
+    output += renderTextFormatting(source.slice(cursor, match.index));
+    output += `<a href="${escAttr(match[2])}">${renderTextFormatting(match[1])}</a>`;
+    cursor = match.index + match[0].length;
+  }
+
+  return output + renderTextFormatting(source.slice(cursor));
 }
 
 function renderMarkdown(value) {
@@ -480,6 +501,54 @@ function renderMarkdown(value) {
   return output.join('\n');
 }
 
+function relatedBlogPosts(post) {
+  const currentTags = new Set((Array.isArray(post.tags) ? post.tags : []).map(tag => String(tag).toLowerCase()));
+  return blogDB.all({ isPublished: true })
+    .filter(item => item.slug && item.slug !== post.slug)
+    .sort((a, b) => {
+      const score = item => (Array.isArray(item.tags) ? item.tags : [])
+        .filter(tag => currentTags.has(String(tag).toLowerCase())).length;
+      return score(b) - score(a) || new Date(b.publishedAt || b.createdAt || 0) - new Date(a.publishedAt || a.createdAt || 0);
+    })
+    .slice(0, 3);
+}
+
+function renderRelatedBlogPosts(post) {
+  const items = relatedBlogPosts(post);
+  if (!items.length) return '';
+
+  const cards = items.map(item => {
+    const cover = item.coverUrl
+      ? `<img class="related-card-img" src="${escAttr(item.coverUrl)}" alt="${escAttr(item.title)}" loading="lazy">`
+      : '<div class="related-card-img related-card-placeholder" aria-hidden="true">Стаття</div>';
+    const date = item.publishedAt || item.createdAt;
+    const formattedDate = date
+      ? new Date(date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' })
+      : '';
+    return `<a href="/blog/${encodeURIComponent(item.slug)}" class="related-card">
+      ${cover}
+      <div class="related-card-body">
+        <p class="related-card-title">${escAttr(item.title)}</p>
+        <span class="related-card-date">${escAttr(formattedDate)}</span>
+      </div>
+    </a>`;
+  }).join('');
+
+  return `<section class="related-posts" aria-labelledby="related-posts-title">
+    <h2 class="related-posts-title" id="related-posts-title">Читайте також</h2>
+    <div class="related-grid">${cards}</div>
+    <div class="related-all"><a href="/blog" class="btn-secondary">Усі статті →</a></div>
+  </section>`;
+}
+
+function relatedService(post) {
+  const tagText = Array.isArray(post.tags) ? post.tags.join(' ') : '';
+  const context = `${post.title || ''} ${tagText}`.toLowerCase();
+  if (/меню|кафе|ресторан|qr/.test(context)) return { slug: 'qr-menu', label: 'Переглянути QR-меню та ціни →' };
+  if (/лендінг|landing|масаж/.test(context)) return { slug: 'landing', label: 'Переглянути лендінг та ціни →' };
+  return { slug: 'business-site', label: 'Переглянути формати сайтів і ціни →' };
+}
+
 app.get('/blog/:slug', (req, res) => {
   try {
     if (!/^[a-zA-Z0-9\-_]+$/.test(req.params.slug)) {
@@ -494,7 +563,10 @@ app.get('/blog/:slug', (req, res) => {
     const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image.jpg';
     const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
 
-    // Article Schema + FAQ Schema (якщо є поле faq у пості)
+    const tags = Array.isArray(post.tags) ? post.tags : [];
+    const wordCount = String(post.content || '').trim().split(/\s+/).filter(Boolean).length;
+
+    // Article, Breadcrumb і FAQ schema.
     const articleSchema = safeJsonLd({
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -504,8 +576,22 @@ app.get('/blog/:slug', (req, res) => {
       url: url,
       datePublished: post.publishedAt || post.createdAt,
       dateModified: post.updatedAt || post.publishedAt || post.createdAt,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+      inLanguage: 'uk-UA',
+      keywords: tags.join(', '),
+      wordCount,
       author: { '@type': 'Person', name: 'Олександр Звірич', url: DOMAIN },
       publisher: { '@type': 'Person', name: 'Олександр Звірич', url: DOMAIN },
+    });
+
+    const breadcrumbSchema = safeJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Головна', item: DOMAIN },
+        { '@type': 'ListItem', position: 2, name: 'Блог', item: `${DOMAIN}/blog` },
+        { '@type': 'ListItem', position: 3, name: post.title, item: url },
+      ],
     });
 
     const articleMeta = [
@@ -513,7 +599,7 @@ app.get('/blog/:slug', (req, res) => {
       (post.updatedAt || post.publishedAt || post.createdAt) ? `<meta property="article:modified_time" content="${escAttr(post.updatedAt || post.publishedAt || post.createdAt)}">` : '',
       ...(Array.isArray(post.tags) ? post.tags.map(tag => `<meta property="article:tag" content="${escAttr(tag)}">`) : []),
     ].filter(Boolean).join('\n');
-    let schemaBlock = `${articleMeta}\n<script type="application/ld+json">${articleSchema}</script>`;
+    let schemaBlock = `${articleMeta}\n<script type="application/ld+json">${articleSchema}</script>\n<script type="application/ld+json">${breadcrumbSchema}</script>`;
 
     if (Array.isArray(post.faq) && post.faq.length) {
       const faqSchema = safeJsonLd({
@@ -528,9 +614,10 @@ app.get('/blog/:slug', (req, res) => {
       schemaBlock += `\n<script type="application/ld+json">${faqSchema}</script>`;
     }
 
-    const tags = Array.isArray(post.tags) ? post.tags : [];
     const publishedDate = post.publishedAt || post.createdAt;
     const renderedContent = renderMarkdown(post.content);
+    const renderedRelatedPosts = renderRelatedBlogPosts(post);
+    const service = relatedService(post);
     const renderedTags = tags.map(tag => `<span class="blog-tag">${escAttr(tag)}</span>`).join('');
     const renderedDate = publishedDate ? new Date(publishedDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
@@ -554,6 +641,8 @@ app.get('/blog/:slug', (req, res) => {
         ? `<img class="post-cover" id="post-cover" src="${image}" alt="${title}" loading="eager">`
         : '<img class="post-cover hidden" id="post-cover" src="" alt="">')
       .replace('<div class="post-content" id="post-content"></div>', `<div class="post-content" id="post-content">${renderedContent}</div>`)
+      .replace('<a href="/services/business-site" class="post-service-link">Переглянути формати сайтів і ціни →</a>', `<a href="/services/${service.slug}" class="post-service-link">${service.label}</a>`)
+      .replace('<div id="related-posts"></div>', `<div id="related-posts">${renderedRelatedPosts}</div>`)
       .replace('</head>', `${schemaBlock}\n</head>`);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

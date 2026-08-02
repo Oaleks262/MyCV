@@ -41,9 +41,11 @@ async function run() {
     const post = Array.isArray(posts) && posts.find(entry => entry.slug);
     if (!post) throw new Error('немає опублікованої статті з slug');
     failed += await check('Блог SSR', `/blog/${encodeURIComponent(post.slug)}`, 200, 'article:published_time');
+    failed += await check('Блог SEO schema', `/blog/${encodeURIComponent(post.slug)}`, 200, 'BreadcrumbList');
+    failed += await check('Блог внутрішні посилання', `/blog/${encodeURIComponent(post.slug)}`, 200, 'post-service-link');
   } catch (error) {
     console.log(`✗ Блог SSR: ${error.message}`);
-    failed += 1;
+    failed += 3;
   }
 
   try {
@@ -64,6 +66,16 @@ async function run() {
     if (!ok) failed += 1;
   } catch (error) {
     console.log(`✗ Старий URL статті: ${error.message}`);
+    failed += 1;
+  }
+
+  try {
+    const legacyMenu = await fetch(baseUrl + '/blog/online-menu-qr-cafe-reasons', { redirect: 'manual' });
+    const ok = legacyMenu.status === 301 && legacyMenu.headers.get('location') === '/blog/online-menu-qr-cafe-5-prychyn';
+    console.log(`${ok ? '✓' : '✗'} Старий URL QR-статті: HTTP ${legacyMenu.status}`);
+    if (!ok) failed += 1;
+  } catch (error) {
+    console.log(`✗ Старий URL QR-статті: ${error.message}`);
     failed += 1;
   }
 
