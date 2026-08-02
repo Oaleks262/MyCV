@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="/favicon.PNG">
-  <link rel="apple-touch-icon" href="/favicon.PNG">
+  <link rel="icon" type="image/svg+xml" href="/brand-mark.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>Блог про розробку сайтів у Львові — zvirycholeksandr</title>
   <meta name="robots" content="index, follow">
   <meta name="description" content="Статті про розробку сайтів, SEO та маркетинг для малого бізнесу у Львові та Україні.">
@@ -12,12 +12,18 @@
   <meta property="og:description" content="Практичні матеріали про сайти, SEO та залучення клієнтів для малого бізнесу.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zvirycholeksandr.com.ua/blog">
-  <meta property="og:image" content="https://zvirycholeksandr.com.ua/og-image.jpg">
+  <meta property="og:image" content="https://zvirycholeksandr.com.ua/og-image-2026.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Сайти, які приносять заявки — Олександр Звірич">
   <meta property="og:locale" content="uk_UA">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Блог про сайти та SEO — Олександр Звірич">
+  <meta name="twitter:description" content="Практичні матеріали про сайти, SEO та залучення клієнтів для малого бізнесу.">
+  <meta name="twitter:image" content="https://zvirycholeksandr.com.ua/og-image-2026.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css?v=13">
+  <link rel="stylesheet" href="/css/style.css?v=14">
   <link rel="stylesheet" href="/css/blog.css?v=4">
   <!-- Google Analytics (замініть G-46YFL5WZ82 на свій ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-46YFL5WZ82"></script>
@@ -50,15 +56,15 @@
 <div class="cursor-tri" id="cursor-tri"><span></span><span></span><span></span></div>
 
 <!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+<nav class="navbar" id="navbar" aria-label="Основна навігація">
+  <a href="/" class="navbar-logo" aria-label="Олександр Звірич — головна"><img class="brand-mark" src="/brand-mark.svg" alt="" width="32" height="32"><span class="brand-wordmark">zvirych<span class="brand-signal">o</span>leksandr</span></a>
   <ul class="navbar-links" id="navbar-links">
     <li><a href="/portfolio">Портфоліо</a></li>
-    <li><a href="/blog" style="color:var(--color-text)">Блог</a></li>
+    <li><a href="/blog" aria-current="page">Блог</a></li>
     <li><a href="/#contacts">Контакти</a></li>
     <li><button class="btn-nav" data-open-order>Замовити сайт</button></li>
   </ul>
-  <button class="navbar-burger" id="navbar-burger" aria-label="Меню" aria-expanded="false">
+  <button class="navbar-burger" id="navbar-burger" aria-label="Відкрити меню" aria-expanded="false" aria-controls="navbar-links">
     <span></span>
     <span></span>
     <span></span>
@@ -103,7 +109,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="navbar-logo">zviry<span>ch</span>oleksandr</a>
+        <a href="/" class="navbar-logo" aria-label="Олександр Звірич — головна"><img class="brand-mark" src="/brand-mark.svg" alt="" width="32" height="32"><span class="brand-wordmark">zvirych<span class="brand-signal">o</span>leksandr</span></a>
         <p>Розробляю сайти для малого бізнесу в Україні.</p>
       </div>
       <div class="footer-col">

@@ -330,7 +330,7 @@ function renderPortfolioCase(item) {
   const kind = isDemo ? 'Демо' : 'Проєкт';
   const image = item.screenshotUrl
     ? (item.screenshotUrl.startsWith('http') ? item.screenshotUrl : DOMAIN + item.screenshotUrl)
-    : `${DOMAIN}/og-image.jpg`;
+    : `${DOMAIN}/og-image-2026.jpg`;
   const schema = safeJsonLd({
     '@context': 'https://schema.org',
     '@graph': [
@@ -560,7 +560,7 @@ app.get('/blog/:slug', (req, res) => {
     let html = fs.readFileSync(BLOG_POST_TEMPLATE, 'utf-8');
     const title  = escAttr(post.title);
     const desc   = escAttr(post.excerpt || '');
-    const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image.jpg';
+    const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image-2026.jpg';
     const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
 
     const tags = Array.isArray(post.tags) ? post.tags : [];

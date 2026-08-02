@@ -5,6 +5,14 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
+# ChatGPT Search: пошукова індексація, окрема від навчання моделей
+User-agent: OAI-SearchBot
+Allow: /
+
+# Запити сторінок, ініційовані користувачами ChatGPT
+User-agent: ChatGPT-User
+Allow: /
+
 # Відомі скрапери та SEO-боти — забороняємо повністю
 User-agent: AhrefsBot
 Disallow: /

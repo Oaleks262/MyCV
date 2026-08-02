@@ -3,7 +3,7 @@
   --paper-soft: #e9e5dc;
   --ink: #0b0b0c;
   --graphite: #575650;
-  --signal: #c8ff20;
+  --signal: #d7ff3a;
   --mono: "Space Grotesk", sans-serif;
   --display: "Space Grotesk", sans-serif;
 }
@@ -25,13 +25,15 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 78px;
-  padding: 0 clamp(20px, 4vw, 60px);
+  min-height: 86px;
+  padding: 0 clamp(20px, 3.4vw, 52px);
   border-bottom: 1px solid var(--ink);
   background: var(--paper);
 }
-.brand { display: inline-flex; align-items: center; min-height: 28px; font-family: var(--display); font-size: clamp(18px, 2vw, 25px); font-weight: 700; letter-spacing: -.055em; }
-.brand span { background: var(--signal); line-height: .75; }
+.brand { display: inline-flex; align-items: center; gap: 10px; min-height: 32px; font-family: var(--display); font-size: clamp(18px, 2vw, 25px); font-weight: 700; letter-spacing: -.055em; }
+.brand .brand-signal { background: var(--signal); line-height: .75; }
+.brand .brand-mark { display: block; width: 32px; height: 32px; flex: 0 0 32px; }
+.brand .brand-wordmark { white-space: nowrap; }
 .service-nav nav { display: flex; align-items: center; gap: clamp(18px, 3vw, 42px); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .nav-cta { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: var(--ink); color: var(--paper); }
 
@@ -121,7 +123,7 @@ footer nav a, footer > a:last-child { min-height: 28px; color: var(--graphite); 
 }
 
 @media (max-width: 560px) {
-  .service-nav { min-height: 68px; }
+  .service-nav { min-height: 72px; }
   .brand { font-size: 18px; }
   .nav-cta { min-height: 42px; padding: 0 12px; font-size: 9px; }
   .service-hero { padding-top: 48px; }
@@ -149,6 +151,10 @@ footer nav a, footer > a:last-child { min-height: 28px; color: var(--graphite); 
   .lead-section { gap: 34px; }
   .lead-card { padding: 24px 18px; }
   footer { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 350px) {
+  .service-nav .brand-wordmark { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

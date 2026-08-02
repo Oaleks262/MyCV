@@ -4,14 +4,21 @@ const staticChecks = [
   ['Головна', '/', 200, 'чому варто обрати вас'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
   ['Sitemap', '/sitemap.xml', 200, '/services/business-site'],
+  ['AI robots', '/robots.txt', 200, 'User-agent: OAI-SearchBot'],
+  ['LLM index', '/llms.txt', 200, 'Олександр Звірич — створення сайтів'],
+  ['Логотип', '/brand-mark.svg', 200, '<svg'],
+  ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],
 ];
 
-async function check(name, pathname, expectedStatus, expectedText) {
+async function check(name, pathname, expectedStatus, expectedText, expectedContentType) {
   try {
     const response = await fetch(baseUrl + pathname);
     const body = await response.text();
-    const ok = response.status === expectedStatus && body.includes(expectedText);
-    console.log(`${ok ? '✓' : '✗'} ${name}: HTTP ${response.status}${body.includes(expectedText) ? '' : ' · відсутній контрольний текст'}`);
+    const textOk = !expectedText || body.includes(expectedText);
+    const contentTypeOk = !expectedContentType || String(response.headers.get('content-type')).includes(expectedContentType);
+    const ok = response.status === expectedStatus && textOk && contentTypeOk;
+    const details = `${textOk ? '' : ' · відсутній контрольний текст'}${contentTypeOk ? '' : ' · неправильний Content-Type'}`;
+    console.log(`${ok ? '✓' : '✗'} ${name}: HTTP ${response.status}${details}`);
     return ok ? 0 : 1;
   } catch (error) {
     console.log(`✗ ${name}: ${error.message}`);

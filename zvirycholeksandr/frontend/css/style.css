@@ -243,6 +243,9 @@ section {
 }
 
 .navbar-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
@@ -250,9 +253,18 @@ section {
   flex-shrink: 0;
 }
 
-.navbar-logo span {
+.navbar-logo .brand-signal {
   color: var(--color-accent);
 }
+
+.navbar-logo .brand-mark {
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+}
+
+.navbar-logo .brand-wordmark { white-space: nowrap; }
 
 .navbar-links {
   display: none;
@@ -2089,7 +2101,7 @@ body:not(.home-rebrand) .navbar-logo {
   letter-spacing: -.055em;
 }
 
-body:not(.home-rebrand) .navbar-logo span {
+body:not(.home-rebrand) .navbar-logo .brand-signal {
   display: inline-block;
   background: #d7ff3a;
   color: #0b0b0c;
@@ -2106,6 +2118,12 @@ body:not(.home-rebrand) .navbar-links a {
   text-transform: uppercase;
 }
 body:not(.home-rebrand) .navbar-links a:hover { opacity: .55; }
+body:not(.home-rebrand) .navbar-links a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: #8ca900;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
 
 body:not(.home-rebrand) .btn-nav,
 body:not(.home-rebrand) .btn-primary,
@@ -2126,6 +2144,11 @@ body:not(.home-rebrand) .btn-nav,
 body:not(.home-rebrand) .btn-primary,
 body:not(.home-rebrand) .btn-secondary,
 body:not(.home-rebrand) .btn-submit { padding: 14px 20px; }
+body:not(.home-rebrand) .btn-nav {
+  border-color: #0b0b0c;
+  background: #0b0b0c;
+  color: #f2efe8;
+}
 body:not(.home-rebrand) .btn-nav:hover,
 body:not(.home-rebrand) .btn-primary:hover,
 body:not(.home-rebrand) .btn-secondary:hover,
