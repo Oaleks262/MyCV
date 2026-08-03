@@ -142,10 +142,18 @@
 
     .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.65s ease,transform 0.65s ease}
     .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* Premium art direction */
+    :root{--bg:#f3efe7;--bg2:#e9e2d7;--bg3:#ded2c5;--text:#201714;--muted:#75675e;--accent:#761f30;--accent2:#a43a45;--border:#cfc2b6}
+    .hero{min-height:100svh;display:flex;align-items:center;background:linear-gradient(90deg,rgba(243,239,231,.12),rgba(243,239,231,.05) 45%,rgba(243,239,231,.94) 65%),url('/assets/demos/nutritionist-hero.webp') 42% center/cover no-repeat;padding-inline:clamp(1.25rem,6vw,6rem)}
+    .hero-inner{max-width:620px;margin-left:auto}.hero-bg-num{display:none}.hero-title{font-size:clamp(3.9rem,8.5vw,7.7rem);line-height:.84}.hero-desc{font-size:1rem}.hero-stats{background:rgba(243,239,231,.84);backdrop-filter:blur(8px)}
+    .nav{padding-inline:clamp(1rem,4vw,4rem)}.prog-row{padding-block:1.9rem}.prog-name{font-size:1.55rem}.btn-main,.nav-cta{border-radius:0}
+    @media(max-width:720px){.hero{min-height:95svh;align-items:flex-end;background:linear-gradient(180deg,rgba(243,239,231,.12),rgba(243,239,231,.12) 42%,rgba(243,239,231,.98) 64%),url('/assets/demos/nutritionist-hero.webp') 37% top/auto 66% no-repeat;padding:26rem 1rem 3rem}.hero-inner{margin:0;max-width:none}.hero-title{font-size:clamp(3.4rem,17vw,5.3rem)}.hero-stats{align-items:stretch}.h-stat{padding-inline:.5rem}.h-num{font-size:2rem}.nav{padding-inline:1rem}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
   </style>
 </head>
 <body>
-  <aside role="note" style="position:relative;z-index:9999;padding:10px 16px;background:#c8ff1a;color:#111;text-align:center;font:700 12px/1.4 Arial,sans-serif">Демо-концепт: імена, відгуки та цифри використані лише як приклад контенту.</aside>
+  <aside role="note" style="position:relative;z-index:9999;padding:9px 16px;background:#e9e2d7;color:#201714;text-align:center;font:600 11px/1.4 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase">Демо-концепт · сайт експерта з харчування</aside>
 
 <nav class="nav">
   <div class="nav-logo">Аліна <span>Дорош</span></div>
@@ -171,9 +179,9 @@
       <a href="#cta" class="btn-ghost">Безкоштовна консультація</a>
     </div>
     <div class="hero-stats">
-      <div class="h-stat"><div class="h-num">250+</div><div class="h-lbl">Клієнтів</div></div>
-      <div class="h-stat"><div class="h-num">96%</div><div class="h-lbl">Досягають мети</div></div>
-      <div class="h-stat"><div class="h-num">3</div><div class="h-lbl">Роки практики</div></div>
+      <div class="h-stat"><div class="h-num">1:1</div><div class="h-lbl">Супровід</div></div>
+      <div class="h-stat"><div class="h-num">0</div><div class="h-lbl">Шаблонних дієт</div></div>
+      <div class="h-stat"><div class="h-num">UA</div><div class="h-lbl">Онлайн</div></div>
     </div>
   </div>
 </section>

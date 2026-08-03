@@ -107,10 +107,23 @@
       transition:background 0.2s;
     }
     .cta-btn:hover{background:#7a4a1e}
+
+    /* Premium art direction */
+    :root{--bg:#f2eee6;--bg2:#e9e2d7;--bg3:#ded2c2;--text:#201811;--muted:#75695d;--accent:#8e1f29;--accent2:#b63b42;--border:#cfc3b5;--white:#f9f6f0;--r:0;--shadow:0 16px 50px rgba(50,28,16,.12)}
+    .hero{min-height:min(72svh,680px);max-height:none;background:linear-gradient(90deg,rgba(20,10,7,.7),rgba(20,10,7,.16) 60%),url('/assets/demos/cafe-hero.webp') center/cover no-repeat;padding-inline:clamp(2rem,8vw,8rem)}
+    .hero::before{content:'';position:absolute;inset:1rem;border:1px solid rgba(255,255,255,.28);background:none;pointer-events:none}
+    .hero-circles{display:none}.hero-title{font-size:clamp(3.8rem,13vw,8rem);line-height:.92;margin-bottom:.8rem;font-weight:400}.hero-content{max-width:720px}.hero-title em{color:#fff}.hero-sub{color:rgba(255,255,255,.78)}
+    .tabs-wrap{background:rgba(249,246,240,.94);backdrop-filter:blur(14px);box-shadow:none}
+    .item-card{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0;padding:1.35rem .25rem}
+    .item-card:hover{padding-inline:1rem;background:var(--white);transform:none;box-shadow:none}.item-name{font-family:'Playfair Display',serif;font-weight:400;font-size:1.15rem}.item-card.special{background:rgba(142,31,41,.055);border-color:var(--accent2);padding-inline:1rem}
+    .cat-icon{border-radius:0;background:var(--accent);color:#fff;font-family:'Playfair Display',serif}.cat-title{color:var(--text);font-size:1.8rem}.item-price{color:var(--accent)}
+    @media(min-width:760px){.menu-wrap{max-width:880px;padding-top:3rem}.items-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:3rem}.s-divider{grid-column:1/-1}.tabs{justify-content:center}.tab{padding-inline:2rem}}
+    @media(max-width:560px){.hero{min-height:58svh;background-position:62% center}.hero::before{inset:.65rem}.hero-title{font-size:clamp(3.6rem,19vw,5.4rem)}.menu-wrap{padding-inline:1rem}.item-card{gap:.7rem}.item-desc{font-size:.74rem}.cta-bar{padding-inline:1rem}.demo-note{max-width:48%}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cat-section{animation:none}.item-card{transition:none}}
   </style>
 </head>
 <body>
-  <aside role="note" style="position:relative;z-index:9999;padding:10px 16px;background:#c8ff1a;color:#111;text-align:center;font:700 12px/1.4 Arial,sans-serif">Демо-концепт: імена, відгуки та цифри використані лише як приклад контенту.</aside>
+  <aside role="note" style="position:relative;z-index:9999;padding:9px 16px;background:#ece7df;color:#201811;text-align:center;font:600 11px/1.4 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase">Демо-концепт · інтерактивне QR-меню</aside>
 
 <div class="hero">
   <div class="hero-circles"></div>
@@ -124,10 +137,10 @@
 
 <div class="tabs-wrap">
   <div class="tabs" id="tabs">
-    <button class="tab active" data-cat="kava">☕ Кава</button>
-    <button class="tab" data-cat="tea">🍵 Чай</button>
-    <button class="tab" data-cat="snidanky">🥐 Сніданки</button>
-    <button class="tab" data-cat="deserty">🍰 Десерти</button>
+    <button class="tab active" data-cat="kava">Кава</button>
+    <button class="tab" data-cat="tea">Чай</button>
+    <button class="tab" data-cat="snidanky">Сніданки</button>
+    <button class="tab" data-cat="deserty">Десерти</button>
   </div>
 </div>
 
@@ -135,7 +148,7 @@
 
   <div class="cat-section active" id="cat-kava">
     <div class="cat-header">
-      <div class="cat-icon">☕</div>
+      <div class="cat-icon">01</div>
       <div><div class="cat-title">Кава</div><div class="cat-desc">Арабіка 100% · Власне обсмаження</div></div>
     </div>
     <div class="items-grid">
@@ -185,7 +198,7 @@
 
   <div class="cat-section" id="cat-tea">
     <div class="cat-header">
-      <div class="cat-icon">🍵</div>
+      <div class="cat-icon">02</div>
       <div><div class="cat-title">Чай</div><div class="cat-desc">Листовий · Авторські купажі</div></div>
     </div>
     <div class="items-grid">
@@ -213,7 +226,7 @@
 
   <div class="cat-section" id="cat-snidanky">
     <div class="cat-header">
-      <div class="cat-icon">🥐</div>
+      <div class="cat-icon">03</div>
       <div><div class="cat-title">Сніданки</div><div class="cat-desc">Подаються до 13:00</div></div>
     </div>
     <div class="items-grid">
@@ -234,7 +247,7 @@
 
   <div class="cat-section" id="cat-deserty">
     <div class="cat-header">
-      <div class="cat-icon">🍰</div>
+      <div class="cat-icon">04</div>
       <div><div class="cat-title">Десерти</div><div class="cat-desc">Власне виробництво · Без консервантів</div></div>
     </div>
     <div class="items-grid">
@@ -270,7 +283,7 @@
 </div>
 
 <div class="cta-bar">
-  <div class="demo-note">🖥 Демо-зразок · Онлайн-меню</div>
+  <div class="demo-note">Демо-зразок · Онлайн-меню</div>
   <a href="/" class="cta-btn">Замовити сайт →</a>
 </div>
 

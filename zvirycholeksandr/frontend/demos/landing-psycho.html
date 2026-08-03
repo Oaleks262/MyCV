@@ -145,10 +145,22 @@
 
     .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease}
     .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* Premium art direction */
+    .hero{min-height:100svh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);grid-template-rows:auto 1fr auto;gap:2rem;padding:9rem 2rem 4rem;background:#171915}
+    .hero-portrait{grid-column:2;grid-row:1/4;position:relative;z-index:1;min-height:660px;margin:0;overflow:hidden;background:#c9c1b3}
+    .hero-portrait img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.78) contrast(1.03)}
+    .hero-portrait figcaption{position:absolute;right:0;bottom:0;padding:.8rem 1rem;background:rgba(23,25,21,.88);color:var(--accent2);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase}
+    .hero-tag,.hero-title,.hero-bottom{grid-column:1;position:relative;z-index:2}
+    .hero-tag{margin-bottom:1rem}.hero-title{align-self:center}.hero-bottom{margin-top:1rem}
+    .area-icon{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--accent)}
+    @media(max-width:860px){.hero{grid-template-columns:1fr;grid-template-rows:auto auto auto auto;padding-top:7rem}.hero-tag,.hero-title,.hero-bottom{grid-column:1}.hero-title{grid-row:2}.hero-portrait{grid-column:1;grid-row:3;min-height:clamp(420px,115vw,620px);margin-top:1rem}.hero-bottom{grid-row:4}.hero-actions{align-items:flex-start}.nav{padding-inline:1rem}}
+    @media(max-width:520px){.hero{padding-inline:1rem}.hero-title{font-size:clamp(3.6rem,18vw,5.4rem)}.hero-bottom{align-items:flex-start;flex-direction:column}.hero-actions{width:100%}.hero-actions a{width:100%;text-align:center}.hero-portrait{min-height:460px}section{padding-inline:1rem}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marquee-track{animation:none}.reveal{opacity:1;transform:none;transition:none}}
   </style>
 </head>
 <body>
-  <aside role="note" style="position:relative;z-index:9999;padding:10px 16px;background:#c8ff1a;color:#111;text-align:center;font:700 12px/1.4 Arial,sans-serif">Демо-концепт: імена, відгуки та цифри використані лише як приклад контенту.</aside>
+  <aside role="note" style="position:relative;z-index:9999;padding:9px 16px;background:#ebe4d8;color:#171915;text-align:center;font:600 11px/1.4 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase">Демо-концепт · контент створено для презентації дизайну</aside>
 
 <nav class="nav">
   <div class="nav-name">Марія <span>Дорош</span></div>
@@ -171,6 +183,10 @@
     Простір,<br>де можна<br><em>бути собою</em>
     <span class="small">Марія Дорош · 7 років практики · КПТ</span>
   </h1>
+  <figure class="hero-portrait">
+    <img src="/assets/demos/psychologist-hero.webp" alt="Психологиня у світлому кабінеті" width="1536" height="1024" fetchpriority="high">
+    <figcaption>Конфіденційно · доказовий підхід</figcaption>
+  </figure>
   <div class="hero-bottom">
     <p class="hero-desc">Тривога, вигорання, стосунки, самооцінка. Безпечна робота в темпі, що підходить саме вам — без осуду і готових відповідей.</p>
     <div class="hero-actions">
@@ -241,22 +257,22 @@
     <h2 class="s-title reveal">З чим <em>я працюю</em></h2>
     <div class="areas-inner reveal">
       <div class="area-item">
-        <div class="area-icon">🌀</div>
+        <div class="area-icon">01</div>
         <div class="area-name">Тривога та панічні атаки</div>
         <div class="area-desc">КПТ-техніки, робота з тригерами, заземлення</div>
       </div>
       <div class="area-item">
-        <div class="area-icon">🔥</div>
+        <div class="area-icon">02</div>
         <div class="area-name">Стрес, вигорання, ПТСР</div>
         <div class="area-desc">Опрацювання травм, відновлення ресурсу, стабілізація</div>
       </div>
       <div class="area-item">
-        <div class="area-icon">💬</div>
+        <div class="area-icon">03</div>
         <div class="area-name">Стосунки та комунікація</div>
         <div class="area-desc">Межі, залежні стосунки, розрив, конфлікти</div>
       </div>
       <div class="area-item">
-        <div class="area-icon">🪞</div>
+        <div class="area-icon">04</div>
         <div class="area-name">Самооцінка та ідентичність</div>
         <div class="area-desc">Самоприйняття, впевненість, синдром самозванця</div>
       </div>
@@ -287,8 +303,8 @@
       <div class="p-step reveal">
         <div class="p-big-num">03</div>
         <div>
-          <div class="p-title">Перші зміни — вже за 4–6 сесій</div>
-          <div class="p-desc">Клієнти помічають різницю набагато швидше, ніж очікують. Не тому що легко — а тому що не самотньо.</div>
+          <div class="p-title">Регулярно звіряємо напрям роботи</div>
+          <div class="p-desc">Обговорюємо зміни, труднощі та цілі. Тривалість роботи залежить від запиту й узгоджується разом.</div>
         </div>
       </div>
     </div>

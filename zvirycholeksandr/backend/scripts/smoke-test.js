@@ -10,6 +10,18 @@ const staticChecks = [
   ['LLM index', '/llms.txt', 200, 'Олександр Звірич — створення сайтів'],
   ['Favicon', '/brand-signal.svg', 200, '<svg'],
   ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],
+  ['Демо психолога', '/demos/landing-psycho', 200, '/assets/demos/psychologist-hero.webp'],
+  ['Демо фотографа', '/demos/card-photo', 200, '/assets/demos/photographer-hero.webp'],
+  ['Демо QR-меню', '/demos/menu-cafe', 200, '/assets/demos/cafe-hero.webp'],
+  ['Демо масажу', '/demos/landing-massage', 200, '/assets/demos/massage-hero.webp'],
+  ['Демо нутриціолога', '/demos/card-nutri', 200, '/assets/demos/nutritionist-hero.webp'],
+  ['Демо пабу', '/demos/menu-pub', 200, '/assets/demos/pub-hero.webp'],
+  ['Візуал психолога', '/assets/demos/psychologist-hero.webp', 200, null, 'image/webp'],
+  ['Візуал фотографа', '/assets/demos/photographer-hero.webp', 200, null, 'image/webp'],
+  ['Візуал кафе', '/assets/demos/cafe-hero.webp', 200, null, 'image/webp'],
+  ['Візуал масажу', '/assets/demos/massage-hero.webp', 200, null, 'image/webp'],
+  ['Візуал нутриціолога', '/assets/demos/nutritionist-hero.webp', 200, null, 'image/webp'],
+  ['Візуал пабу', '/assets/demos/pub-hero.webp', 200, null, 'image/webp'],
 ];
 
 async function check(name, pathname, expectedStatus, expectedText, expectedContentType) {
