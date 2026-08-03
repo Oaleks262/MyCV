@@ -245,7 +245,6 @@ section {
 .navbar-logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
@@ -255,13 +254,6 @@ section {
 
 .navbar-logo .brand-signal {
   color: var(--color-accent);
-}
-
-.navbar-logo .brand-mark {
-  display: block;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
 }
 
 .navbar-logo .brand-wordmark { white-space: nowrap; }

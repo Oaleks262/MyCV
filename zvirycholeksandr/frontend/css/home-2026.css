@@ -71,7 +71,6 @@
 .home-rebrand .navbar-logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   color: var(--ink);
   font-family: var(--display);
   font-size: clamp(17px, 1.55vw, 24px);
@@ -84,12 +83,6 @@
   background: var(--signal);
   color: var(--ink);
   line-height: 0.72;
-}
-.home-rebrand .navbar-logo .brand-mark {
-  display: block;
-  width: 32px;
-  height: 32px;
-  flex: 0 0 32px;
 }
 .home-rebrand .navbar-links { gap: clamp(18px, 2.5vw, 42px); }
 .home-rebrand .navbar-links a {

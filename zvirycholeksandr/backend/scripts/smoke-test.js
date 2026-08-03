@@ -6,7 +6,7 @@ const staticChecks = [
   ['Sitemap', '/sitemap.xml', 200, '/services/business-site'],
   ['AI robots', '/robots.txt', 200, 'User-agent: OAI-SearchBot'],
   ['LLM index', '/llms.txt', 200, 'Олександр Звірич — створення сайтів'],
-  ['Логотип', '/brand-mark.svg', 200, '<svg'],
+  ['Favicon', '/brand-signal.svg', 200, '<svg'],
   ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],
 ];
 
