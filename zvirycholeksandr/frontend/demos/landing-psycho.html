@@ -154,6 +154,7 @@
     .hero-tag,.hero-title,.hero-bottom{grid-column:1;position:relative;z-index:2}
     .hero-tag{margin-bottom:1rem}.hero-title{align-self:center}.hero-bottom{margin-top:1rem}
     .area-icon{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--accent)}
+    .editorial-break{position:relative;margin:0;background:#111}.editorial-break img{display:block;width:100%;height:clamp(360px,62vw,820px);object-fit:cover}.editorial-break figcaption{position:absolute;right:1rem;bottom:1rem;padding:.7rem .9rem;background:rgba(23,25,21,.86);color:var(--accent2);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase}
     @media(max-width:860px){.hero{grid-template-columns:1fr;grid-template-rows:auto auto auto auto;padding-top:7rem}.hero-tag,.hero-title,.hero-bottom{grid-column:1}.hero-title{grid-row:2}.hero-portrait{grid-column:1;grid-row:3;min-height:clamp(420px,115vw,620px);margin-top:1rem}.hero-bottom{grid-row:4}.hero-actions{align-items:flex-start}.nav{padding-inline:1rem}}
     @media(max-width:520px){.hero{padding-inline:1rem}.hero-title{font-size:clamp(3.6rem,18vw,5.4rem)}.hero-bottom{align-items:flex-start;flex-direction:column}.hero-actions{width:100%}.hero-actions a{width:100%;text-align:center}.hero-portrait{min-height:460px}section{padding-inline:1rem}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marquee-track{animation:none}.reveal{opacity:1;transform:none;transition:none}}
@@ -279,6 +280,11 @@
     </div>
   </div>
 </section>
+
+<figure class="editorial-break reveal">
+  <img src="/assets/demos/psychologist-detail.webp" alt="Затишний кабінет із двома кріслами для консультації" width="1536" height="1024" loading="lazy">
+  <figcaption>Простір для розмови без поспіху</figcaption>
+</figure>
 
 <section class="process-bg" id="process">
   <div class="container">

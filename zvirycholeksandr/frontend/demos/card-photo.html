@@ -116,6 +116,7 @@
     .photo-inner{background-image:linear-gradient(180deg,transparent,rgba(0,0,0,.22)),url('/assets/demos/photographer-hero.webp');background-size:auto 150%;filter:saturate(.72)}
     .photo-cell:nth-child(1) .photo-inner{background-position:8% center}.photo-cell:nth-child(2) .photo-inner{background-position:67% 44%}.photo-cell:nth-child(3) .photo-inner{background-position:92% 46%;filter:grayscale(1)}.photo-cell:nth-child(4) .photo-inner{background-position:52% 54%;filter:sepia(.35)}.photo-cell:nth-child(5) .photo-inner{background-position:78% 50%;filter:grayscale(.55) contrast(1.15)}
     .about-visual{background:url('/assets/demos/photographer-hero.webp') 12% center/cover;filter:grayscale(.35)}
+    .editorial-break{position:relative;margin:0;background:#080808}.editorial-break img{display:block;width:100%;height:clamp(380px,68vw,900px);object-fit:cover;filter:saturate(.82)}.editorial-break figcaption{position:absolute;left:clamp(1rem,4vw,4rem);bottom:1.5rem;color:#fff;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;text-shadow:0 2px 12px #000}
     @media(min-width:760px){.container{max-width:1120px}.photo-grid{grid-template-columns:1.2fr .8fr .8fr}.photo-cell:nth-child(1){grid-row:span 2}.about-inner{grid-template-columns:1.1fr .9fr;align-items:center}.services-bg .container{max-width:1000px}}
     @media(max-width:650px){.nav-links a:not(:last-child){display:none}.hero{background-position:38% center}.hero-content{grid-template-columns:1fr}.hero-title{grid-column:1}.hero-desc{color:#f1ede8}.photo-grid{grid-template-columns:1fr 1fr}.photo-cell:nth-child(1){grid-column:1/3}.svc-row{align-items:flex-start;flex-direction:column}.svc-price{font-size:1.15rem}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
@@ -167,6 +168,11 @@
     </div>
   </div>
 </section>
+
+<figure class="editorial-break reveal">
+  <img src="/assets/demos/photographer-detail.webp" alt="Молодята прогулюються історичним двориком Львова" width="1536" height="1024" loading="lazy">
+  <figcaption>Wedding story · Lviv</figcaption>
+</figure>
 
 <section class="services-bg" id="services">
   <div class="container">

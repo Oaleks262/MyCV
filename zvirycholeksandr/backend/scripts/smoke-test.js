@@ -22,6 +22,12 @@ const staticChecks = [
   ['Візуал масажу', '/assets/demos/massage-hero.webp', 200, null, 'image/webp'],
   ['Візуал нутриціолога', '/assets/demos/nutritionist-hero.webp', 200, null, 'image/webp'],
   ['Візуал пабу', '/assets/demos/pub-hero.webp', 200, null, 'image/webp'],
+  ['Деталь психолога', '/assets/demos/psychologist-detail.webp', 200, null, 'image/webp'],
+  ['Деталь фотографа', '/assets/demos/photographer-detail.webp', 200, null, 'image/webp'],
+  ['Деталь кафе', '/assets/demos/cafe-detail.webp', 200, null, 'image/webp'],
+  ['Деталь масажу', '/assets/demos/massage-detail.webp', 200, null, 'image/webp'],
+  ['Деталь нутриціолога', '/assets/demos/nutritionist-detail.webp', 200, null, 'image/webp'],
+  ['Деталь пабу', '/assets/demos/pub-detail.webp', 200, null, 'image/webp'],
 ];
 
 async function check(name, pathname, expectedStatus, expectedText, expectedContentType) {
