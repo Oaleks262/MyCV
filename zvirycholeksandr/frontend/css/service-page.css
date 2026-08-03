@@ -81,6 +81,11 @@ button { cursor: pointer; }
 .faq-list summary::after { content: "+"; display: grid; place-items: center; flex: 0 0 38px; height: 38px; border: 1px solid var(--ink); font-family: var(--mono); }
 .faq-list details[open] summary::after { background: var(--signal); transform: rotate(45deg); }
 .faq-list details p { max-width: 780px; margin: 0; padding: 0 0 24px; color: var(--graphite); font-size: 16px; line-height: 1.65; }
+.related-services { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(42px, 8vw, 130px); background: var(--paper-soft); }
+.related-services header h2 { font-size: clamp(42px, 5vw, 76px); }
+.related-services nav { border-top: 1px solid var(--ink); }
+.related-services nav a { display: flex; align-items: center; justify-content: space-between; min-height: 74px; padding: 16px 4px; border-bottom: 1px solid var(--ink); font-family: var(--display); font-size: clamp(18px, 2vw, 28px); font-weight: 500; }
+.related-services nav a:hover { padding-inline: 14px; background: var(--signal); }
 
 .lead-section { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(50px, 9vw, 150px); padding: clamp(72px, 9vw, 138px) clamp(20px, 4vw, 60px); background: var(--ink); color: var(--paper); }
 .lead-section .eyebrow { color: #aaa9a3; }
@@ -110,7 +115,7 @@ footer nav a, footer > a:last-child { min-height: 28px; color: var(--graphite); 
 
 @media (max-width: 900px) {
   .service-nav nav > a:not(.nav-cta) { display: none; }
-  .hero-grid, .split-section, .lead-section { grid-template-columns: 1fr; }
+  .hero-grid, .split-section, .lead-section, .related-services { grid-template-columns: 1fr; }
   .service-facts { grid-template-columns: 1fr 1fr; }
   .service-facts article:nth-child(3) { grid-column: 1 / -1; border-top: 1px solid var(--ink); border-left: 0; }
   .audience-grid, .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

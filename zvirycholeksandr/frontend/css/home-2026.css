@@ -305,6 +305,10 @@
 .text-link:hover { background: var(--signal); }
 
 .service-list { border-top: 1px solid var(--ink); }
+.niche-service-link { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0; padding: 22px clamp(0px, 1vw, 16px); border-bottom: 1px solid var(--ink); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.niche-service-link span { color: var(--ash); }
+.niche-service-link a { min-height: 32px; padding: 8px 10px; }
+.niche-service-link a:hover { background: var(--signal); }
 .home-rebrand .service-card {
   position: relative;
   display: grid;
@@ -583,6 +587,11 @@
   .about-copy { padding-top: 0; }
   .home-rebrand .reviews-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .niche-service-link { align-items: flex-start; flex-direction: column; gap: 8px; padding-block: 18px; }
+  .niche-service-link a { max-width: 100%; overflow-wrap: anywhere; padding-inline: 0; line-height: 1.45; }
 }
 
 @media (min-width: 561px) and (max-width: 900px) {

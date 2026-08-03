@@ -3,7 +3,9 @@ const baseUrl = String(process.env.SMOKE_BASE_URL || 'http://127.0.0.1:1995').re
 const staticChecks = [
   ['Головна', '/', 200, 'чому варто обрати вас'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
-  ['Sitemap', '/sitemap.xml', 200, '/services/business-site'],
+  ['Нішева послуга', '/services/psychologist-site', 200, 'Сайт психолога'],
+  ['QR-меню', '/services/qr-menu', 200, 'Створення QR-меню для кафе'],
+  ['Sitemap', '/sitemap.xml', 200, '/services/psychologist-site'],
   ['AI robots', '/robots.txt', 200, 'User-agent: OAI-SearchBot'],
   ['LLM index', '/llms.txt', 200, 'Олександр Звірич — створення сайтів'],
   ['Favicon', '/brand-signal.svg', 200, '<svg'],

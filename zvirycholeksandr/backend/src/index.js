@@ -221,6 +221,9 @@ function renderServicePage(service) {
   const faqVisible = service.faqs.map(([question, answer]) =>
     `<details><summary>${escAttr(question)}</summary><p>${escAttr(answer)}</p></details>`
   ).join('');
+  const relatedLinks = (service.relatedLinks || []).map(([href, label]) =>
+    `<a href="${escAttr(href)}">${escAttr(label)} <span aria-hidden="true">→</span></a>`
+  ).join('');
   const minPrice = service.price.replace(/\D/g, '');
   const schema = safeJsonLd({
     '@context': 'https://schema.org',
@@ -267,6 +270,7 @@ function renderServicePage(service) {
     '{{IDEAL_FOR}}': idealFor,
     '{{STEPS}}': steps,
     '{{FAQ_VISIBLE}}': faqVisible,
+    '{{RELATED_LINKS}}': relatedLinks,
   };
 
   let html = fs.readFileSync(SERVICE_PAGE_TEMPLATE, 'utf-8');
@@ -294,12 +298,13 @@ function caseTypeLabel(item) {
 }
 
 function caseServiceUrl(item) {
+  const text = `${item.niche} ${item.description}`.toLowerCase();
+  if (/психолог|психотерап/.test(text)) return '/services/psychologist-site';
   if (item.siteType === 'landing') return '/services/landing';
   if (item.siteType === 'business_card') return '/services/business-site';
   if (item.siteType === 'menu') return '/services/qr-menu';
-  const text = `${item.niche} ${item.description}`.toLowerCase();
   if (/меню|кафе|бар/.test(text)) return '/services/qr-menu';
-  if (/масаж|психолог|лендінг/.test(text)) return '/services/landing';
+  if (/масаж|лендінг/.test(text)) return '/services/landing';
   return '/services/business-site';
 }
 
@@ -544,6 +549,7 @@ function renderRelatedBlogPosts(post) {
 function relatedService(post) {
   const tagText = Array.isArray(post.tags) ? post.tags.join(' ') : '';
   const context = `${post.title || ''} ${tagText}`.toLowerCase();
+  if (/психолог|психотерап/.test(context)) return { slug: 'psychologist-site', label: 'Переглянути сайт для психолога та ціни →' };
   if (/меню|кафе|ресторан|qr/.test(context)) return { slug: 'qr-menu', label: 'Переглянути QR-меню та ціни →' };
   if (/лендінг|landing|масаж/.test(context)) return { slug: 'landing', label: 'Переглянути лендінг та ціни →' };
   return { slug: 'business-site', label: 'Переглянути формати сайтів і ціни →' };
