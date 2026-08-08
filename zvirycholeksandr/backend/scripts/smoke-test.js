@@ -54,13 +54,16 @@ async function run() {
   try {
     const portfolioResponse = await fetch(baseUrl + '/api/portfolio');
     const portfolio = await portfolioResponse.json();
+    const withoutVisual = Array.isArray(portfolio) && portfolio.find(entry => !entry.screenshotUrl);
+    if (withoutVisual) throw new Error(`немає прев’ю для ${withoutVisual.title || withoutVisual.id}`);
     const item = Array.isArray(portfolio) && portfolio.find(entry => entry.slug);
     if (!item) throw new Error('немає опублікованої роботи з slug');
     failed += await check('Портфоліо SSR', '/portfolio', 200, `href="/portfolio/${item.slug}"`);
+    failed += await check('Зображення портфоліо SSR', '/portfolio', 200, 'portfolio-card-img');
     failed += await check('Сторінка роботи', `/portfolio/${encodeURIComponent(item.slug)}`, 200, 'CreativeWork');
   } catch (error) {
     console.log(`✗ Портфоліо SSR: ${error.message}`);
-    failed += 2;
+    failed += 3;
   }
 
   try {

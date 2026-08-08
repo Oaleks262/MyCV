@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 const SERVICE_PAGES = require('./content/services');
+const { resolvePortfolioVisual } = require('./content/portfolioVisuals');
 const JsonDB = require('./db');
 
 if (!process.env.JWT_SECRET) {
@@ -333,9 +334,8 @@ function renderPortfolioCase(item) {
   const type = caseTypeLabel(item);
   const isDemo = item.siteType === 'demo';
   const kind = isDemo ? 'Демо' : 'Проєкт';
-  const image = item.screenshotUrl
-    ? (item.screenshotUrl.startsWith('http') ? item.screenshotUrl : DOMAIN + item.screenshotUrl)
-    : `${DOMAIN}/og-image-2026.jpg`;
+  const portfolioVisual = resolvePortfolioVisual(item);
+  const image = portfolioVisual.startsWith('http') ? portfolioVisual : DOMAIN + portfolioVisual;
   const schema = safeJsonLd({
     '@context': 'https://schema.org',
     '@graph': [
@@ -382,13 +382,13 @@ function renderPortfolioCase(item) {
 
 function renderPortfolioIndex() {
   const items = portfolioDB.all({ isVisible: true }).filter(item => item.slug);
-  const cards = items.map(item => `
+  const cards = items.map(item => {
+    const portfolioVisual = resolvePortfolioVisual(item);
+    return `
     <article class="portfolio-card fade-in visible">
       <a class="portfolio-card-link" href="/portfolio/${encodeURIComponent(item.slug)}" aria-label="Відкрити роботу: ${escAttr(item.title)}">
         <div class="portfolio-card-img-wrap">
-          ${item.screenshotUrl
-            ? `<img class="portfolio-card-img" src="${escAttr(item.screenshotUrl)}" alt="${escAttr(item.title)}" loading="lazy">`
-            : '<div class="portfolio-card-placeholder" aria-hidden="true">🖥️</div>'}
+          <img class="portfolio-card-img" src="${escAttr(portfolioVisual)}" alt="${escAttr(item.title)}" loading="lazy">
           <div class="portfolio-card-overlay">Переглянути роботу →</div>
         </div>
         <div class="portfolio-card-body">
@@ -397,7 +397,8 @@ function renderPortfolioIndex() {
           <div class="portfolio-card-niche">${escAttr(item.niche)}</div>
         </div>
       </a>
-    </article>`).join('');
+    </article>`;
+  }).join('');
   const template = fs.readFileSync(path.join(__dirname, '../../frontend/portfolio.html'), 'utf8');
   return template.replace('<div class="spinner" style="grid-column:1/-1"></div>', cards);
 }

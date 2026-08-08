@@ -5,6 +5,7 @@ const fs = require('fs');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 const { convertToWebP } = require('../services/imageProcessor');
+const { withPortfolioVisual } = require('../content/portfolioVisuals');
 
 const portfolio = new JsonDB('portfolio.json');
 
@@ -33,7 +34,8 @@ const upload = multer({
 // GET /api/portfolio — публічний (тільки visible)
 router.get('/', (req, res) => {
   const items = portfolio.all({ isVisible: true })
-    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+    .map(withPortfolioVisual);
   res.json(items);
 });
 
