@@ -2,6 +2,7 @@ const baseUrl = String(process.env.SMOKE_BASE_URL || 'http://127.0.0.1:1995').re
 
 const staticChecks = [
   ['Головна', '/', 200, 'чому варто обрати вас'],
+  ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
   ['Нішева послуга', '/services/psychologist-site', 200, 'Сайт психолога'],
   ['QR-меню', '/services/qr-menu', 200, 'Створення QR-меню для кафе'],

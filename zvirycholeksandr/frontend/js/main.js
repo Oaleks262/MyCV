@@ -231,6 +231,17 @@ applySettings();
 loadPortfolioPreview();
 loadBlogPreview();
 
+document.querySelectorAll('[data-concept-id]').forEach(link => {
+  link.addEventListener('click', () => {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'select_content', {
+        content_type: 'demo_concept',
+        item_id: link.dataset.conceptId
+      });
+    }
+  });
+});
+
 /* ===== FAQ ACCORDION ===== */
 document.querySelectorAll('.faq-question').forEach(btn => {
   btn.addEventListener('click', () => {
