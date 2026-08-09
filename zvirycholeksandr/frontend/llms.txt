@@ -8,6 +8,7 @@
 
 - [Головна](https://zvirycholeksandr.com.ua/): підхід, послуги, процес, роботи та контакти
 - [Портфоліо](https://zvirycholeksandr.com.ua/portfolio): приклади реалізованих сайтів
+- [Готові сайти](https://zvirycholeksandr.com.ua/ready-sites): три дизайни з цінами, строками та адаптацією під бізнес
 - [Блог](https://zvirycholeksandr.com.ua/blog): практичні матеріали про сайти, SEO та залучення клієнтів
 - [Відгуки](https://zvirycholeksandr.com.ua/reviews): відгуки клієнтів
 

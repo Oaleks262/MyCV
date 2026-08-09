@@ -1,6 +1,9 @@
 const serviceForm = document.getElementById('service-lead-form');
-const serviceType = document.body.dataset.serviceType;
 const serviceFormStartedAt = Date.now();
+
+function currentServiceType() {
+  return document.body.dataset.serviceType || 'landing';
+}
 
 function readAttribution() {
   const key = 'mycv_lead_attribution';
@@ -29,6 +32,7 @@ function setServiceError(message) {
 }
 
 function buildFormData(data) {
+  const serviceType = currentServiceType();
   const common = {
     name: String(data.get('name') || '').trim(),
     phone: String(data.get('phone') || '').trim(),
@@ -49,6 +53,7 @@ serviceForm?.addEventListener('submit', async event => {
   const button = serviceForm.querySelector('button[type="submit"]');
   const fallback = document.getElementById('service-form-fallback');
   const raw = new FormData(serviceForm);
+  const serviceType = currentServiceType();
   const attribution = readAttribution();
   button.disabled = true;
   button.textContent = 'Надсилаю…';

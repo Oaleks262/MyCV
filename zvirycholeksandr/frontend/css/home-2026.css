@@ -411,6 +411,7 @@
 .concept-cta span { color: var(--paper); font-family: var(--display); font-size: clamp(24px, 2.4vw, 36px); letter-spacing: -.035em; }
 .concept-cta p { max-width: 620px; margin: 8px 0 0; color: #aaa9a3; font-size: 13px; line-height: 1.55; }
 .concept-cta .btn-signal { flex: 0 0 auto; min-height: 58px; }
+.concept-cta a.btn-signal { display: inline-flex; align-items: center; justify-content: center; padding: 0 24px; }
 
 .home-rebrand .process-section { background: var(--ink); color: var(--paper); }
 .home-rebrand .process-section h2,

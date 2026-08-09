@@ -124,6 +124,7 @@ app.get('/sitemap.xml', (req, res) => {
   const staticPages = [
     { url: '/', file: 'index.html' },
     { url: '/portfolio', file: 'portfolio.html' },
+    { url: '/ready-sites', file: 'ready-sites.html' },
     { url: '/blog', file: 'blog.html' },
     { url: '/reviews', file: 'reviews.html' },
     ...Object.values(SERVICE_PAGES).map(service => ({ url: `/services/${service.slug}`, file: 'service.html' })),
