@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const crypto = require('crypto');
 const JsonDB = require('../db');
 const { generatePrompt } = require('../services/aiBuilder');
 const { notifyTelegram } = require('../services/telegram');
@@ -20,6 +21,16 @@ const REQUIRED_FIELDS = {
 };
 
 const LONG_FIELDS = new Set(['services', 'about']);
+const DEDUPE_WINDOW_MS = 10 * 60 * 1000;
+
+function fail(res, status, code, error, fields) {
+  return res.status(status).json({
+    error,
+    code,
+    ...(fields?.length ? { fields } : {}),
+    requestId: res.locals.requestId,
+  });
+}
 
 function cleanValue(value, max = 240) {
   return String(value ?? '').replace(/\u0000/g, '').trim().slice(0, max);
@@ -47,47 +58,82 @@ function sanitizeMeta(raw = {}, req) {
     gclid: field('gclid', 200),
     formDurationMs: Number.isFinite(duration) ? Math.max(0, Math.min(duration, 24 * 60 * 60 * 1000)) : 0,
     userAgent: cleanValue(req.get('user-agent'), 300),
+    requestId: req.requestId,
   };
+}
+
+function dedupeKey(siteType, formData) {
+  const identity = [
+    siteType,
+    formData.email.toLowerCase(),
+    formData.phone.replace(/\D/g, ''),
+    formData.profession || formData.cafeName || '',
+  ].join('|');
+  return crypto.createHash('sha256').update(identity).digest('hex');
+}
+
+function recentDuplicate(key) {
+  const cutoff = Date.now() - DEDUPE_WINDOW_MS;
+  return orders.all().find(order =>
+    order.dedupeKey === key &&
+    new Date(order.createdAt).getTime() >= cutoff &&
+    !['spam', 'lost'].includes(order.status)
+  );
 }
 
 // POST /api/orders/submit — прийом нового замовлення
 router.post('/submit', async (req, res) => {
+  if (!req.is('application/json')) {
+    return fail(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Надішліть дані у форматі JSON');
+  }
   const body = req.body || {};
   const { siteType } = body;
 
   const validTypes = ['landing', 'business_card', 'menu'];
   if (!validTypes.includes(siteType)) {
-    return res.status(400).json({ error: 'Невірний тип сайту' });
+    return fail(res, 400, 'INVALID_SITE_TYPE', 'Невірний тип сайту', ['siteType']);
   }
 
   // Honeypot: бот отримує нейтральну відповідь, але заявка не зберігається.
   if (cleanValue(body.website, 200)) {
-    return res.status(201).json({ success: true });
+    return res.status(201).json({ success: true, requestId: req.requestId });
   }
 
   const formData = sanitizeFormData(siteType, body.formData);
   const missingRequired = REQUIRED_FIELDS[siteType].some(field => !formData[field]);
   if (missingRequired) {
-    return res.status(400).json({ error: 'Заповніть обовʼязкові поля' });
+    const fields = REQUIRED_FIELDS[siteType].filter(field => !formData[field]);
+    return fail(res, 400, 'VALIDATION_ERROR', 'Заповніть обовʼязкові поля', fields);
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email)) {
-    return res.status(400).json({ error: 'Невірний формат email' });
+    return fail(res, 400, 'INVALID_EMAIL', 'Невірний формат email', ['email']);
   }
   const phoneDigits = formData.phone.replace(/\D/g, '');
   if (phoneDigits.length < 10 || phoneDigits.length > 13) {
-    return res.status(400).json({ error: 'Невірний формат телефону' });
+    return fail(res, 400, 'INVALID_PHONE', 'Невірний формат телефону', ['phone']);
   }
 
   if (formData.referenceUrl && !/^https?:\/\/[^\s]+$/i.test(formData.referenceUrl)) {
-    return res.status(400).json({ error: 'Невірний формат посилання' });
+    return fail(res, 400, 'INVALID_REFERENCE_URL', 'Невірний формат посилання', ['referenceUrl']);
   }
 
   const meta = sanitizeMeta(body.meta, req);
+  const leadDedupeKey = dedupeKey(siteType, formData);
+  const duplicate = recentDuplicate(leadDedupeKey);
+  if (duplicate) {
+    return res.status(200).json({
+      success: true,
+      orderId: duplicate.id,
+      deduplicated: true,
+      requestId: req.requestId,
+    });
+  }
 
   const order = orders.insert({
     siteType,
     formData,
     meta,
+    dedupeKey: leadDedupeKey,
     status: 'new',
     automationStatus: 'pending',
     confirmationEmail: { status: 'pending' },
@@ -96,7 +142,7 @@ router.post('/submit', async (req, res) => {
   trackLead(meta);
 
   // Відповідаємо одразу — не чекаємо AI
-  res.status(201).json({ success: true, orderId: order.id });
+  res.status(201).json({ success: true, orderId: order.id, deduplicated: false, requestId: req.requestId });
 
   // Для локальних smoke-тестів: заявка й аналітика зберігаються, зовнішні інтеграції не викликаються.
   if (process.env.DISABLE_LEAD_AUTOMATION === 'true') return;

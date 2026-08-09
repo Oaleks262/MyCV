@@ -8,6 +8,7 @@ const fs = require('fs');
 const SERVICE_PAGES = require('./content/services');
 const { resolvePortfolioVisual } = require('./content/portfolioVisuals');
 const JsonDB = require('./db');
+const requestContext = require('./middleware/requestContext');
 
 if (!process.env.JWT_SECRET) {
   console.error('FATAL: JWT_SECRET not set in .env');
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 1995;
 
 // Сервер за nginx proxy — довіряємо одному рівню проксі для коректного IP в rate-limit
 app.set('trust proxy', 1);
+app.use(requestContext);
 
 app.use(helmet({
   hsts: { maxAge: 31536000, includeSubDomains: true },
@@ -57,22 +59,59 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json({ limit: '1mb' })); // Upload йде через multipart, не JSON
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
 
-app.get('/api/health', (req, res) => {
+function checkDataStorage({ validateJson = true } = {}) {
   const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(__dirname, '../data');
-  let storage = 'ok';
+  const requiredFiles = ['admin.json', 'blog.json', 'orders.json', 'portfolio.json', 'settings.json'];
+  const optionalFiles = ['analytics.json', 'reviews.json'];
+  const checks = { storage: 'ok', json: 'ok' };
   try {
     fs.accessSync(dataDir, fs.constants.R_OK | fs.constants.W_OK);
   } catch {
-    storage = 'unavailable';
+    checks.storage = 'unavailable';
   }
+  if (!validateJson) {
+    return { storage: checks.storage };
+  }
+  if (checks.storage === 'ok') {
+    try {
+      const presentOptionalFiles = optionalFiles.filter(filename => fs.existsSync(path.join(dataDir, filename)));
+      [...requiredFiles, ...presentOptionalFiles].forEach(filename => {
+        JSON.parse(fs.readFileSync(path.join(dataDir, filename), 'utf8'));
+      });
+    } catch {
+      checks.json = 'invalid';
+    }
+  } else {
+    checks.json = 'unavailable';
+  }
+  return checks;
+}
+
+app.get('/api/health', (req, res) => {
+  const { storage } = checkDataStorage({ validateJson: false });
   const healthy = storage === 'ok';
-  res.setHeader('Cache-Control', 'no-store');
   res.status(healthy ? 200 : 503).json({
     status: healthy ? 'ok' : 'degraded',
     checks: { storage },
+    requestId: req.requestId,
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
+  });
+});
+
+app.get('/api/ready', (req, res) => {
+  const checks = checkDataStorage();
+  const ready = Object.values(checks).every(value => value === 'ok');
+  res.status(ready ? 200 : 503).json({
+    status: ready ? 'ready' : 'not_ready',
+    checks,
+    requestId: req.requestId,
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -675,9 +714,15 @@ app.use((req, res) => {
 // Global Express error handler → Telegram
 const { notifyError } = require('./services/telegram');
 app.use((err, req, res, next) => {
-  console.error('Express error:', err);
-  notifyError(err, `${req.method} ${req.path}`);
-  res.status(500).json({ error: 'Внутрішня помилка сервера' });
+  if (err?.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'Невірний формат JSON', code: 'INVALID_JSON', requestId: req.requestId });
+  }
+  if (err?.type === 'entity.too.large') {
+    return res.status(413).json({ error: 'Запит перевищує допустимий розмір', code: 'PAYLOAD_TOO_LARGE', requestId: req.requestId });
+  }
+  console.error(`[${req.requestId || 'no-request-id'}] Express error:`, err);
+  notifyError(err, `${req.method} ${req.path} [${req.requestId || 'no-request-id'}]`);
+  res.status(500).json({ error: 'Внутрішня помилка сервера', code: 'INTERNAL_ERROR', requestId: req.requestId });
 });
 
 // Uncaught exceptions → Telegram (потім перезапуск через PM2)

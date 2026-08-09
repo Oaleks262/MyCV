@@ -8,6 +8,7 @@ const staticChecks = [
   ['Головна', '/', 200, 'чому варто обрати вас'],
   ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
+  ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
   ['Нішева послуга', '/services/psychologist-site', 200, 'Сайт психолога'],
   ['QR-меню', '/services/qr-menu', 200, 'Створення QR-меню для кафе'],

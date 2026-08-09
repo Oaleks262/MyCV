@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.js",
     "test:smoke": "node scripts/smoke-test.js",
     "test:analytics": "node scripts/test-analytics.js",
+    "test:api": "node scripts/test-api.js",
     "migrate:content": "node scripts/migrate-content.js",
     "backup": "../scripts/backup.sh"
   },
