@@ -90,12 +90,19 @@ const reviewLimiter = rateLimit({
   message: { error: 'Ви вже залишили відгук сьогодні' }
 });
 
+const analyticsEventLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  message: { error: 'Забагато аналітичних подій' },
+});
+
 // Публічні роути
 app.use('/api/orders', formLimiter, require('./routes/orders'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/blog', require('./routes/blog'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/analytics', analyticsEventLimiter, require('./routes/analytics'));
 
 // Адмін роути (JWT захищені)
 app.use('/api/admin', require('./routes/admin'));

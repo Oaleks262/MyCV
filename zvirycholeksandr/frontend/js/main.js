@@ -242,6 +242,40 @@ document.querySelectorAll('[data-concept-id]').forEach(link => {
   });
 });
 
+/* ===== CONVERSION TRACKING ===== */
+function contactMethod(link) {
+  const explicit = link.dataset.contact;
+  if (['telegram', 'phone', 'email'].includes(explicit)) return explicit;
+  const href = String(link.getAttribute('href') || '');
+  if (/^https?:\/\/(t\.me|telegram\.me)\//i.test(href)) return 'telegram';
+  if (/^tel:/i.test(href)) return 'phone';
+  if (/^mailto:/i.test(href)) return 'email';
+  return null;
+}
+
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href]');
+  if (!link) return;
+  const method = contactMethod(link);
+  if (!method) return;
+
+  const params = { contact_method: method, page_path: window.location.pathname };
+  if (typeof window.gtag === 'function') window.gtag('event', 'contact_click', params);
+  fetch('/api/analytics/event', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ event: 'contact_click', method, page: window.location.pathname }),
+    keepalive: true,
+  }).catch(() => {});
+});
+
+if (document.body.dataset.pageType === '404' && typeof window.gtag === 'function') {
+  window.gtag('event', 'page_not_found', {
+    page_path: window.location.pathname,
+    page_referrer: document.referrer || '',
+  });
+}
+
 /* ===== FAQ ACCORDION ===== */
 document.querySelectorAll('.faq-question').forEach(btn => {
   btn.addEventListener('click', () => {

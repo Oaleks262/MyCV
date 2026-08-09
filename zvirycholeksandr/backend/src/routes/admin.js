@@ -230,7 +230,7 @@ router.post('/orders/:id/complete', auth, async (req, res) => {
 
 // GET /api/admin/analytics?days=30
 router.get('/analytics', auth, (req, res) => {
-  const days = parseInt(req.query.days) || 30;
+  const days = Math.max(1, Math.min(parseInt(req.query.days) || 30, 365));
   res.json(getStats(days));
 });
 

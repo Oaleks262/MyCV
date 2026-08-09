@@ -33,6 +33,7 @@
     .period-btn.active{background:#6c63ff;border-color:#6c63ff;color:#fff}
     .show-all-btn{display:block;width:100%;margin-top:.75rem;padding:.4rem;background:none;border:1px solid #2a2a3a;border-radius:6px;color:#666;font-size:.78rem;cursor:pointer;text-align:center;transition:color .2s,border-color .2s}
     .show-all-btn:hover{color:#aaa;border-color:#555}
+    .stats-note{margin:-.75rem 0 1.5rem;color:#777;font-size:.78rem;line-height:1.5}
   </style>
 </head>
 <body>
@@ -69,15 +70,19 @@
       <button class="period-btn" onclick="loadStats(30,this)">30 днів</button>
       <button class="period-btn" onclick="loadStats(90,this)">90 днів</button>
     </div>
+    <p class="stats-note">Чистий облік v2: технічні перевірки, API, статичні файли та відомі боти не входять у відвідування. Старі забруднені перегляди збережені в архіві, але тут не показуються.</p>
 
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-card-num" id="s-total">—</div><div class="stat-card-lbl">Переглядів за період</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-sessions">—</div><div class="stat-card-lbl">Анонімних сеансів</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-leads">—</div><div class="stat-card-lbl">Отримано заявок</div></div>
-      <div class="stat-card"><div class="stat-card-num" id="s-conversion">—</div><div class="stat-card-lbl">Конверсія у заявку</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-contacts">—</div><div class="stat-card-lbl">Кліків на контакти</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-conversion">—</div><div class="stat-card-lbl">Конверсія сеанс → заявка</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-lbl">Сьогодні</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-avg">—</div><div class="stat-card-lbl">Середньо / день</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-sources">—</div><div class="stat-card-lbl">Джерел трафіку</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-bots" style="color:#ef4444">—</div><div class="stat-card-lbl">Запитів ботів/сканерів</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-404" style="color:#f59e0b">—</div><div class="stat-card-lbl">Переходів на 404</div></div>
     </div>
 
     <div class="chart-card" style="margin-bottom:1.5rem">
@@ -96,6 +101,22 @@
         <div id="referrers-chart"></div>
         <button class="show-all-btn" id="refs-more-btn" onclick="showAllRefs()" style="display:none">Показати всі →</button>
       </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>💬 Способи контакту</h3>
+        <div id="contact-methods-chart"></div>
+      </div>
+      <div class="chart-card">
+        <h3>📍 Сторінки контактних кліків</h3>
+        <div id="contact-pages-chart"></div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:1.5rem" id="not-found-section" hidden>
+      <h3>⚠️ URL, що повернули 404</h3>
+      <div id="not-found-chart"></div>
     </div>
 
     <div class="charts-row">
@@ -131,12 +152,6 @@ function escapeHTML(value) {
     .replace(/'/g, '&#039;');
 }
 
-function isBot(path) {
-  const valid = ['/', '/portfolio', '/blog', '/reviews', '/privacy', '/terms', '/sitemap.xml', '/services/landing', '/services/business-site', '/services/qr-menu'];
-  if (valid.includes(path) || path.startsWith('/blog/')) return false;
-  return true;
-}
-
 const pageNames = {
   '/': 'Головна', '/portfolio': 'Портфоліо', '/blog': 'Блог',
   '/services/landing': 'Лендінг', '/services/business-site': 'Сайт-візитка', '/services/qr-menu': 'QR-меню',
@@ -146,6 +161,9 @@ const pageNames = {
 function pageName(p) {
   if (pageNames[p]) return pageNames[p];
   if (p.startsWith('/blog/')) return '📄 ' + p.replace('/blog/', '');
+  if (p.startsWith('/services/')) return 'Послуга: ' + p.replace('/services/', '');
+  if (p.startsWith('/portfolio/')) return 'Робота: ' + p.replace('/portfolio/', '');
+  if (p.startsWith('/demos/')) return 'Демо: ' + p.replace('/demos/', '');
   return p;
 }
 
@@ -186,20 +204,19 @@ async function loadStats(days = 7, btn) {
   const todayVal = data.daily[today] || 0;
   const days_ = Object.keys(data.daily).length || 1;
 
-  // Розділяємо сторінки на реальні та боти/сканери
-  const allPageEntries = Object.entries(data.pages).sort(([,a],[,b]) => b - a);
-  _allPages = allPageEntries.filter(([p]) => !isBot(p));
-  _allBots  = allPageEntries.filter(([p]) =>  isBot(p));
-
-  const botTotal = _allBots.reduce((s,[,n]) => s+n, 0);
+  _allPages = Object.entries(data.pages || {}).sort(([,a],[,b]) => b - a);
+  _allBots = Object.entries(data.bots || {}).sort(([,a],[,b]) => b - a);
 
   document.getElementById('s-total').textContent   = data.total;
+  document.getElementById('s-sessions').textContent = data.sessions || 0;
   document.getElementById('s-leads').textContent   = data.leads || 0;
+  document.getElementById('s-contacts').textContent = data.contactClicks || 0;
   document.getElementById('s-conversion').textContent = `${data.conversionRate || 0}%`;
   document.getElementById('s-today').textContent   = todayVal;
   document.getElementById('s-avg').textContent     = Math.round(data.total / days_);
   document.getElementById('s-sources').textContent = Object.keys(data.referrers).length;
-  document.getElementById('s-bots').textContent    = botTotal;
+  document.getElementById('s-bots').textContent    = data.botTotal || 0;
+  document.getElementById('s-404').textContent     = data.notFoundTotal || 0;
 
   // Графік по днях
   const sorted = Object.entries(data.daily).sort(([a],[b]) => a.localeCompare(b)).slice(-days);
@@ -246,6 +263,21 @@ async function loadStats(days = 7, btn) {
   const leadSources = Object.entries(data.leadSources || {});
   renderBars(leadPages, document.getElementById('lead-pages-chart'), 'bar-fill', pageName, Math.max(...leadPages.map(([,v])=>v), 1));
   renderBars(leadSources, document.getElementById('lead-sources-chart'), 'bar-fill-purple', r => r, Math.max(...leadSources.map(([,v])=>v), 1));
+
+  const contactMethods = Object.entries(data.contactMethods || {});
+  const contactPages = Object.entries(data.contactPages || {});
+  const contactLabels = { telegram: 'Telegram', phone: 'Телефон', email: 'Email' };
+  renderBars(contactMethods, document.getElementById('contact-methods-chart'), 'bar-fill-purple', method => contactLabels[method] || method, Math.max(...contactMethods.map(([,v])=>v), 1));
+  renderBars(contactPages, document.getElementById('contact-pages-chart'), 'bar-fill', pageName, Math.max(...contactPages.map(([,v])=>v), 1));
+
+  const notFound = Object.entries(data.notFound || {});
+  const notFoundSection = document.getElementById('not-found-section');
+  if (notFound.length) {
+    notFoundSection.hidden = false;
+    renderBars(notFound, document.getElementById('not-found-chart'), 'bar-fill-red', path => path, Math.max(...notFound.map(([,v])=>v), 1));
+  } else {
+    notFoundSection.hidden = true;
+  }
 }
 
 loadStats(7);
