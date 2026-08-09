@@ -161,6 +161,18 @@
   transition: gap 0.2s;
 }
 
+body:not(.home-rebrand) .blog-read-btn {
+  border-color: #f2efe8;
+  background: #f2efe8;
+  color: #0b0b0c;
+}
+
+body:not(.home-rebrand) .blog-card:hover .blog-read-btn {
+  border-color: #d7ff3a;
+  background: #d7ff3a;
+  color: #0b0b0c;
+}
+
 .blog-card:hover .blog-read-btn { gap: 0.6rem; }
 
 .blog-card-views {
