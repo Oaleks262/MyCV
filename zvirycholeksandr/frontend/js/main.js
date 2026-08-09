@@ -1,4 +1,53 @@
 /* ===== NAVBAR ===== */
+document.body.classList.add('motion-ready');
+
+function initHeroTypewriter() {
+  const target = document.querySelector('[data-typewriter]');
+  if (!target || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const phrases = String(target.dataset.typewriter || '').split('|').filter(Boolean);
+  if (!phrases.length) return;
+
+  let phraseIndex = 0;
+  let characterIndex = phrases[0].length;
+  let deleting = true;
+  let timer;
+
+  const tick = () => {
+    const phrase = phrases[phraseIndex];
+    target.textContent = phrase.slice(0, characterIndex);
+
+    if (!deleting && characterIndex < phrase.length) {
+      characterIndex += 1;
+      timer = window.setTimeout(tick, 42 + Math.random() * 28);
+      return;
+    }
+    if (!deleting && characterIndex === phrase.length) {
+      deleting = true;
+      timer = window.setTimeout(tick, 1700);
+      return;
+    }
+    if (deleting && characterIndex > 0) {
+      characterIndex -= 1;
+      timer = window.setTimeout(tick, 24);
+      return;
+    }
+
+    deleting = false;
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    characterIndex = 0;
+    timer = window.setTimeout(tick, 320);
+  };
+
+  timer = window.setTimeout(tick, 1200);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) window.clearTimeout(timer);
+    else timer = window.setTimeout(tick, 300);
+  });
+}
+
+initHeroTypewriter();
+
 const navbar = document.querySelector('.navbar');
 const burger = document.querySelector('.navbar-burger');
 const navLinks = document.querySelector('.navbar-links');
