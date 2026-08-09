@@ -1,0 +1,184 @@
+/* Shared public shell: spacing, navigation and feedback across every marketing page. */
+:root {
+  --shell-paper: #f2efe8;
+  --shell-paper-soft: #e8e4db;
+  --shell-ink: #0b0b0c;
+  --shell-signal: #d7ff3a;
+  --shell-muted: #565653;
+  --shell-gutter: clamp(20px, 3.4vw, 52px);
+  --shell-section-y: clamp(72px, 9vw, 138px);
+  --shell-nav-height: 86px;
+  --shell-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --shell-display: "Space Grotesk", Arial, sans-serif;
+}
+
+/* One header rhythm on the home, content, case, service and ready-site pages. */
+.navbar,
+.service-nav {
+  min-height: var(--shell-nav-height);
+  padding-inline: var(--shell-gutter) !important;
+  border-bottom: 1px solid var(--shell-ink);
+  background: var(--shell-paper);
+  color: var(--shell-ink);
+}
+
+.navbar-logo,
+.service-nav .brand {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  color: var(--shell-ink) !important;
+  font-family: var(--shell-display);
+  font-size: clamp(17px, 1.5vw, 22px) !important;
+  font-weight: 600;
+  letter-spacing: -.055em;
+  white-space: nowrap;
+}
+
+.navbar-logo .brand-signal,
+.service-nav .brand-signal {
+  display: inline-block;
+  background: var(--shell-signal);
+  color: var(--shell-ink);
+  line-height: .72;
+}
+
+.navbar-links a,
+.service-nav nav > a {
+  font-family: var(--shell-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.btn-nav,
+.nav-cta {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid var(--shell-ink);
+  border-radius: 0;
+  background: var(--shell-ink);
+  color: var(--shell-paper) !important;
+  font-family: var(--shell-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.btn-nav:hover,
+.nav-cta:hover {
+  background: var(--shell-signal);
+  color: var(--shell-ink) !important;
+  transform: translateY(-2px);
+}
+
+.nav-cta-short { display: none; }
+
+/* The same safe horizontal edge on every public layout. */
+.home-rebrand .navbar.home-nav,
+.home-rebrand .status-line,
+.home-rebrand .rebrand-hero,
+.home-rebrand .rebrand-section,
+.home-rebrand .contact-section,
+.home-rebrand .home-footer,
+.service-nav,
+.service-hero,
+.service-section,
+.lead-section,
+.ready-hero,
+.ready-catalog,
+.ready-included {
+  padding-inline: var(--shell-gutter) !important;
+}
+
+body:not(.home-rebrand) .container {
+  padding-inline: var(--shell-gutter);
+}
+
+.case-wrap {
+  width: auto;
+  max-width: 1180px;
+  margin-inline: max(var(--shell-gutter), calc((100% - 1180px) / 2));
+}
+
+body:not(.home-rebrand) .legal-wrap,
+body:not(.home-rebrand) .reviews-page {
+  width: min(980px, 100%);
+  padding-inline: var(--shell-gutter);
+}
+
+/* Consistent button dimensions and interaction feedback. */
+.button,
+.case-button,
+.btn-primary,
+.btn-secondary,
+.btn-submit,
+.order-btn-primary,
+.order-btn-secondary {
+  min-height: 52px;
+  border-radius: 0;
+}
+
+.form-error:not(:empty),
+.order-submit-error {
+  min-height: 0;
+  padding: 12px 14px;
+  border: 1px solid #b35d5d;
+  background: #2a1818;
+  color: #ffd4d4;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.form-success,
+.order-success {
+  color: inherit;
+}
+
+.form-success > span,
+.order-success-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  background: var(--shell-signal);
+  color: var(--shell-ink);
+}
+
+.order-success-icon { margin: 0 auto 1rem; }
+
+@media (max-width: 900px) {
+  :root { --shell-nav-height: 72px; }
+  .navbar,
+  .service-nav { min-height: var(--shell-nav-height); }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --shell-gutter: 20px;
+    --shell-section-y: 56px;
+  }
+
+  .navbar-logo,
+  .service-nav .brand { font-size: 18px !important; }
+  .nav-cta { min-height: 42px; padding-inline: 12px; font-size: 9px; }
+  .case-wrap { margin-inline: var(--shell-gutter); }
+}
+
+@media (max-width: 360px) {
+  .service-nav .nav-cta-full { display: none; }
+  .service-nav .nav-cta-short { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-nav,
+  .nav-cta { transition: none; }
+}
