@@ -93,9 +93,27 @@ async function run() {
     const clean = postPage.status === 200 && !postHtml.includes('Можливо, стаття була видалена');
     console.log(`${clean ? '✓' : '✗'} Блог без хибної 404-підказки: HTTP ${postPage.status}`);
     if (!clean) failed += 1;
+
+    let allPostsOk = true;
+    for (const entry of posts) {
+      if (!entry.slug) continue;
+      const response = await qaFetch(baseUrl + `/blog/${encodeURIComponent(entry.slug)}`);
+      const html = await response.text();
+      if (
+        response.status !== 200
+        || !html.includes('article:published_time')
+        || !html.includes('FAQPage')
+        || !html.includes('post-service-link')
+      ) {
+        allPostsOk = false;
+        console.log(`✗ Повна SEO-перевірка статті: ${entry.slug}`);
+      }
+    }
+    console.log(`${allPostsOk ? '✓' : '✗'} Повна SEO-перевірка блогу: ${posts.length} статей`);
+    if (!allPostsOk) failed += 1;
   } catch (error) {
     console.log(`✗ Блог SSR: ${error.message}`);
-    failed += 4;
+    failed += 5;
   }
 
   try {
