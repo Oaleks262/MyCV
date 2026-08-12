@@ -5,7 +5,7 @@ const qaFetch = (url, options = {}) => fetch(url, {
 });
 
 const staticChecks = [
-  ['Головна', '/', 200, 'чому варто обрати вас'],
+  ['Головна', '/', 200, 'Розробка сайтів <em>у Львові</em>'],
   ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
   ['Спільна дизайн-система', '/css/public-shell.css', 200, '--shell-gutter', 'text/css'],
@@ -86,9 +86,14 @@ async function run() {
     failed += await check('Блог SSR', `/blog/${encodeURIComponent(post.slug)}`, 200, 'article:published_time');
     failed += await check('Блог SEO schema', `/blog/${encodeURIComponent(post.slug)}`, 200, 'BreadcrumbList');
     failed += await check('Блог внутрішні посилання', `/blog/${encodeURIComponent(post.slug)}`, 200, 'post-service-link');
+    const postPage = await qaFetch(baseUrl + `/blog/${encodeURIComponent(post.slug)}`);
+    const postHtml = await postPage.text();
+    const clean = postPage.status === 200 && !postHtml.includes('Можливо, стаття була видалена');
+    console.log(`${clean ? '✓' : '✗'} Блог без хибної 404-підказки: HTTP ${postPage.status}`);
+    if (!clean) failed += 1;
   } catch (error) {
     console.log(`✗ Блог SSR: ${error.message}`);
-    failed += 3;
+    failed += 4;
   }
 
   try {

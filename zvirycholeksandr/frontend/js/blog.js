@@ -240,8 +240,15 @@ async function loadRelatedPosts(currentPost) {
 
 function showPostError() {
   document.getElementById('post-loading')?.remove();
-  const errorEl = document.getElementById('post-error');
-  if (errorEl) errorEl.style.display = 'block';
+  document.getElementById('post-wrap')?.remove();
+  const errorEl = document.createElement('main');
+  errorEl.id = 'post-error';
+  errorEl.className = 'post-wrap';
+  errorEl.innerHTML = `
+    <h1>Статтю не знайдено</h1>
+    <p style="color:var(--color-text-muted);margin:1rem 0">Можливо, стаття була видалена або посилання неправильне.</p>
+    <a href="/blog" class="btn-secondary" style="display:inline-flex;margin-top:1rem">← Повернутися до блогу</a>`;
+  document.querySelector('.navbar')?.insertAdjacentElement('afterend', errorEl);
 }
 
 // Запустити завантаження поста якщо ми на сторінці blog-post
