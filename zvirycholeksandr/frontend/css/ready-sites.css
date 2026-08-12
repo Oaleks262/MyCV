@@ -9,6 +9,23 @@
 .ready-facts article + article { border-left: 1px solid var(--ink); }
 .ready-facts span, .ready-product-meta, .ready-product-price span { color: var(--graphite); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .ready-facts strong { display: block; margin-top: 44px; font-family: var(--display); font-size: clamp(27px, 3.2vw, 50px); font-weight: 500; letter-spacing: -.045em; line-height: 1; }
+.pilot-offer { padding: clamp(72px, 9vw, 138px) clamp(20px, 4vw, 60px); border-bottom: 1px solid var(--ink); background: var(--signal); color: var(--ink); }
+.pilot-heading { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(40px, 9vw, 140px); }
+.pilot-heading h2 { max-width: 900px; margin: 32px 0 0; font-family: var(--display); font-size: clamp(52px, 7vw, 108px); font-weight: 500; letter-spacing: -.065em; line-height: .9; }
+.pilot-heading h2 em { font-family: Georgia, serif; font-weight: 400; }
+.pilot-intro { align-self: end; }
+.pilot-intro p { margin: 0 0 32px; font-size: clamp(17px, 1.7vw, 23px); line-height: 1.55; }
+.pilot-options { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(60px, 9vw, 120px); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.pilot-options article { display: flex; min-height: 430px; flex-direction: column; padding: clamp(24px, 3vw, 42px); border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.pilot-options span, .pilot-terms span { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.pilot-options h3 { margin: auto 0 18px; font-family: var(--display); font-size: clamp(34px, 3.5vw, 54px); font-weight: 500; letter-spacing: -.05em; line-height: .95; }
+.pilot-options p { min-height: 92px; margin: 0 0 30px; font-size: 14px; line-height: 1.6; }
+.pilot-options button { width: 100%; min-height: 58px; padding: 14px 18px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; }
+.pilot-options button:hover, .pilot-options button:focus-visible { background: transparent; color: var(--ink); }
+.pilot-terms { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 34px; border-top: 1px solid var(--ink); }
+.pilot-terms div { padding: 24px 28px 0 0; }
+.pilot-terms div + div { padding-left: 28px; border-left: 1px solid var(--ink); }
+.pilot-terms p { margin: 14px 0 0; font-size: 13px; line-height: 1.6; }
 .ready-catalog { padding: clamp(72px, 9vw, 138px) clamp(20px, 4vw, 60px); background: var(--ink); color: var(--paper); }
 .ready-section-heading { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px clamp(40px, 8vw, 130px); margin-bottom: 58px; }
 .ready-section-heading h2 { margin: 26px 0 0; font-family: var(--display); font-size: clamp(52px, 7vw, 104px); font-weight: 500; letter-spacing: -.065em; line-height: .9; }
@@ -49,7 +66,7 @@
   .ready-product-body > p { min-height: 0; }
 }
 @media (max-width: 760px) {
-  .ready-hero-bottom, .ready-section-heading, .ready-included { grid-template-columns: 1fr; }
+  .ready-hero-bottom, .ready-section-heading, .ready-included, .pilot-heading { grid-template-columns: 1fr; }
   .ready-facts { grid-template-columns: 1fr; }
   .ready-facts article { min-height: 130px; }
   .ready-facts article + article { border-top: 1px solid var(--ink); border-left: 0; }
@@ -59,6 +76,10 @@
   .ready-product h3 { margin-top: 34px; }
   .ready-product-price { align-items: flex-start; flex-direction: column; }
   .ready-note { grid-column: 1; }
+  .pilot-options, .pilot-terms { grid-template-columns: 1fr; }
+  .pilot-options article { min-height: 360px; }
+  .pilot-terms div { padding: 24px 0; }
+  .pilot-terms div + div { padding-left: 0; border-top: 1px solid var(--ink); border-left: 0; }
 }
 @media (max-width: 480px) {
   .ready-hero h1 { font-size: clamp(48px, 15vw, 68px); overflow-wrap: anywhere; }

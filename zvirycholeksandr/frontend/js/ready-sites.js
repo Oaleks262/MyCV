@@ -2,6 +2,7 @@ const readyChoiceTypes = {
   'Психолог - готовий лендінг': 'landing',
   'Фотограф - готовий сайт-візитка': 'business_card',
   'Масажист - готовий лендінг': 'landing',
+  'Кафе - пілотне QR-меню': 'menu',
 };
 
 function applyReadyChoice(value) {
@@ -19,7 +20,7 @@ document.querySelectorAll('[data-ready-choice]').forEach(button => {
     window.setTimeout(() => choice?.focus(), 500);
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'select_item', {
-        item_list_name: 'ready_sites',
+        item_list_name: button.hasAttribute('data-pilot-choice') ? 'pilot_projects' : 'ready_sites',
         item_name: button.dataset.readyChoice || '',
       });
     }
@@ -35,6 +36,11 @@ const requestedTemplate = new URLSearchParams(window.location.search).get('templ
 const requestedChoice = templateChoices[requestedTemplate];
 if (requestedChoice) {
   applyReadyChoice(requestedChoice);
+}
+
+if (new URLSearchParams(window.location.search).get('pilot') === '1') {
+  document.body.classList.add('pilot-mode');
+  window.setTimeout(() => document.getElementById('pilot-offer')?.scrollIntoView({ block: 'start' }), 250);
 }
 
 document.getElementById('ready-choice')?.addEventListener('change', event => {

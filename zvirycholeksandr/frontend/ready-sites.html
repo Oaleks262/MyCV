@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/css/service-page.css?v=6">
-  <link rel="stylesheet" href="/css/ready-sites.css?v=1">
+  <link rel="stylesheet" href="/css/ready-sites.css?v=2">
   <link rel="stylesheet" href="/css/public-shell.css?v=2">
   <script type="application/ld+json">
   {
@@ -63,7 +63,7 @@
     <nav aria-label="Основна навігація">
       <a href="/portfolio">Роботи</a>
       <a href="/blog">Блог</a>
-      <a class="nav-cta" href="#brief">Обрати сайт →</a>
+      <a class="nav-cta" href="#pilot-offer">Пілотна програма →</a>
     </nav>
   </header>
 
@@ -81,6 +81,46 @@
       <article><span>Стартова ціна</span><strong>від 10 900 грн</strong></article>
       <article><span>Строк адаптації</span><strong>5-7 робочих днів</strong></article>
       <article><span>Оплата</span><strong>50% / 50%</strong></article>
+    </section>
+
+    <section class="pilot-offer" id="pilot-offer" aria-labelledby="pilot-title">
+      <header class="pilot-heading">
+        <div>
+          <p class="eyebrow">3 пілотні проєкти</p>
+          <h2 id="pilot-title">Шукаю бізнеси<br><em>для сильних кейсів.</em></h2>
+        </div>
+        <div class="pilot-intro">
+          <p>Адаптую один із готових преміальних дизайнів за спеціальними умовами. Ви отримуєте робочий сайт, а я - право чесно показати процес і результат у портфоліо.</p>
+          <a class="button button-dark" href="#pilot-options">Переглянути напрямки →</a>
+        </div>
+      </header>
+
+      <div class="pilot-options" id="pilot-options">
+        <article>
+          <span>01 / Психолог</span>
+          <h3>Приватна практика</h3>
+          <p>Для психолога або психотерапевта з реальною практикою, професійними матеріалами й готовністю етично розповісти про свій підхід.</p>
+          <button type="button" data-ready-choice="Психолог - готовий лендінг" data-pilot-choice>Подати заявку →</button>
+        </article>
+        <article>
+          <span>02 / Заклад</span>
+          <h3>Кафе або ресторан</h3>
+          <p>Для закладу зі старим PDF-меню або незручним мобільним сайтом. Потрібні актуальні позиції, ціни, логотип і власні фотографії.</p>
+          <button type="button" data-ready-choice="Кафе - пілотне QR-меню" data-pilot-choice>Подати заявку →</button>
+        </article>
+        <article>
+          <span>03 / Спеціаліст</span>
+          <h3>Фотограф або майстер</h3>
+          <p>Для активного спеціаліста з власними роботами, послугами та бажанням перетворити соціальний профіль на зрозумілий сайт.</p>
+          <button type="button" data-ready-choice="Фотограф - готовий сайт-візитка" data-pilot-choice>Подати заявку →</button>
+        </article>
+      </div>
+
+      <div class="pilot-terms">
+        <div><span>З вашого боку</span><p>Контент, швидкий зворотний зв’язок, домен і хостинг, дозвіл на публікацію кейсу та чесний відгук після запуску.</p></div>
+        <div><span>З мого боку</span><p>Адаптація дизайну, мобільна версія, форма заявки, базове SEO, аналітика, запуск і підтримка після публікації.</p></div>
+        <div><span>Важливо</span><p>Це не обмін сайту на посилання. Спочатку перевіряємо, чи підходять задача, матеріали та формат співпраці.</p></div>
+      </div>
     </section>
 
     <section class="ready-catalog" id="catalog">
@@ -174,6 +214,7 @@
               <option>Психолог - готовий лендінг</option>
               <option>Фотограф - готовий сайт-візитка</option>
               <option>Масажист - готовий лендінг</option>
+              <option>Кафе - пілотне QR-меню</option>
             </select>
           </label>
           <label>Ваше ім’я<input name="name" autocomplete="name" required maxlength="120"></label>
@@ -197,7 +238,7 @@
     <a href="https://t.me/zvirycholeksandr" target="_blank" rel="noopener">Telegram</a>
   </footer>
   <script src="/js/analytics-init.js" defer></script>
-  <script src="/js/service-lead.js?v=2" defer></script>
-  <script src="/js/ready-sites.js?v=1" defer></script>
+  <script src="/js/service-lead.js?v=3" defer></script>
+  <script src="/js/ready-sites.js?v=2" defer></script>
 </body>
 </html>

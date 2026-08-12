@@ -82,7 +82,10 @@ serviceForm?.addEventListener('submit', async event => {
     success.hidden = false;
     success.focus();
     if (typeof window.gtag === 'function') {
-      window.gtag('event', 'generate_lead', { currency: 'UAH', site_type: serviceType, form_variant: 'service_page' });
+      const formVariant = new URLSearchParams(window.location.search).get('pilot') === '1'
+        ? 'pilot_program'
+        : 'service_page';
+      window.gtag('event', 'generate_lead', { currency: 'UAH', site_type: serviceType, form_variant: formVariant });
     }
   } catch (error) {
     setServiceError(error.message || 'Не вдалося надіслати форму.');
