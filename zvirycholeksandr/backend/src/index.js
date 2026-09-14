@@ -327,6 +327,9 @@ function renderServicePage(service) {
 }
 
 app.get(['/service', '/service.html'], (req, res) => res.redirect(301, '/services/landing'));
+app.get('/services/photographer', (req, res) => res.redirect(301, '/services/photographer-site'));
+app.get('/services/masseur-site', (req, res) => res.redirect(301, '/services/massage-site'));
+app.get('/services/restaurant-site', (req, res) => res.redirect(301, '/services/cafe-site'));
 app.get('/services/:slug', (req, res) => {
   const service = SERVICE_PAGES[req.params.slug];
   if (!service) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
@@ -348,6 +351,9 @@ function caseTypeLabel(item) {
 function caseServiceUrl(item) {
   const text = `${item.niche} ${item.description}`.toLowerCase();
   if (/психолог|психотерап/.test(text)) return '/services/psychologist-site';
+  if (/фотограф|фотостуд/.test(text)) return '/services/photographer-site';
+  if (/масаж|spa|спа/.test(text)) return '/services/massage-site';
+  if (/кафе|кав’яр|кав'яр|ресторан|бар|паб/.test(text) && item.siteType !== 'menu') return '/services/cafe-site';
   if (item.siteType === 'landing') return '/services/landing';
   if (item.siteType === 'business_card') return '/services/business-site';
   if (item.siteType === 'menu') return '/services/qr-menu';
@@ -599,7 +605,9 @@ function relatedService(post) {
   const context = `${post.title || ''} ${tagText}`.toLowerCase();
   if (/психолог|психотерап/.test(context)) return { slug: 'psychologist-site', label: 'Переглянути сайт для психолога та ціни →' };
   if (/меню|кафе|ресторан|qr/.test(context)) return { slug: 'qr-menu', label: 'Переглянути QR-меню та ціни →' };
-  if (/лендінг|landing|масаж/.test(context)) return { slug: 'landing', label: 'Переглянути лендінг та ціни →' };
+  if (/фотограф|фотостуд/.test(context)) return { slug: 'photographer-site', label: 'Переглянути сайт для фотографа та ціни →' };
+  if (/масаж|spa|спа/.test(context)) return { slug: 'massage-site', label: 'Переглянути сайт для масажиста та ціни →' };
+  if (/лендінг|landing/.test(context)) return { slug: 'landing', label: 'Переглянути лендінг та ціни →' };
   return { slug: 'business-site', label: 'Переглянути формати сайтів і ціни →' };
 }
 
