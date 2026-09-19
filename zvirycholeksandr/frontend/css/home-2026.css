@@ -818,24 +818,33 @@
   .home-rebrand .service-card > button { grid-column: 2; grid-row: 1; width: 46px; height: 46px; }
   .home-rebrand .service-card:hover { padding-left: 10px; padding-right: 10px; }
 
-  .work-section .rebrand-cards,
-  .journal-section .rebrand-cards {
+  .home-rebrand .work-section .cards-grid.rebrand-cards,
+  .home-rebrand .journal-section .cards-grid.rebrand-cards {
     display: flex;
+    align-items: stretch;
     gap: 12px;
     overflow-x: auto;
-    margin-right: -20px;
-    padding-right: 20px;
+    margin: 0;
+    padding: 0;
     border: 0;
     background: transparent;
-    scroll-padding-left: 0;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 0;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
-  .work-section .rebrand-cards::-webkit-scrollbar,
-  .journal-section .rebrand-cards::-webkit-scrollbar,
+  .home-rebrand .work-section .cards-grid.rebrand-cards::-webkit-scrollbar,
+  .home-rebrand .journal-section .cards-grid.rebrand-cards::-webkit-scrollbar,
   .home-rebrand .reviews-grid::-webkit-scrollbar { display: none; }
-  .work-section .rebrand-cards .card,
-  .journal-section .rebrand-cards .card { flex: 0 0 84vw; border: 1px solid var(--ink); scroll-snap-align: start; }
+  .home-rebrand .work-section .cards-grid.rebrand-cards .card,
+  .home-rebrand .journal-section .cards-grid.rebrand-cards .card {
+    width: 100%;
+    min-width: 100%;
+    flex: 0 0 100%;
+    border: 1px solid var(--ink);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
   .mobile-scroll-hint {
     display: block;
     margin: 14px 0 0;
