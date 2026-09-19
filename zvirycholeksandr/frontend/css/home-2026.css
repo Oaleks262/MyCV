@@ -532,12 +532,35 @@
 .home-rebrand .faq-section { background: var(--paper-soft); }
 .home-rebrand .faq-list { max-width: none; border-top: 1px solid var(--ink); }
 .home-rebrand .faq-item { border-bottom: 1px solid var(--ink); }
-.home-rebrand .faq-question { width: 100%; min-height: 84px; gap: 24px; padding: 20px 18px; color: var(--ink); font-family: var(--display); font-size: clamp(21px, 2.4vw, 34px); font-weight: 500; letter-spacing: -.035em; text-align: left; }
+.home-rebrand .faq-question { width: 100%; min-height: 84px; gap: 24px; padding: 20px 18px; color: var(--ink); font-family: var(--display); font-size: clamp(21px, 2.4vw, 34px); font-weight: 500; letter-spacing: -.035em; text-align: left; transition: color .35s ease, background-color .45s ease; }
 .home-rebrand .faq-question:hover { color: var(--ink); background: rgba(255, 255, 255, .22); }
-.home-rebrand .faq-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border: 1px solid var(--ink); border-radius: 0; font-family: var(--mono); font-size: 20px; }
+.home-rebrand .faq-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border: 1px solid var(--ink); border-radius: 0; font-family: var(--mono); font-size: 20px; transition: transform .6s cubic-bezier(.22, 1, .36, 1), background-color .4s ease, color .4s ease; }
 .home-rebrand .faq-item.open .faq-icon { background: var(--signal); transform: rotate(45deg); }
-.home-rebrand .faq-answer { color: var(--graphite); }
-.home-rebrand .faq-answer p { max-width: 796px; padding: 0 18px 28px; font-size: 16px; line-height: 1.7; }
+.home-rebrand .faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  max-height: none;
+  overflow: hidden;
+  color: var(--graphite);
+  transition: grid-template-rows .7s cubic-bezier(.22, 1, .36, 1);
+}
+.home-rebrand .faq-item.open .faq-answer { grid-template-rows: 1fr; max-height: none; }
+.home-rebrand .faq-answer p {
+  min-height: 0;
+  max-width: 796px;
+  overflow: hidden;
+  padding: 0 18px 28px;
+  opacity: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  transform: translateY(-10px);
+  transition: opacity .4s ease, transform .65s cubic-bezier(.22, 1, .36, 1);
+}
+.home-rebrand .faq-item.open .faq-answer p {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .08s;
+}
 
 .home-rebrand .journal-section { background: var(--paper); }
 .mobile-scroll-hint { display: none; }

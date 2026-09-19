@@ -12,6 +12,7 @@ const staticChecks = [
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
   ['Пілотні проєкти', '/ready-sites?pilot=1', 200, '3 пілотні проєкти'],
   ['Спільна дизайн-система', '/css/public-shell.css', 200, '--shell-gutter', 'text/css'],
+  ['Плавна анімація FAQ', '/css/home-2026.css', 200, 'grid-template-rows .7s', 'text/css'],
   ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
   ['Аналітика конверсій послуг', '/services/landing', 200, '/js/analytics-init.js?v=2'],
