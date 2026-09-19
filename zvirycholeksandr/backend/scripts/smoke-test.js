@@ -6,12 +6,14 @@ const qaFetch = (url, options = {}) => fetch(url, {
 
 const staticChecks = [
   ['Головна', '/', 200, 'Розробка сайтів <em>у Львові</em>'],
+  ['Аналітика конверсій головної', '/', 200, '/js/analytics-init.js?v=2'],
   ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
   ['Пілотні проєкти', '/ready-sites?pilot=1', 200, '3 пілотні проєкти'],
   ['Спільна дизайн-система', '/css/public-shell.css', 200, '--shell-gutter', 'text/css'],
   ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
+  ['Аналітика конверсій послуг', '/services/landing', 200, '/js/analytics-init.js?v=2'],
   ['Нішева послуга', '/services/psychologist-site', 200, 'Розробка сайту для психолога'],
   ['Сайт фотографа', '/services/photographer-site', 200, 'Сайт для фотографа'],
   ['Сайт масажиста', '/services/massage-site', 200, 'Сайт для масажиста'],
@@ -28,6 +30,7 @@ const staticChecks = [
   ['Favicon ICO', '/favicon.ico', 200],
   ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],
   ['Відгуки GA4', '/reviews', 200, '/js/analytics-init.js'],
+  ['Модуль конверсій', '/js/analytics-init.js', 200, 'contact_click', 'application/javascript'],
   ['404 tracking', '/smoke-missing-page', 404, 'data-page-type="404"'],
   ['Демо психолога', '/demos/landing-psycho', 200, '/assets/demos/psychologist-hero.webp'],
   ['Демо фотографа', '/demos/card-photo', 200, '/assets/demos/photographer-hero.webp'],
