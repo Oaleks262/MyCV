@@ -22,6 +22,8 @@ const staticChecks = [
   ['Сайт закладу', '/services/cafe-site', 200, 'Сайт для кафе'],
   ['QR-меню', '/services/qr-menu', 200, 'QR-меню для кафе і ресторану'],
   ['SEO-стаття для психологів', '/blog/sait-dlya-psyhologa', 200, 'Де психологу шукати клієнтів'],
+  ['Нова стилістика статей', '/blog/sait-dlya-psyhologa', 200, 'class="blog-post-page"'],
+  ['Палітра статей', '/css/blog.css', 200, 'body.blog-post-page', 'text/css'],
   ['SEO-стаття про QR-меню', '/blog/online-menu-qr-cafe-5-prychyn', 200, 'Скільки коштує QR-меню'],
   ['Sitemap', '/sitemap.xml', 200, '/services/photographer-site'],
   ['Sitemap готових сайтів', '/sitemap.xml', 200, '/ready-sites'],
