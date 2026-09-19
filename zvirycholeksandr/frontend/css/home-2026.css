@@ -303,14 +303,25 @@
   background: var(--paper-soft);
   white-space: nowrap;
 }
-.niche-ticker > div {
+.niche-ticker-track {
   display: flex;
   width: max-content;
-  min-width: 2400px;
-  padding: 14px 0;
   animation: niche-scroll 32s linear infinite;
+  will-change: transform;
+}
+.niche-ticker-group {
+  display: flex;
+  flex: 0 0 auto;
+  width: max-content;
+  min-width: 100vw;
+  padding: 14px 0;
+  justify-content: space-around;
 }
 .niche-ticker span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   min-width: 150px;
   padding: 0 24px;
   color: var(--graphite);
@@ -321,7 +332,10 @@
   letter-spacing: .055em;
   text-transform: uppercase;
 }
-@keyframes niche-scroll { to { transform: translateX(-50%); } }
+@keyframes niche-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
 .niche-ticker:hover .niche-ticker-track { animation-play-state: paused; }
 .niche-ticker span::before { width: 5px; height: 5px; margin-right: 9px; }
 

@@ -6,6 +6,7 @@ const qaFetch = (url, options = {}) => fetch(url, {
 
 const staticChecks = [
   ['Головна', '/', 200, 'Розробка сайтів <em>у Львові</em>'],
+  ['Безшовна стрічка ніш', '/', 200, 'niche-ticker-group'],
   ['Аналітика конверсій головної', '/', 200, '/js/analytics-init.js?v=2'],
   ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
