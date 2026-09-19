@@ -522,6 +522,7 @@
 .home-rebrand .reviews-section { background: var(--paper); }
 .home-rebrand .reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border: 1px solid var(--ink); background: var(--ink); }
 .home-rebrand .review-card { min-height: 330px; padding: clamp(28px, 4vw, 58px); border: 0; border-radius: 0; background: var(--paper); }
+.home-rebrand .review-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .home-rebrand .review-card:hover { transform: none; border-color: transparent; }
 .home-rebrand .review-stars { color: var(--ink); font-size: 15px; letter-spacing: .15em; }
 .home-rebrand .review-text { margin: 44px 0; color: var(--ink); font-family: var(--display); font-size: clamp(22px, 2.3vw, 34px); letter-spacing: -.03em; line-height: 1.25; }
@@ -583,17 +584,34 @@
 
 .home-rebrand .site-footer.rebrand-footer {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr auto;
-  gap: 34px;
-  align-items: start;
-  padding: 46px clamp(20px, 3.4vw, 52px);
+  grid-template-columns: minmax(190px, .8fr) minmax(360px, 1.65fr) minmax(180px, .65fr);
+  gap: clamp(42px, 6vw, 96px);
+  align-items: stretch;
+  padding: 56px clamp(20px, 3.4vw, 52px) 46px;
   border: 0;
   background: var(--paper);
   color: var(--ink);
 }
+.rebrand-footer .footer-intro,
+.rebrand-footer .footer-directory,
+.rebrand-footer .footer-connect { display: flex; flex-direction: column; align-items: flex-start; }
+.rebrand-footer .footer-intro { gap: 22px; }
+.rebrand-footer .footer-intro p { max-width: 270px; line-height: 1.55; }
+.rebrand-footer .footer-label {
+  margin-bottom: 20px;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
 .rebrand-footer p { margin: 0; color: var(--graphite); font-size: 12px; }
-.rebrand-footer nav,
-.rebrand-footer .footer-socials { display: flex; flex-wrap: wrap; gap: 12px 22px; }
+.rebrand-footer nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 28px; width: 100%; }
+.rebrand-footer .footer-socials { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.rebrand-footer .footer-connect { align-items: flex-end; text-align: right; }
+.rebrand-footer .footer-connect .footer-socials { justify-content: flex-end; }
+.rebrand-footer .copyright { margin-top: auto; padding-top: 44px; }
 .rebrand-footer nav a,
 .rebrand-footer .footer-socials a,
 .rebrand-footer .copyright { color: var(--graphite); font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
@@ -659,7 +677,7 @@
   .home-rebrand .process-steps { grid-template-columns: repeat(2, 1fr); }
   .home-rebrand .process-step:nth-child(3) { border-left: 0; border-top: 1px solid #3a3a3a; }
   .home-rebrand .process-step:nth-child(4) { border-top: 1px solid #3a3a3a; }
-  .home-rebrand .site-footer.rebrand-footer { grid-template-columns: 1fr 1fr; }
+  .home-rebrand .site-footer.rebrand-footer { grid-template-columns: .8fr 1.4fr .7fr; gap: 34px; }
 }
 
 @media (max-width: 900px) {
@@ -757,6 +775,33 @@
   .about-copy { padding-top: 0; }
   .home-rebrand .reviews-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-grid { grid-template-columns: 1fr; }
+  .home-rebrand .site-footer.rebrand-footer {
+    grid-template-columns: 1fr;
+    gap: 0;
+    justify-items: center;
+    padding-top: 48px;
+    padding-bottom: 38px;
+    text-align: center;
+  }
+  .rebrand-footer .footer-intro,
+  .rebrand-footer .footer-directory,
+  .rebrand-footer .footer-connect { align-items: center; width: min(100%, 600px); }
+  .rebrand-footer .footer-intro { gap: 16px; }
+  .rebrand-footer .footer-intro p { max-width: 330px; }
+  .rebrand-footer .footer-directory {
+    margin-top: 34px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(11, 11, 12, .24);
+  }
+  .rebrand-footer nav { display: flex; justify-content: center; gap: 8px 20px; }
+  .rebrand-footer .footer-connect {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(11, 11, 12, .24);
+    text-align: center;
+  }
+  .rebrand-footer .footer-connect .footer-socials { justify-content: center; }
+  .rebrand-footer .copyright { width: 100%; margin-top: 24px; padding-top: 22px; border-top: 1px solid rgba(11, 11, 12, .24); }
 }
 
 @media (max-width: 560px) {

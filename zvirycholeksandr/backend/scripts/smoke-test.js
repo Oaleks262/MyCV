@@ -13,6 +13,8 @@ const staticChecks = [
   ['Пілотні проєкти', '/ready-sites?pilot=1', 200, '3 пілотні проєкти'],
   ['Спільна дизайн-система', '/css/public-shell.css', 200, '--shell-gutter', 'text/css'],
   ['Центрований footer', '/css/style.css', 200, 'grid-template-columns: 1fr auto 1fr', 'text/css'],
+  ['Структурований footer головної', '/', 200, 'class="footer-directory"'],
+  ['Відгуки без порожньої комірки', '/css/home-2026.css', 200, 'last-child:nth-child(odd)', 'text/css'],
   ['Плавна анімація FAQ', '/css/home-2026.css', 200, 'grid-template-rows .7s', 'text/css'],
   ['Плавне мобільне меню', '/css/home-2026.css', 200, 'visibility 0s linear .58s', 'text/css'],
   ['Стабільні мобільні картки', '/css/home-2026.css', 200, 'flex: 0 0 100%', 'text/css'],
