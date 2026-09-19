@@ -95,7 +95,7 @@ async function sendOrderConfirmation(order) {
       </a>
     </div>
     <div style="border-top:1px solid #f0f0f0;padding:1rem 2rem;font-size:0.75rem;color:#aaa">
-      © 2026 Олександр Звірич · zvirycholeksandr.com.ua
+      © 2026 Олександр Звірич. Всі права захищені. · zvirycholeksandr.com.ua
     </div>
   </div>
 </body>
@@ -175,7 +175,7 @@ async function sendCompleteWorkEmail(order, { siteUrl, message, credentials }) {
       </p>
     </div>
     <div style="border-top:1px solid #f0f0f0;padding:1rem 2rem;font-size:0.75rem;color:#aaa">
-      © 2026 Олександр Звірич · <a href="https://zvirycholeksandr.com.ua" style="color:#aaa">zvirycholeksandr.com.ua</a>
+      © 2026 Олександр Звірич. Всі права захищені. · <a href="https://zvirycholeksandr.com.ua" style="color:#aaa">zvirycholeksandr.com.ua</a>
     </div>
   </div>
 </body>

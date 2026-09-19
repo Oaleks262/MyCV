@@ -4,12 +4,16 @@ const qaFetch = (url, options = {}) => fetch(url, {
   headers: { ...(options.headers || {}), 'x-analytics-ignore': '1' },
 });
 
+const copyright = '© 2026 Олександр Звірич. Всі права захищені.';
+
 const staticChecks = [
   ['Головна', '/', 200, 'Розробка сайтів <em>у Львові</em>'],
+  ['Єдиний copyright головної', '/', 200, copyright],
   ['Безшовна стрічка ніш', '/', 200, 'niche-ticker-group'],
   ['Аналітика конверсій головної', '/', 200, '/js/analytics-init.js?v=2'],
   ['Каталог концептів', '/', 200, '/demos/landing-psycho'],
   ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
+  ['Єдиний copyright готових сайтів', '/ready-sites', 200, copyright],
   ['Пілотні проєкти', '/ready-sites?pilot=1', 200, '3 пілотні проєкти'],
   ['Спільна дизайн-система', '/css/public-shell.css', 200, '--shell-gutter', 'text/css'],
   ['Центрований footer', '/css/style.css', 200, 'grid-template-columns: 1fr auto 1fr', 'text/css'],
@@ -20,6 +24,7 @@ const staticChecks = [
   ['Стабільні мобільні картки', '/css/home-2026.css', 200, 'flex: 0 0 100%', 'text/css'],
   ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
+  ['Єдиний copyright послуг', '/services/landing', 200, copyright],
   ['Аналітика конверсій послуг', '/services/landing', 200, '/js/analytics-init.js?v=2'],
   ['Нішева послуга', '/services/psychologist-site', 200, 'Розробка сайту для психолога'],
   ['Сайт фотографа', '/services/photographer-site', 200, 'Сайт для фотографа'],
@@ -27,6 +32,7 @@ const staticChecks = [
   ['Сайт закладу', '/services/cafe-site', 200, 'Сайт для кафе'],
   ['QR-меню', '/services/qr-menu', 200, 'QR-меню для кафе і ресторану'],
   ['SEO-стаття для психологів', '/blog/sait-dlya-psyhologa', 200, 'Де психологу шукати клієнтів'],
+  ['Єдиний copyright блогу', '/blog/sait-dlya-psyhologa', 200, copyright],
   ['Нова стилістика статей', '/blog/sait-dlya-psyhologa', 200, 'class="blog-post-page"'],
   ['Палітра статей', '/css/blog.css', 200, 'body.blog-post-page', 'text/css'],
   ['SEO-стаття про QR-меню', '/blog/online-menu-qr-cafe-5-prychyn', 200, 'Скільки коштує QR-меню'],
