@@ -1315,10 +1315,14 @@ textarea.order-input {
   }
 
   .footer-bottom {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    text-align: center;
   }
+
+  .footer-bottom > span { grid-column: 2; }
+  .footer-bottom > :not(span) { grid-column: 3; justify-self: end; }
 
   .footer-socials {
     justify-content: flex-end;
