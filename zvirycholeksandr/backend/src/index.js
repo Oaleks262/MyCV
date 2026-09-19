@@ -389,13 +389,17 @@ function renderPortfolioCase(item) {
   const kind = isDemo ? 'Демо' : 'Проєкт';
   const portfolioVisual = resolvePortfolioVisual(item);
   const image = portfolioVisual.startsWith('http') ? portfolioVisual : DOMAIN + portfolioVisual;
+  const rawDescription = String(item.description || '').trim();
+  const metaDescription = rawDescription.length >= 70
+    ? rawDescription.slice(0, 180)
+    : `${rawDescription} Адаптивний дизайн, мобільна версія та зрозумілий сценарій для відвідувача.`.slice(0, 180);
   const schema = safeJsonLd({
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'CreativeWork',
         name: item.title,
-        description: item.description,
+        description: metaDescription,
         url: canonical,
         image,
         creator: { '@type': 'Person', '@id': `${DOMAIN}/#person`, name: 'Олександр Звірич' },
@@ -413,7 +417,7 @@ function renderPortfolioCase(item) {
   });
   const replacements = {
     '{{TITLE}}': escAttr(`${item.title} — ${type}`),
-    '{{DESCRIPTION}}': escAttr(String(item.description || '').slice(0, 180)),
+    '{{DESCRIPTION}}': escAttr(metaDescription),
     '{{DESCRIPTION_TEXT}}': escAttr(item.description),
     '{{CANONICAL}}': canonical,
     '{{IMAGE}}': escAttr(image),
@@ -621,6 +625,7 @@ app.get('/blog/:slug', (req, res) => {
 
     let html = fs.readFileSync(BLOG_POST_TEMPLATE, 'utf-8');
     const title  = escAttr(post.title);
+    const seoTitle = title;
     const desc   = escAttr(post.excerpt || '');
     const image  = post.coverUrl ? (post.coverUrl.startsWith('http') ? post.coverUrl : DOMAIN + post.coverUrl) : DOMAIN + '/og-image-2026.jpg';
     const url    = `${DOMAIN}/blog/${escAttr(post.slug)}`;
@@ -684,7 +689,7 @@ app.get('/blog/:slug', (req, res) => {
     const renderedDate = publishedDate ? new Date(publishedDate).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
     html = html
-      .replace(/<title>[^<]*<\/title>/, `<title>${title} — zvirycholeksandr</title>`)
+      .replace(/<title>[^<]*<\/title>/, `<title>${seoTitle}</title>`)
       .replace(/(<meta name="description" content=")[^"]*(")/,        `$1${desc}$2`)
       .replace(/(<meta property="og:title" content=")[^"]*(")/,       `$1${title}$2`)
       .replace(/(<meta property="og:description" content=")[^"]*(")/,  `$1${desc}$2`)

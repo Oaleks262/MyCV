@@ -5,6 +5,7 @@ const fs = require('fs');
 const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 const { convertToWebP } = require('../services/imageProcessor');
+const { notifyInBackground } = require('../services/indexNow');
 
 const blog = new JsonDB('blog.json');
 
@@ -92,6 +93,7 @@ router.post('/', auth, handleUpload, (req, res) => {
 // PATCH /api/blog/:id
 router.patch('/:id', auth, handleUpload, (req, res) => {
   try {
+    const previous = blog.findById(req.params.id);
     const updates = req.body.data ? JSON.parse(req.body.data) : req.body;
     if (req.file) updates.coverUrl = `/uploads/blog/${req.file.filename}`;
     // Якщо публікуємо вперше — ставимо publishedAt
@@ -100,6 +102,10 @@ router.patch('/:id', auth, handleUpload, (req, res) => {
     }
     const updated = blog.update(req.params.id, updates);
     if (!updated) return res.status(404).json({ error: 'Not found' });
+    const changedUrls = ['/blog'];
+    if (previous?.slug) changedUrls.push(`/blog/${encodeURIComponent(previous.slug)}`);
+    if (updated.slug) changedUrls.push(`/blog/${encodeURIComponent(updated.slug)}`);
+    notifyInBackground(changedUrls);
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -108,7 +114,9 @@ router.patch('/:id', auth, handleUpload, (req, res) => {
 
 // DELETE /api/blog/:id
 router.delete('/:id', auth, (req, res) => {
+  const post = blog.findById(req.params.id);
   blog.delete(req.params.id);
+  if (post?.slug) notifyInBackground(['/blog', `/blog/${encodeURIComponent(post.slug)}`]);
   res.json({ success: true });
 });
 

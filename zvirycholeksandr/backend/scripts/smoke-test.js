@@ -23,6 +23,7 @@ const staticChecks = [
   ['Sitemap готових сайтів', '/sitemap.xml', 200, '/ready-sites'],
   ['AI robots', '/robots.txt', 200, 'User-agent: OAI-SearchBot'],
   ['LLM index', '/llms.txt', 200, 'Олександр Звірич — створення сайтів'],
+  ['IndexNow key', '/6d2f840b92c647dba72d16d98f0e5c31.txt', 200, '6d2f840b92c647dba72d16d98f0e5c31', 'text/plain'],
   ['Favicon PNG', '/favicon-96x96.png', 200],
   ['Favicon ICO', '/favicon.ico', 200],
   ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],

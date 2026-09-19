@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 const JsonDB = require('../db');
 const { convertToWebP } = require('../services/imageProcessor');
 const { withPortfolioVisual } = require('../content/portfolioVisuals');
+const { notifyInBackground } = require('../services/indexNow');
 
 const portfolio = new JsonDB('portfolio.json');
 
@@ -72,6 +73,7 @@ router.post('/', auth, handleUpload, (req, res) => {
     const data = req.body.data ? JSON.parse(req.body.data) : req.body;
     const screenshotUrl = req.file ? `/uploads/portfolio/${req.file.filename}` : '';
     const item = portfolio.insert({ ...data, screenshotUrl, isVisible: true });
+    if (item.slug) notifyInBackground(['/portfolio', `/portfolio/${encodeURIComponent(item.slug)}`]);
     res.json(item);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -81,10 +83,15 @@ router.post('/', auth, handleUpload, (req, res) => {
 // PATCH /api/portfolio/:id
 router.patch('/:id', auth, handleUpload, (req, res) => {
   try {
+    const previous = portfolio.findById(req.params.id);
     const updates = req.body.data ? JSON.parse(req.body.data) : req.body;
     if (req.file) updates.screenshotUrl = `/uploads/portfolio/${req.file.filename}`;
     const updated = portfolio.update(req.params.id, updates);
     if (!updated) return res.status(404).json({ error: 'Not found' });
+    const changedUrls = ['/portfolio'];
+    if (previous?.slug) changedUrls.push(`/portfolio/${encodeURIComponent(previous.slug)}`);
+    if (updated.slug) changedUrls.push(`/portfolio/${encodeURIComponent(updated.slug)}`);
+    notifyInBackground(changedUrls);
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -93,7 +100,9 @@ router.patch('/:id', auth, handleUpload, (req, res) => {
 
 // DELETE /api/portfolio/:id
 router.delete('/:id', auth, (req, res) => {
+  const item = portfolio.findById(req.params.id);
   portfolio.delete(req.params.id);
+  if (item?.slug) notifyInBackground(['/portfolio', `/portfolio/${encodeURIComponent(item.slug)}`]);
   res.json({ success: true });
 });
 
