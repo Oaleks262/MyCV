@@ -8,6 +8,8 @@ const copyright = '© 2026 Олександр Звірич. Всі права з
 
 const staticChecks = [
   ['Головна', '/', 200, 'Розробка сайтів <em>у Львові</em>'],
+  ['Підключення теми головної', '/', 200, '/js/theme.js?v=1'],
+  ['Модуль кольорової теми', '/js/theme.js', 200, "'--signal'", 'application/javascript'],
   ['Єдиний copyright головної', '/', 200, copyright],
   ['Безшовна стрічка ніш', '/', 200, 'niche-ticker-group'],
   ['Аналітика конверсій головної', '/', 200, '/js/analytics-init.js?v=2'],
@@ -24,6 +26,7 @@ const staticChecks = [
   ['Стабільні мобільні картки', '/css/home-2026.css', 200, 'flex: 0 0 100%', 'text/css'],
   ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
+  ['Підключення теми послуг', '/services/landing', 200, '/js/theme.js?v=1'],
   ['Єдиний copyright послуг', '/services/landing', 200, copyright],
   ['Аналітика конверсій послуг', '/services/landing', 200, '/js/analytics-init.js?v=2'],
   ['Нішева послуга', '/services/psychologist-site', 200, 'Розробка сайту для психолога'],

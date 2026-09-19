@@ -6,6 +6,7 @@
   --graphite: #565653;
   --ash: #6f6d68;
   --signal: #d7ff3a;
+  --surface: var(--paper);
   --line: rgba(11, 11, 12, 0.72);
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --display: "Space Grotesk", Arial, sans-serif;
@@ -73,7 +74,7 @@
   z-index: 1000;
   height: 86px;
   padding: 0 clamp(20px, 3.4vw, 52px);
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--line);
   background: var(--paper);
   backdrop-filter: none;
 }
@@ -407,7 +408,7 @@
 .home-rebrand .service-card > button:hover { background: var(--ink); color: var(--signal); }
 
 .work-section { background: var(--paper-soft); }
-.home-rebrand .cards-grid.rebrand-cards { grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--ink); background: var(--ink); }
+.home-rebrand .cards-grid.rebrand-cards { grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
 .home-rebrand .rebrand-cards .card {
   display: flex;
   flex-direction: column;
@@ -415,7 +416,7 @@
   overflow: hidden;
   border: 0;
   border-radius: 0;
-  background: var(--paper);
+  background: var(--surface);
   box-shadow: none;
   color: var(--ink);
 }
@@ -520,8 +521,8 @@
 .about-principles strong { font-size: 14px; font-weight: 500; }
 
 .home-rebrand .reviews-section { background: var(--paper); }
-.home-rebrand .reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border: 1px solid var(--ink); background: var(--ink); }
-.home-rebrand .review-card { min-height: 330px; padding: clamp(28px, 4vw, 58px); border: 0; border-radius: 0; background: var(--paper); }
+.home-rebrand .reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+.home-rebrand .review-card { min-height: 330px; padding: clamp(28px, 4vw, 58px); border: 0; border-radius: 0; background: var(--surface); }
 .home-rebrand .review-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .home-rebrand .review-card:hover { transform: none; border-color: transparent; }
 .home-rebrand .review-stars { color: var(--ink); font-size: 15px; letter-spacing: .15em; }
@@ -531,8 +532,8 @@
 .home-rebrand .review-project { color: var(--graphite); font-size: 12px; }
 
 .home-rebrand .faq-section { background: var(--paper-soft); }
-.home-rebrand .faq-list { max-width: none; border-top: 1px solid var(--ink); }
-.home-rebrand .faq-item { border-bottom: 1px solid var(--ink); }
+.home-rebrand .faq-list { max-width: none; border-top: 1px solid var(--line); }
+.home-rebrand .faq-item { border-bottom: 1px solid var(--line); }
 .home-rebrand .faq-question { width: 100%; min-height: 84px; gap: 24px; padding: 20px 18px; color: var(--ink); font-family: var(--display); font-size: clamp(21px, 2.4vw, 34px); font-weight: 500; letter-spacing: -.035em; text-align: left; transition: color .35s ease, background-color .45s ease; }
 .home-rebrand .faq-question:hover { color: var(--ink); background: rgba(255, 255, 255, .22); }
 .home-rebrand .faq-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border: 1px solid var(--ink); border-radius: 0; font-family: var(--mono); font-size: 20px; transition: transform .6s cubic-bezier(.22, 1, .36, 1), background-color .4s ease, color .4s ease; }
@@ -578,7 +579,7 @@
 .contact-grid > p { max-width: 650px; margin: 0; color: #b8b7b1; font-size: clamp(17px, 1.7vw, 24px); line-height: 1.55; }
 .contact-actions { display: grid; gap: 12px; }
 .home-rebrand .btn-signal { background: var(--signal); color: var(--ink); min-height: 68px; }
-.home-rebrand .btn-signal:hover { background: var(--paper); transform: translateY(-2px); }
+.home-rebrand .btn-signal:hover { background: var(--signal-hover, var(--paper)); transform: translateY(-2px); }
 .contact-actions > a { display: flex; align-items: center; min-height: 54px; padding: 0 20px; border: 1px solid #555; color: var(--paper); font-family: var(--mono); font-size: 11px; text-transform: uppercase; }
 .contact-actions > a:hover { color: var(--signal); }
 

@@ -213,28 +213,7 @@ async function applySettings() {
     if (!res.ok) return;
     const s = await res.json();
 
-    // Кольори → CSS-змінні
-    if (s.colors) {
-      const root = document.documentElement;
-      const map = {
-        accent:      '--color-accent',
-        accentHover: '--color-accent-hover',
-        bg:          '--color-bg',
-        bg2:         '--color-bg-2',
-        bg3:         '--color-bg-3',
-        text:        '--color-text',
-        textMuted:   '--color-text-muted',
-        border:      '--color-border'
-      };
-      Object.entries(map).forEach(([key, cssVar]) => {
-        if (s.colors[key]) root.style.setProperty(cssVar, s.colors[key]);
-      });
-      // accentLight перераховуємо з accent
-      if (s.colors.accent) {
-        const hex = s.colors.accent;
-        root.style.setProperty('--color-accent-light', hex + '1a');
-      }
-    }
+    if (s.colors && window.SiteTheme) window.SiteTheme.apply(s.colors);
 
     // Про мене
     if (s.about) {

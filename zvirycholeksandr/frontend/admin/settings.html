@@ -225,6 +225,8 @@
 
         <div class="color-preview" id="color-preview"></div>
 
+        <p style="margin:0 0 1rem;color:var(--admin-muted);font-size:.82rem;line-height:1.5">Кольори застосовуються до публічних сторінок після збереження та оновлення сайту.</p>
+
         <div id="colors-list">
           <!-- Генерується JS -->
         </div>
@@ -261,6 +263,17 @@
 <script src="/js/admin.js"></script>
 <script>
 const COLOR_DEFAULTS = {
+  accent:      '#d7ff3a',
+  accentHover: '#f2efe8',
+  bg:          '#f2efe8',
+  bg2:         '#e8e4db',
+  bg3:         '#f2efe8',
+  text:        '#0b0b0c',
+  textMuted:   '#565653',
+  border:      '#0b0b0c'
+};
+
+const LEGACY_COLOR_DEFAULTS = {
   accent:      '#6c63ff',
   accentHover: '#5a52e0',
   bg:          '#0a0a0a',
@@ -374,7 +387,12 @@ async function loadSettings() {
     }
 
     // Fill colors
-    if (s.colors) currentColors = { ...COLOR_DEFAULTS, ...s.colors };
+    if (s.colors) {
+      currentColors = Object.fromEntries(Object.keys(COLOR_DEFAULTS).map(key => {
+        const value = String(s.colors[key] || '').toLowerCase();
+        return [key, value === LEGACY_COLOR_DEFAULTS[key] ? COLOR_DEFAULTS[key] : (value || COLOR_DEFAULTS[key])];
+      }));
+    }
     buildColorRows(currentColors);
   } catch {
     showToast('Помилка завантаження налаштувань', 'error');
