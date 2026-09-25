@@ -50,7 +50,7 @@
     "description": "Демо онлайн-меню для кафе з категоріями: кава, чай, сніданки, десерти. Адаптивне, темне/світле оформлення.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/menu-cafe",
+    "liveUrl": "https://cafe.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 10,
     "createdAt": "2026-04-03T10:00:00.000Z"
@@ -64,7 +64,7 @@
     "description": "Демо меню для пабу в темному стилі: пиво, коктейлі, закуски, акції.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/menu-pub",
+    "liveUrl": "https://pub.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 11,
     "createdAt": "2026-04-03T10:01:00.000Z"
@@ -78,7 +78,7 @@
     "description": "Демо лендінгу для масажиста: послуги та ціни, про майстра, запис на прийом.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/landing-massage",
+    "liveUrl": "https://massage.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 12,
     "createdAt": "2026-04-03T10:02:00.000Z"
@@ -92,7 +92,7 @@
     "description": "Демо лендінгу для психолога: напрямки роботи, як проходить сесія, відгуки клієнтів.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/landing-psycho",
+    "liveUrl": "https://psycho.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 13,
     "createdAt": "2026-04-03T10:03:00.000Z"
@@ -106,7 +106,7 @@
     "description": "Демо сайту-візитки для фотографа: портфоліо, послуги та ціни, контакти.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/card-photo",
+    "liveUrl": "https://photo.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 14,
     "createdAt": "2026-04-03T10:04:00.000Z"
@@ -120,7 +120,7 @@
     "description": "Демо сайту-візитки для нутриціолога: програми харчування, результати клієнтів, відгуки.",
     "technologies": ["HTML", "CSS", "JS"],
     "screenshotUrl": "",
-    "liveUrl": "/demos/card-nutri",
+    "liveUrl": "https://nutrition.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 15,
     "createdAt": "2026-04-03T10:05:00.000Z"

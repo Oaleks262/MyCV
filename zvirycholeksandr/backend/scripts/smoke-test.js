@@ -70,6 +70,15 @@ const staticChecks = [
   ['Деталь пабу', '/assets/demos/pub-detail.webp', 200, null, 'image/webp'],
 ];
 
+const demoHostChecks = [
+  ['Психолог', 'psycho.zvirycholeksandr.com.ua', 'Марія Дорош'],
+  ['Фотограф', 'photo.zvirycholeksandr.com.ua', 'Максим Коваль'],
+  ['Масаж', 'massage.zvirycholeksandr.com.ua', 'Масажний кабінет'],
+  ['Нутриціолог', 'nutrition.zvirycholeksandr.com.ua', 'Аліна Дорош'],
+  ['Кафе', 'cafe.zvirycholeksandr.com.ua', 'Горобина'],
+  ['Паб', 'pub.zvirycholeksandr.com.ua', 'Берлога'],
+];
+
 async function check(name, pathname, expectedStatus, expectedText, expectedContentType) {
   try {
     const response = await qaFetch(baseUrl + pathname);
@@ -89,6 +98,21 @@ async function check(name, pathname, expectedStatus, expectedText, expectedConte
 async function run() {
   let failed = 0;
   for (const args of staticChecks) failed += await check(...args);
+
+  if (['127.0.0.1', 'localhost', '::1'].includes(new URL(baseUrl).hostname)) {
+    for (const [label, host, marker] of demoHostChecks) {
+      try {
+        const response = await qaFetch(baseUrl + '/', { headers: { 'x-forwarded-host': host } });
+        const html = await response.text();
+        const ok = response.status === 200 && html.includes(marker) && html.includes('noindex, nofollow');
+        console.log(`${ok ? '✓' : '✗'} Окремий демо-сайт · ${label}: HTTP ${response.status}`);
+        if (!ok) failed += 1;
+      } catch (error) {
+        console.log(`✗ Окремий демо-сайт · ${label}: ${error.message}`);
+        failed += 1;
+      }
+    }
+  }
 
   try {
     const portfolioResponse = await qaFetch(baseUrl + '/api/portfolio');

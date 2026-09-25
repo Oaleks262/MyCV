@@ -18,6 +18,15 @@ if (!process.env.JWT_SECRET) {
 const app = express();
 const PORT = process.env.PORT || 1995;
 
+const DEMO_SUBDOMAIN_PAGES = Object.freeze({
+  'psycho.zvirycholeksandr.com.ua': 'landing-psycho.html',
+  'photo.zvirycholeksandr.com.ua': 'card-photo.html',
+  'massage.zvirycholeksandr.com.ua': 'landing-massage.html',
+  'nutrition.zvirycholeksandr.com.ua': 'card-nutri.html',
+  'cafe.zvirycholeksandr.com.ua': 'menu-cafe.html',
+  'pub.zvirycholeksandr.com.ua': 'menu-pub.html',
+});
+
 // Сервер за nginx proxy — довіряємо одному рівню проксі для коректного IP в rate-limit
 app.set('trust proxy', 1);
 app.use(requestContext);
@@ -148,6 +157,17 @@ app.use('/api/admin', require('./routes/admin'));
 
 const { analyticsMiddleware } = require('./services/analytics');
 app.use(analyticsMiddleware);
+
+// Each portfolio concept is also available as a standalone, working website.
+// The HTML itself remains noindex and visibly marked as a demo, so fictional
+// businesses, contacts and sample reviews cannot be mistaken for real clients.
+app.get('/', (req, res, next) => {
+  const demoPage = DEMO_SUBDOMAIN_PAGES[String(req.hostname || '').toLowerCase()];
+  if (!demoPage) return next();
+  res.setHeader('Cache-Control', 'no-cache');
+  return res.sendFile(path.join(__dirname, '../../frontend/demos', demoPage));
+});
+
 app.get('/sitemap.xml', (req, res) => {
   const blog = new JsonDB('blog.json');
   const portfolio = new JsonDB('portfolio.json');
