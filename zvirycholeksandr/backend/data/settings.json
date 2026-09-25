@@ -8,14 +8,14 @@
     "phone": ""
   },
   "colors": {
-    "accent": "#6c63ff",
-    "accentHover": "#5a52e0",
-    "bg": "#07070f",
-    "bg2": "#0d0d1a",
-    "bg3": "#12121f",
-    "text": "#f0f0f0",
-    "textMuted": "#888888",
-    "border": "#1e1e30"
+    "accent": "#d7ff3a",
+    "accentHover": "#f2efe8",
+    "bg": "#f2efe8",
+    "bg2": "#e8e4db",
+    "bg3": "#f2efe8",
+    "text": "#0b0b0c",
+    "textMuted": "#565653",
+    "border": "#0b0b0c"
   },
   "about": {
     "name": "Олександр Звірич",
