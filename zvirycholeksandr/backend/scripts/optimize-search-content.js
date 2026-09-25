@@ -796,6 +796,49 @@ const filepath = path.join(dataDir, 'blog.json');
 const records = JSON.parse(fs.readFileSync(filepath, 'utf8'));
 if (!Array.isArray(records)) throw new Error('blog.json має містити масив');
 
+// These articles are linked from public service pages. Keep the seed list explicit so
+// a fresh deployment cannot publish navigation that leads visitors to a 404 page.
+const requiredArticles = {
+  'sait-dlya-psyhologa': {
+    id: 'seo-sait-dlya-psyhologa',
+    coverUrl: '/assets/demos/psychologist-hero.webp',
+    publishedAt: '2026-09-04T09:00:00.000Z',
+  },
+  'online-menu-qr-cafe-5-prychyn': {
+    id: 'seo-online-menu-qr-cafe-5-prychyn',
+    coverUrl: '/assets/demos/cafe-hero.webp',
+    publishedAt: '2026-09-08T09:00:00.000Z',
+  },
+  'mobilna-versiya-saitu-chomu-vazhlyva': {
+    id: 'seo-mobilna-versiya-saitu-chomu-vazhlyva',
+    coverUrl: '/assets/demos/photographer-detail.webp',
+    publishedAt: '2026-09-12T09:00:00.000Z',
+  },
+  'google-business-ta-sait-klienty': {
+    id: 'seo-google-business-ta-sait-klienty',
+    coverUrl: '/assets/blog/business-website.webp',
+    publishedAt: '2026-09-16T09:00:00.000Z',
+  },
+};
+
+let seeded = 0;
+for (const [slug, meta] of Object.entries(requiredArticles)) {
+  if (records.some(record => record.slug === slug)) continue;
+  const article = articles[slug];
+  if (!article) throw new Error(`Відсутній контент обов’язкової статті: ${slug}`);
+  records.push({
+    id: meta.id,
+    slug,
+    ...article,
+    coverUrl: meta.coverUrl,
+    isPublished: true,
+    publishedAt: meta.publishedAt,
+    createdAt: meta.publishedAt,
+    updatedAt: meta.publishedAt,
+  });
+  seeded += 1;
+}
+
 let matched = 0;
 let changed = 0;
 for (const record of records) {
@@ -813,10 +856,10 @@ if (!matched) {
   process.exit(1);
 }
 
-if (changed) {
+if (changed || seeded) {
   const temporary = `${filepath}.tmp`;
   fs.writeFileSync(temporary, `${JSON.stringify(records, null, 2)}\n`, { mode: 0o600 });
   fs.chmodSync(temporary, 0o600);
   fs.renameSync(temporary, filepath);
 }
-console.log(`Оновлено SEO-контент для ${changed} статей`);
+console.log(`Оновлено SEO-контент для ${changed} статей; додано ${seeded} обов’язкових статей`);
