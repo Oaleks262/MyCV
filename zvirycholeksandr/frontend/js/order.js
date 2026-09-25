@@ -162,6 +162,12 @@ function openOrderPopup() {
   setTimeout(() => overlay.querySelector('.order-popup-close')?.focus({ preventScroll: true }), 100);
 }
 
+function openOrderPopupForType(type) {
+  openOrderPopup();
+  const card = document.querySelector(`.site-type-card[data-type="${type}"]`);
+  card?.click();
+}
+
 function closeOrderPopup() {
   const overlay = document.getElementById('order-popup');
   overlay?.classList.remove('active');

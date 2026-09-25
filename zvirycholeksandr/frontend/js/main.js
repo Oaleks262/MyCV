@@ -119,7 +119,8 @@ async function loadPortfolioPreview() {
     if (!res.ok) throw new Error('Failed to load');
     const items = await res.json();
 
-    const previewItems = items.slice(0, 3);
+    const concepts = items.filter(item => item.siteType === 'demo');
+    const previewItems = (concepts.length ? concepts : items).slice(0, 3);
     container.innerHTML = previewItems.map((item, index) => `
       <article class="card fade-in" role="button" tabindex="0" data-item-index="${index}" aria-label="Відкрити кейс: ${escapeHTML(item.title)}">
         <div class="card-img-wrap">
@@ -258,6 +259,43 @@ async function applySettings() {
 applySettings();
 loadPortfolioPreview();
 loadBlogPreview();
+
+/* ===== QUICK PRICE ESTIMATOR ===== */
+(function initPriceEstimator() {
+  const form = document.getElementById('price-estimator');
+  const price = document.getElementById('estimate-price');
+  const term = document.getElementById('estimate-term');
+  const orderButton = document.getElementById('estimate-order');
+  if (!form || !price || !term || !orderButton) return;
+
+  const formats = {
+    landing: { base: 10000, max: 12000, term: '5–7 робочих днів' },
+    business_card: { base: 15000, max: 19000, term: '7–14 робочих днів' },
+    menu: { base: 4000, max: 6500, term: '3–5 робочих днів' },
+  };
+  const extras = { content: 2500, language: 3000, admin: 5000 };
+  const money = value => `${new Intl.NumberFormat('uk-UA').format(value)} грн`;
+
+  const calculate = () => {
+    const type = form.elements['estimate-type'].value;
+    const config = formats[type];
+    const selectedExtras = [...form.querySelectorAll('[name="estimate-option"]:checked')];
+    const extraTotal = selectedExtras.reduce((sum, input) => sum + (extras[input.value] || 0), 0);
+    price.value = `${money(config.base + extraTotal).replace(' грн', '')}–${money(config.max + extraTotal)}`;
+    term.textContent = `Орієнтовний строк: ${config.term}`;
+    orderButton.dataset.estimateType = type;
+  };
+
+  form.addEventListener('change', calculate);
+  orderButton.addEventListener('click', () => {
+    const type = orderButton.dataset.estimateType || 'landing';
+    if (typeof openOrderPopupForType === 'function') openOrderPopupForType(type);
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'price_estimate_open_order', { site_type: type, estimate: price.value });
+    }
+  });
+  calculate();
+})();
 
 document.querySelectorAll('[data-concept-id]').forEach(link => {
   link.addEventListener('click', () => {

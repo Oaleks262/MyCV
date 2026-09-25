@@ -407,6 +407,68 @@
 .home-rebrand .service-card > button { display: grid; place-items: center; width: 54px; height: 54px; border: 1px solid var(--ink); color: var(--ink); font-size: 24px; }
 .home-rebrand .service-card > button:hover { background: var(--ink); color: var(--signal); }
 
+.estimate-section { background: var(--paper); }
+.estimate-layout {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 1px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+}
+.estimate-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--paper);
+}
+.estimate-form fieldset { min-width: 0; margin: 0; padding: 28px; border: 0; }
+.estimate-form fieldset + fieldset { border-left: 1px solid var(--ink); }
+.estimate-form legend,
+.estimate-result > span {
+  margin-bottom: 18px;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.estimate-form label {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 17px 0;
+  border-top: 1px solid rgba(11, 11, 12, .28);
+  cursor: pointer;
+}
+.estimate-form input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ink); }
+.estimate-form label:has(input:checked) { background: linear-gradient(90deg, var(--signal) 0 5px, transparent 5px); padding-left: 14px; }
+.estimate-form label span { display: grid; gap: 4px; }
+.estimate-form label strong { font-family: var(--display); font-size: 17px; font-weight: 600; }
+.estimate-form label small { color: var(--graphite); font-size: 12px; }
+.estimate-result {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(30px, 4vw, 58px);
+  background: var(--ink);
+  color: var(--paper);
+}
+.estimate-result > span { color: #aaa9a3; }
+.estimate-result output { display: block; margin: 12px 0 18px; font-family: var(--display); font-size: clamp(38px, 4.2vw, 66px); font-weight: 500; letter-spacing: -.055em; line-height: .95; }
+.estimate-result p { margin: 0 0 28px; color: #c5c4be; font-size: 14px; }
+.estimate-result .btn-signal { width: 100%; margin-bottom: 14px; }
+.estimate-result > small { color: #8f8e89; font-size: 10px; line-height: 1.5; }
+.guarantee-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 1px; border: 1px solid var(--ink); }
+.guarantee-grid article { min-height: 210px; padding: 26px; }
+.guarantee-grid article + article { border-left: 1px solid var(--ink); }
+.guarantee-grid span { color: var(--graphite); font-family: var(--mono); font-size: 10px; }
+.guarantee-grid h3 { margin: 54px 0 12px; font-size: 23px; font-weight: 500; letter-spacing: -.035em; }
+.guarantee-grid p { margin: 0; color: var(--graphite); font-size: 13px; line-height: 1.55; }
+
+.mobile-project-cta { display: none; }
+
 .work-section { background: var(--paper-soft); }
 .home-rebrand .cards-grid.rebrand-cards { grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
 .home-rebrand .rebrand-cards .card {
@@ -769,6 +831,11 @@
   .home-rebrand .service-card ul { grid-column: 2 / 3; }
   .service-price { grid-column: 2 / 3; }
   .home-rebrand .service-card > button { grid-column: 3; grid-row: 1; }
+  .estimate-layout { grid-template-columns: 1fr; }
+  .estimate-result { min-height: 330px; }
+  .guarantee-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .guarantee-grid article:nth-child(3) { border-top: 1px solid var(--ink); border-left: 0; }
+  .guarantee-grid article:nth-child(4) { border-top: 1px solid var(--ink); }
   .home-rebrand .cards-grid.rebrand-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .concept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .concept-cta { align-items: flex-start; flex-direction: column; }
@@ -901,6 +968,40 @@
   .service-price { font-size: 19px; }
   .home-rebrand .service-card > button { grid-column: 2; grid-row: 1; width: 46px; height: 46px; }
   .home-rebrand .service-card:hover { padding-left: 10px; padding-right: 10px; }
+
+  .estimate-form { grid-template-columns: 1fr; }
+  .estimate-form fieldset { padding: 22px 18px; }
+  .estimate-form fieldset + fieldset { border-top: 1px solid var(--ink); border-left: 0; }
+  .estimate-result { min-height: 300px; padding: 28px 20px; }
+  .estimate-result output { font-size: 42px; }
+  .guarantee-grid { grid-template-columns: 1fr; }
+  .guarantee-grid article { min-height: 170px; padding: 22px 20px; }
+  .guarantee-grid article + article { border-top: 1px solid var(--ink); border-left: 0; }
+  .guarantee-grid h3 { margin-top: 34px; }
+
+  .home-rebrand { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .mobile-project-cta {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    z-index: 980;
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 9px 9px 16px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .18);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .mobile-project-cta button { min-height: 40px; padding: 0 14px; border: 1px solid var(--ink); background: var(--signal); color: var(--ink); font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .home-rebrand:has(#order-popup.active) .mobile-project-cta { display: none; }
 
   .home-rebrand .work-section .cards-grid.rebrand-cards,
   .home-rebrand .journal-section .cards-grid.rebrand-cards {
