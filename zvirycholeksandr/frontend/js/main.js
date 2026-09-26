@@ -289,6 +289,7 @@ loadBlogPreview();
   form.addEventListener('change', calculate);
   orderButton.addEventListener('click', () => {
     const type = orderButton.dataset.estimateType || 'landing';
+    window.trackConversionIntent?.('price_estimate');
     if (typeof openOrderPopupForType === 'function') openOrderPopupForType(type);
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'price_estimate_open_order', { site_type: type, estimate: price.value });

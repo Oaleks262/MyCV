@@ -14,6 +14,18 @@
   if (window.__zvContactTracking) return;
   window.__zvContactTracking = true;
 
+  window.trackConversionIntent = function trackConversionIntent(type) {
+    if (!['order_open', 'demo_view', 'price_estimate'].includes(type)) return;
+    const pagePath = window.location.pathname;
+    window.gtag('event', type, { page_path: pagePath });
+    fetch('/api/analytics/event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'conversion_intent', type, page: pagePath }),
+      keepalive: true,
+    }).catch(() => {});
+  };
+
   function contactMethod(link) {
     const explicit = link.dataset.contact;
     if (['telegram', 'phone', 'email'].includes(explicit)) return explicit;
@@ -41,6 +53,12 @@
       body: JSON.stringify({ event: 'contact_click', method, page: pagePath }),
       keepalive: true,
     }).catch(() => {});
+  });
+
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-concept-id], .ready-product-image')) {
+      window.trackConversionIntent('demo_view');
+    }
   });
 
   if (document.body?.dataset.pageType === '404') {

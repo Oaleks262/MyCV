@@ -51,7 +51,7 @@ async function run() {
     body: JSON.stringify({ siteType: 'landing', formData: { name: 'QA' } }),
   });
   const invalidBody = await json(invalid);
-  assert(invalid.status === 400 && invalidBody.code === 'VALIDATION_ERROR' && invalidBody.fields.includes('email'), 'validation contract не пройдено');
+  assert(invalid.status === 400 && invalidBody.code === 'VALIDATION_ERROR' && invalidBody.fields.includes('profession'), 'validation contract не пройдено');
   console.log('✓ Structured validation error');
 
   const suffix = Date.now();

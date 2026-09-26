@@ -48,6 +48,9 @@ function ensureDay(data, date) {
   day.contactClicks ||= 0;
   day.contactMethods ||= {};
   day.contactPages ||= {};
+  day.intentEvents ||= 0;
+  day.intentTypes ||= {};
+  day.intentPages ||= {};
   day.leads ||= 0;
   day.leadSources ||= {};
   day.leadPages ||= {};
@@ -210,6 +213,19 @@ function trackContact(meta = {}) {
   } catch { /* контактна подія не повинна ламати сайт */ }
 }
 
+function trackIntent(meta = {}) {
+  const type = ['order_open', 'demo_view', 'price_estimate'].includes(meta.type) ? meta.type : 'other';
+  const page = safeKey(String(meta.page || '/').split('?')[0], '/');
+  try {
+    const data = load();
+    const day = ensureDay(data, new Date().toISOString().split('T')[0]);
+    day.intentEvents += 1;
+    increment(day.intentTypes, type);
+    increment(day.intentPages, page);
+    save(data);
+  } catch { /* подія наміру не повинна ламати сайт */ }
+}
+
 function addEntries(target, source) {
   for (const [key, value] of Object.entries(source || {})) target[key] = (target[key] || 0) + value;
 }
@@ -226,6 +242,7 @@ function getStats(days = 30) {
     leads: 0, leadSources: {}, leadPages: {}, conversionRate: 0,
     bots: {}, botTotal: 0, notFound: {}, notFoundTotal: 0,
     contactClicks: 0, contactMethods: {}, contactPages: {}, legacyTotal: 0,
+    intentEvents: 0, intentTypes: {}, intentPages: {},
   };
   const cutoff = new Date();
   cutoff.setHours(0, 0, 0, 0);
@@ -240,6 +257,7 @@ function getStats(days = 30) {
     result.sessions += day.sessions || 0;
     result.leads += day.leads || 0;
     result.contactClicks += day.contactClicks || 0;
+    result.intentEvents += day.intentEvents || 0;
     result.legacyTotal += day.total || 0;
     addEntries(result.pages, day.humanPages);
     addEntries(result.referrers, day.humanReferrers);
@@ -247,6 +265,8 @@ function getStats(days = 30) {
     addEntries(result.leadPages, day.leadPages);
     addEntries(result.contactMethods, day.contactMethods);
     addEntries(result.contactPages, day.contactPages);
+    addEntries(result.intentTypes, day.intentTypes);
+    addEntries(result.intentPages, day.intentPages);
     addEntries(result.bots, day.bots);
     addEntries(result.notFound, day.notFound);
   }
@@ -257,6 +277,8 @@ function getStats(days = 30) {
   result.leadPages = sortedObject(result.leadPages, 100);
   result.contactMethods = sortedObject(result.contactMethods, 20);
   result.contactPages = sortedObject(result.contactPages, 100);
+  result.intentTypes = sortedObject(result.intentTypes, 20);
+  result.intentPages = sortedObject(result.intentPages, 100);
   result.bots = sortedObject(result.bots, 100);
   result.notFound = sortedObject(result.notFound, 100);
   result.botTotal = Object.values(result.bots).reduce((sum, value) => sum + value, 0);
@@ -265,4 +287,4 @@ function getStats(days = 30) {
   return result;
 }
 
-module.exports = { analyticsMiddleware, getStats, trackLead, trackContact };
+module.exports = { analyticsMiddleware, getStats, trackLead, trackContact, trackIntent };

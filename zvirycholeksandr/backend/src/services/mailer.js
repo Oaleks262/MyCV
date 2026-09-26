@@ -27,6 +27,7 @@ const transporter = ENABLED
   : null;
 
 const typeLabels = {
+  audit:        'Експрес-аудит сайту',
   landing:      'Лендінг',
   business_card:'Сайт-візитка',
   menu:         'Онлайн-меню',

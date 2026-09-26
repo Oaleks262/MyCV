@@ -104,6 +104,18 @@ function buildSlug(name = '') {
 }
 
 async function generatePrompt(siteType, formData) {
+  if (siteType === 'audit') {
+    return [
+      'ЕКСПРЕС-АУДИТ САЙТУ',
+      `Сайт: ${formData.referenceUrl || 'не вказано'}`,
+      `Запит клієнта: ${formData.about || 'загальна перевірка'}`,
+      '',
+      'Перевірити: мобільну версію, швидкість, зрозумілість пропозиції, шлях до заявки,',
+      'довіру, базове SEO та технічні помилки. Підготувати короткий відеорозбір і',
+      'пріоритетний список: що виправити зараз, що можна відкласти, орієнтовна оцінка робіт.'
+    ].join('\n');
+  }
+
   const slug = buildSlug(formData.name || formData.cafeName);
   const structure = SITE_STRUCTURES[siteType] || SITE_STRUCTURES.landing;
 

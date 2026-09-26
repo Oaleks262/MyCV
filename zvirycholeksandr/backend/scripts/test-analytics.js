@@ -7,7 +7,7 @@ const { EventEmitter } = require('events');
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'zv-analytics-'));
 process.env.DATA_DIR = tempDir;
 
-const { analyticsMiddleware, getStats, trackContact } = require('../src/services/analytics');
+const { analyticsMiddleware, getStats, trackContact, trackIntent } = require('../src/services/analytics');
 const browserUa = 'Mozilla/5.0 AppleWebKit/537.36 Chrome/130 Safari/537.36';
 
 class MockResponse extends EventEmitter {
@@ -40,6 +40,7 @@ try {
   request('/', { query: { utm_source: 'qa', utm_medium: 'browser' } });
   request('/missing-page', { cookie, status: 404 });
   trackContact({ method: 'telegram', page: '/services/psychologist-site' });
+  trackIntent({ type: 'order_open', page: '/services/psychologist-site' });
 
   const stats = getStats(7);
   assert.equal(stats.total, 2, 'рахуються лише успішні людські HTML-перегляди');
@@ -49,6 +50,7 @@ try {
   assert.equal(stats.botTotal, 1, 'Googlebot відокремлений від людей');
   assert.equal(stats.notFound['/missing-page'], 1, '404 зберігає конкретний URL');
   assert.equal(stats.contactMethods.telegram, 1, 'контактний клік враховано');
+  assert.equal(stats.intentTypes.order_open, 1, 'дію до заявки враховано');
   console.log('✓ Analytics v2 tests passed');
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });

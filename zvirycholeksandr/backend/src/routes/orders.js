@@ -9,15 +9,17 @@ const { trackLead } = require('../services/analytics');
 const orders = new JsonDB('orders.json');
 
 const TYPE_FIELDS = {
+  audit: ['name', 'phone', 'email', 'referenceUrl', 'about'],
   landing: ['name', 'profession', 'city', 'phone', 'email', 'services', 'about', 'colorStyle', 'designStyle', 'referenceUrl'],
   business_card: ['name', 'profession', 'phone', 'email', 'about', 'skills', 'referenceUrl'],
   menu: ['cafeName', 'name', 'phone', 'email', 'address', 'about', 'colorStyle'],
 };
 
 const REQUIRED_FIELDS = {
-  landing: ['name', 'profession', 'phone', 'email'],
-  business_card: ['name', 'profession', 'phone', 'email'],
-  menu: ['cafeName', 'name', 'phone', 'email'],
+  audit: ['name', 'referenceUrl'],
+  landing: ['name', 'profession'],
+  business_card: ['name', 'profession'],
+  menu: ['cafeName', 'name'],
 };
 
 const LONG_FIELDS = new Set(['services', 'about']);
@@ -89,7 +91,7 @@ router.post('/submit', async (req, res) => {
   const body = req.body || {};
   const { siteType } = body;
 
-  const validTypes = ['landing', 'business_card', 'menu'];
+  const validTypes = ['audit', 'landing', 'business_card', 'menu'];
   if (!validTypes.includes(siteType)) {
     return fail(res, 400, 'INVALID_SITE_TYPE', 'Невірний тип сайту', ['siteType']);
   }
@@ -105,11 +107,14 @@ router.post('/submit', async (req, res) => {
     const fields = REQUIRED_FIELDS[siteType].filter(field => !formData[field]);
     return fail(res, 400, 'VALIDATION_ERROR', 'Заповніть обовʼязкові поля', fields);
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email)) {
+  if (!formData.phone && !formData.email) {
+    return fail(res, 400, 'CONTACT_REQUIRED', 'Вкажіть телефон або email', ['phone', 'email']);
+  }
+  if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email)) {
     return fail(res, 400, 'INVALID_EMAIL', 'Невірний формат email', ['email']);
   }
   const phoneDigits = formData.phone.replace(/\D/g, '');
-  if (phoneDigits.length < 10 || phoneDigits.length > 13) {
+  if (formData.phone && (phoneDigits.length < 10 || phoneDigits.length > 13)) {
     return fail(res, 400, 'INVALID_PHONE', 'Невірний формат телефону', ['phone']);
   }
 

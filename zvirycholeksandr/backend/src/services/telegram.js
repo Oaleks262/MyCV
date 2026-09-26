@@ -45,6 +45,7 @@ async function notifyTelegram(order, prompt) {
   if (!BOT_TOKEN || !CHAT_ID) return { sent: false, reason: 'telegram_not_configured' };
   const f = order.formData;
   const typeMap = {
+    audit: '🔎 Експрес-аудит',
     landing: '🎯 Лендінг',
     business_card: '🪪 Візитка',
     menu: '🍽️ Меню'

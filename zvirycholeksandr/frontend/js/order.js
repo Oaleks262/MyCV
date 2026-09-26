@@ -1,6 +1,17 @@
 /* ===== ORDER POPUP — підключається до всіх сторінок ===== */
 
 const SITE_TYPES = {
+  audit: {
+    label: '🔎 Експрес-аудит сайту',
+    desc: 'Відеорозбір і пріоритетний план покращень',
+    fields: [
+      { name: 'name', label: "Ваше ім'я *", type: 'text', required: true },
+      { name: 'referenceUrl', label: 'Адреса сайту *', type: 'url', required: true },
+      { name: 'phone', label: 'Телефон або Telegram', type: 'tel' },
+      { name: 'email', label: 'Email', type: 'email' },
+      { name: 'about', label: 'Що зараз найбільше не влаштовує', type: 'textarea' }
+    ]
+  },
   landing: {
     label: '🎯 Лендінг',
     desc: 'Продаючий сайт для місцевого спеціаліста',
@@ -8,8 +19,8 @@ const SITE_TYPES = {
       { name: 'name', label: "Ваше ім'я *", type: 'text', required: true },
       { name: 'profession', label: 'Ваша професія *', type: 'text', required: true },
       { name: 'city', label: 'Місто', type: 'text' },
-      { name: 'phone', label: 'Телефон *', type: 'tel', required: true },
-      { name: 'email', label: 'Email *', type: 'email', required: true },
+      { name: 'phone', label: 'Телефон або Telegram', type: 'tel' },
+      { name: 'email', label: 'Email', type: 'email' },
       { name: 'services', label: 'Ваші послуги та ціни', type: 'textarea' },
       { name: 'about', label: 'Про себе (досвід, сертифікати)', type: 'textarea' },
       { name: 'colorStyle', label: 'Стиль кольорів', type: 'select',
@@ -27,8 +38,8 @@ const SITE_TYPES = {
     fields: [
       { name: 'name', label: "Ваше ім'я *", type: 'text', required: true },
       { name: 'profession', label: 'Ваша професія *', type: 'text', required: true },
-      { name: 'phone', label: 'Телефон *', type: 'tel', required: true },
-      { name: 'email', label: 'Email *', type: 'email', required: true },
+      { name: 'phone', label: 'Телефон або Telegram', type: 'tel' },
+      { name: 'email', label: 'Email', type: 'email' },
       { name: 'about', label: 'Розкажіть про себе', type: 'textarea' },
       { name: 'skills', label: 'Навички / технології', type: 'text' },
       { name: 'referenceUrl', label: 'Приклад для натхнення', type: 'url' }
@@ -40,8 +51,8 @@ const SITE_TYPES = {
     fields: [
       { name: 'cafeName', label: 'Назва закладу *', type: 'text', required: true },
       { name: 'name', label: 'Контактна особа *', type: 'text', required: true },
-      { name: 'phone', label: 'Телефон *', type: 'tel', required: true },
-      { name: 'email', label: 'Email *', type: 'email', required: true },
+      { name: 'phone', label: 'Телефон або Telegram', type: 'tel' },
+      { name: 'email', label: 'Email', type: 'email' },
       { name: 'address', label: 'Адреса закладу', type: 'text' },
       { name: 'about', label: 'Опишіть заклад', type: 'textarea' },
       { name: 'colorStyle', label: 'Стиль оформлення', type: 'select',
@@ -159,6 +170,7 @@ function openOrderPopup() {
   overlay.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   trackOrderEvent('order_form_open', { page_path: window.location.pathname });
+  window.trackConversionIntent?.('order_open');
   setTimeout(() => overlay.querySelector('.order-popup-close')?.focus({ preventScroll: true }), 100);
 }
 
@@ -324,6 +336,18 @@ function goToStep3() {
     }
   });
 
+  const phone = form?.elements.phone;
+  const email = form?.elements.email;
+  if (phone && email && !phone.value.trim() && !email.value.trim()) {
+    const hint = document.createElement('span');
+    hint.className = 'field-error';
+    hint.textContent = 'Вкажіть телефон або email';
+    phone.classList.add('error');
+    phone.after(hint);
+    valid = false;
+    firstError ||= phone;
+  }
+
   if (!valid) {
     firstError?.focus();
     return;
@@ -336,8 +360,7 @@ function goToStep3() {
     summary.innerHTML = `
       <div class="order-summary-type">${SITE_TYPES[selectedType].label}</div>
       <div class="order-summary-row"><b>Ім'я:</b> ${form_data.name || form_data.cafeName}</div>
-      <div class="order-summary-row"><b>Телефон:</b> ${form_data.phone}</div>
-      <div class="order-summary-row"><b>Email:</b> ${form_data.email}</div>
+      <div class="order-summary-row"><b>Зв’язок:</b> ${form_data.phone || form_data.email}</div>
     `;
   }
   showStep(3);
@@ -434,4 +457,8 @@ document.addEventListener('keydown', e => {
 // Кнопки "Замовити сайт" з усіх сторінок
 document.querySelectorAll('[data-open-order]').forEach(btn => {
   btn.addEventListener('click', openOrderPopup);
+});
+
+document.querySelectorAll('[data-open-audit]').forEach(btn => {
+  btn.addEventListener('click', () => openOrderPopupForType('audit'));
 });

@@ -77,6 +77,7 @@
       <div class="stat-card"><div class="stat-card-num" id="s-sessions">—</div><div class="stat-card-lbl">Анонімних сеансів</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-leads">—</div><div class="stat-card-lbl">Отримано заявок</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-contacts">—</div><div class="stat-card-lbl">Кліків на контакти</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-intents">—</div><div class="stat-card-lbl">Зацікавлених дій</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-conversion">—</div><div class="stat-card-lbl">Конверсія сеанс → заявка</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-lbl">Сьогодні</div></div>
       <div class="stat-card"><div class="stat-card-num" id="s-avg">—</div><div class="stat-card-lbl">Середньо / день</div></div>
@@ -100,6 +101,17 @@
         <h3>🌐 Джерела трафіку</h3>
         <div id="referrers-chart"></div>
         <button class="show-all-btn" id="refs-more-btn" onclick="showAllRefs()" style="display:none">Показати всі →</button>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>🧭 Дії до заявки</h3>
+        <div id="intent-types-chart"></div>
+      </div>
+      <div class="chart-card">
+        <h3>📍 Сторінки зацікавлення</h3>
+        <div id="intent-pages-chart"></div>
       </div>
     </div>
 
@@ -211,6 +223,7 @@ async function loadStats(days = 7, btn) {
   document.getElementById('s-sessions').textContent = data.sessions || 0;
   document.getElementById('s-leads').textContent   = data.leads || 0;
   document.getElementById('s-contacts').textContent = data.contactClicks || 0;
+  document.getElementById('s-intents').textContent = data.intentEvents || 0;
   document.getElementById('s-conversion').textContent = `${data.conversionRate || 0}%`;
   document.getElementById('s-today').textContent   = todayVal;
   document.getElementById('s-avg').textContent     = Math.round(data.total / days_);
@@ -269,6 +282,12 @@ async function loadStats(days = 7, btn) {
   const contactLabels = { telegram: 'Telegram', phone: 'Телефон', email: 'Email' };
   renderBars(contactMethods, document.getElementById('contact-methods-chart'), 'bar-fill-purple', method => contactLabels[method] || method, Math.max(...contactMethods.map(([,v])=>v), 1));
   renderBars(contactPages, document.getElementById('contact-pages-chart'), 'bar-fill', pageName, Math.max(...contactPages.map(([,v])=>v), 1));
+
+  const intentTypes = Object.entries(data.intentTypes || {});
+  const intentPages = Object.entries(data.intentPages || {});
+  const intentLabels = { order_open: 'Відкриття форми', demo_view: 'Перегляд демо', price_estimate: 'Оцінка бюджету' };
+  renderBars(intentTypes, document.getElementById('intent-types-chart'), 'bar-fill-purple', type => intentLabels[type] || type, Math.max(...intentTypes.map(([,v])=>v), 1));
+  renderBars(intentPages, document.getElementById('intent-pages-chart'), 'bar-fill', pageName, Math.max(...intentPages.map(([,v])=>v), 1));
 
   const notFound = Object.entries(data.notFound || {});
   const notFoundSection = document.getElementById('not-found-section');
