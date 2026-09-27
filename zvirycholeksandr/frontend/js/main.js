@@ -242,7 +242,12 @@ async function applySettings() {
       document.querySelectorAll('[data-contact]').forEach(el => {
         const key = el.dataset.contact;
         const val = s.contacts[key];
-        if (!val) { el.closest('li, span, div') ? el.parentElement.style.display = 'none' : el.style.display = 'none'; return; }
+        if (!val) {
+          const listItem = el.closest('li');
+          if (listItem) listItem.style.display = 'none';
+          else el.style.display = 'none';
+          return;
+        }
         el.href = val;
         el.style.display = '';
         // Для phone/email показати текст без протоколу
