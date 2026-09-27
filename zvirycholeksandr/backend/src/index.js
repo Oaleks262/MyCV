@@ -485,6 +485,8 @@ app.get('/portfolio', (req, res) => {
   res.type('html').send(renderPortfolioIndex());
 });
 
+app.get('/portfolio/portfolio-dyzaynera', (req, res) => res.redirect(301, '/portfolio/yelyzaveta-antoniuk'));
+
 app.get('/portfolio/:slug', (req, res) => {
   if (!/^[a-z0-9-]+$/.test(req.params.slug)) return res.status(404).sendFile(path.join(__dirname, '../../frontend/404.html'));
   const item = portfolioDB.findOne({ slug: req.params.slug, isVisible: true });

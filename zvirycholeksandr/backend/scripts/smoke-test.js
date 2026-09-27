@@ -65,6 +65,7 @@ const staticChecks = [
   ['Favicon PNG', '/favicon-96x96.png', 200],
   ['Favicon ICO', '/favicon.ico', 200],
   ['Social preview', '/og-image-2026.jpg', 200, null, 'image/jpeg'],
+  ['Прев’ю кейсу Єлизавети', '/assets/portfolio/elizaveta-antoniuk.webp', 200, null, 'image/webp'],
   ['Відгуки GA4', '/reviews', 200, '/js/analytics-init.js'],
   ['Єдиний хедер відгуків', '/reviews', 200, 'class="navbar public-navbar"'],
   ['Єдиний футер відгуків', '/reviews', 200, 'class="site-footer public-footer"'],
@@ -233,6 +234,16 @@ async function run() {
     if (!ok) failed += 1;
   } catch (error) {
     console.log(`✗ Старий URL QR-статті: ${error.message}`);
+    failed += 1;
+  }
+
+  try {
+    const legacyDesigner = await qaFetch(baseUrl + '/portfolio/portfolio-dyzaynera', { redirect: 'manual' });
+    const ok = legacyDesigner.status === 301 && legacyDesigner.headers.get('location') === '/portfolio/yelyzaveta-antoniuk';
+    console.log(`${ok ? '✓' : '✗'} Старий кейс дизайнера: HTTP ${legacyDesigner.status}`);
+    if (!ok) failed += 1;
+  } catch (error) {
+    console.log(`✗ Старий кейс дизайнера: ${error.message}`);
     failed += 1;
   }
 
