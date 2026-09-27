@@ -119,8 +119,8 @@ async function loadPortfolioPreview() {
     if (!res.ok) throw new Error('Failed to load');
     const items = await res.json();
 
-    const concepts = items.filter(item => item.siteType === 'demo');
-    const previewItems = (concepts.length ? concepts : items).slice(0, 3);
+    const clientCases = items.filter(item => item.siteType !== 'demo');
+    const previewItems = (clientCases.length ? clientCases : items).slice(0, 3);
     container.innerHTML = previewItems.map((item, index) => `
       <article class="card fade-in" role="button" tabindex="0" data-item-index="${index}" aria-label="Відкрити кейс: ${escapeHTML(item.title)}">
         <div class="card-img-wrap">

@@ -27,7 +27,7 @@ async function loadPortfolio() {
   try {
     const res = await fetch('/api/portfolio');
     if (!res.ok) throw new Error('Failed');
-    portfolioItems = await res.json();
+    portfolioItems = (await res.json()).filter(item => item.siteType !== 'demo');
     renderGrid(portfolioItems);
   } catch (e) {
     grid.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;padding:3rem;grid-column:1/-1;">Не вдалося завантажити портфоліо</p>';

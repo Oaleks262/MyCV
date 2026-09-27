@@ -354,6 +354,35 @@
 .proof-strip strong { display: block; margin: 36px 0 16px; color: var(--paper); font-family: var(--display); font-size: clamp(64px, 7vw, 112px); font-weight: 400; letter-spacing: -.07em; line-height: .8; }
 .proof-strip p { max-width: 220px; margin: 0; color: #aaa9a3; font-size: 13px; line-height: 1.5; }
 
+.path-section { background: var(--paper); }
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(42px, 6vw, 82px);
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+.path-card {
+  display: flex;
+  min-width: 0;
+  min-height: 360px;
+  flex-direction: column;
+  padding: clamp(24px, 3vw, 42px);
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink);
+  transition: background .25s ease, transform .25s ease;
+}
+.path-card > span,
+.path-card > strong { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.path-card > span { color: var(--graphite); }
+.path-card h3 { margin: 72px 0 18px; font-size: clamp(30px, 3vw, 48px); font-weight: 500; letter-spacing: -.05em; line-height: .98; }
+.path-card p { max-width: 390px; margin: 0; color: var(--graphite); font-size: 14px; line-height: 1.6; }
+.path-card > strong { margin-top: auto; padding-top: 34px; }
+.path-card:hover { background: var(--signal); transform: translateY(-4px); }
+.path-card:hover > span,
+.path-card:hover p { color: var(--ink); }
+
 .audit-offer {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
@@ -768,6 +797,9 @@
 @media (max-width: 900px) {
   .home-rebrand.nav-open { overflow: hidden; }
   .home-rebrand .navbar.home-nav { height: 72px; }
+  .path-grid { grid-template-columns: 1fr; }
+  .path-card { min-height: 260px; }
+  .path-card h3 { margin-top: 46px; }
   .home-rebrand .navbar-links {
     position: fixed;
     top: 72px;
@@ -966,6 +998,9 @@
   .proof-strip article:nth-child(3) { border-left: 0; }
   .proof-strip strong { margin: 22px 0 10px; font-size: 45px; }
   .proof-strip p { font-size: 10px; line-height: 1.4; }
+  .path-grid { margin-top: 34px; }
+  .path-card { min-height: 230px; padding: 24px 20px; }
+  .path-card h3 { margin: 36px 0 14px; font-size: 34px; }
   .audit-offer { grid-template-columns: 1fr; gap: 28px; }
   .audit-offer-copy h2 { margin: 22px 0 20px; font-size: clamp(42px, 12vw, 52px); }
   .audit-offer-copy > p { margin-bottom: 24px; font-size: 14px; line-height: 1.55; }

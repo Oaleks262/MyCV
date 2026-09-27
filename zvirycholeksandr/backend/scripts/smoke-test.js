@@ -15,8 +15,11 @@ const staticChecks = [
   ['Єдиний copyright головної', '/', 200, copyright],
   ['Безшовна стрічка ніш', '/', 200, 'niche-ticker-group'],
   ['Аналітика конверсій головної', '/', 200, '/js/analytics-init.js?v=3'],
-  ['Каталог концептів', '/', 200, 'https://psycho.zvirycholeksandr.com.ua'],
-  ['Готові сайти', '/ready-sites', 200, 'Три готові продукти'],
+  ['Три зрозумілі шляхи', '/', 200, 'Оберіть свій шлях'],
+  ['Реальні кейси на головній', '/', 200, 'Запущені сайти.'],
+  ['Готові рішення на головній', '/', 200, 'https://psycho.zvirycholeksandr.com.ua'],
+  ['Готові рішення', '/ready-sites', 200, 'Три готові рішення'],
+  ['Продукт перед пілотною пропозицією', '/ready-sites', 200, 'Спочатку - продукт і ціна.'],
   ['Єдиний хедер готових сайтів', '/ready-sites', 200, 'class="navbar public-navbar"'],
   ['Єдиний футер готових сайтів', '/ready-sites', 200, 'class="site-footer public-footer"'],
   ['Єдиний copyright готових сайтів', '/ready-sites', 200, copyright],
@@ -34,7 +37,7 @@ const staticChecks = [
   ['Гарантії перед стартом', '/', 200, 'class="guarantee-grid fade-in"'],
   ['Мобільна швидка дія', '/', 200, 'class="mobile-project-cta"'],
   ['Логіка калькулятора', '/js/main.js', 200, 'initPriceEstimator', 'application/javascript'],
-  ['Шість живих демо', '/', 200, 'https://psycho.zvirycholeksandr.com.ua'],
+  ['Кейси без демо у клієнтському каталозі', '/js/portfolio.js', 200, "siteType !== 'demo'", 'application/javascript'],
   ['API readiness', '/api/ready', 200, '"status":"ready"'],
   ['Послуга', '/services/landing', 200, 'application/ld+json'],
   ['Єдиний хедер послуг', '/services/landing', 200, 'class="navbar public-navbar"'],
@@ -67,6 +70,7 @@ const staticChecks = [
   ['Єдиний футер відгуків', '/reviews', 200, 'class="site-footer public-footer"'],
   ['Єдиний хедер портфоліо', '/portfolio', 200, 'class="navbar public-navbar"'],
   ['Єдиний футер портфоліо', '/portfolio', 200, 'class="site-footer public-footer"'],
+  ['Портфоліо пояснене як кейси', '/portfolio', 200, 'Реальні проєкти клієнтів'],
   ['Єдиний хедер блогу', '/blog', 200, 'class="navbar public-navbar"'],
   ['Єдиний футер блогу', '/blog', 200, 'class="site-footer public-footer"'],
   ['Єдиний хедер конфіденційності', '/privacy', 200, 'class="navbar public-navbar"'],
@@ -147,9 +151,17 @@ async function run() {
     const withoutVisual = Array.isArray(portfolio) && portfolio.find(entry => !entry.screenshotUrl);
     if (withoutVisual) throw new Error(`немає прев’ю для ${withoutVisual.title || withoutVisual.id}`);
     const item = Array.isArray(portfolio) && portfolio.find(entry => entry.slug);
+    const demoItem = Array.isArray(portfolio) && portfolio.find(entry => entry.slug && entry.siteType === 'demo');
     if (!item) throw new Error('немає опублікованої роботи з slug');
     failed += await check('Портфоліо SSR', '/portfolio', 200, `href="/portfolio/${item.slug}"`);
     failed += await check('Зображення портфоліо SSR', '/portfolio', 200, 'portfolio-card-img');
+    if (demoItem) {
+      const indexResponse = await qaFetch(baseUrl + '/portfolio');
+      const indexHtml = await indexResponse.text();
+      const cleanCatalog = indexResponse.status === 200 && !indexHtml.includes(`href="/portfolio/${demoItem.slug}"`);
+      console.log(`${cleanCatalog ? '✓' : '✗'} Портфоліо SSR без демо: HTTP ${indexResponse.status}`);
+      if (!cleanCatalog) failed += 1;
+    }
     failed += await check('Сторінка роботи', `/portfolio/${encodeURIComponent(item.slug)}`, 200, 'CreativeWork');
     failed += await check('GA4 сторінки роботи', `/portfolio/${encodeURIComponent(item.slug)}`, 200, '/js/analytics-init.js');
   } catch (error) {

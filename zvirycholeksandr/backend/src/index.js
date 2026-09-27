@@ -429,7 +429,7 @@ function renderPortfolioCase(item) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Головна', item: `${DOMAIN}/` },
-          { '@type': 'ListItem', position: 2, name: 'Роботи', item: `${DOMAIN}/portfolio` },
+          { '@type': 'ListItem', position: 2, name: isDemo ? 'Готові рішення' : 'Кейси', item: isDemo ? `${DOMAIN}/ready-sites` : `${DOMAIN}/portfolio` },
           { '@type': 'ListItem', position: 3, name: item.title, item: canonical },
         ],
       },
@@ -458,7 +458,7 @@ function renderPortfolioCase(item) {
 }
 
 function renderPortfolioIndex() {
-  const items = portfolioDB.all({ isVisible: true }).filter(item => item.slug);
+  const items = portfolioDB.all({ isVisible: true }).filter(item => item.slug && item.siteType !== 'demo');
   const cards = items.map(item => {
     const portfolioVisual = resolvePortfolioVisual(item);
     return `
