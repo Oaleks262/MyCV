@@ -36,7 +36,7 @@
     "description": "Інтерактивне портфоліо 3D-аніматорки та motion-дизайнерки Єлизавети Антонюк з авторською темною стилістикою, анімаціями, процесом роботи й формою зв’язку.",
     "technologies": ["React", "Vite", "Framer Motion", "Node.js"],
     "screenshotUrl": "/assets/portfolio/elizaveta-antoniuk.webp",
-    "liveUrl": "https://elizaveta.zvirycholeksandr.com.ua",
+    "liveUrl": "https://designer.zvirycholeksandr.com.ua",
     "isVisible": true,
     "sortOrder": 3,
     "createdAt": "2026-03-15T10:00:00.000Z"
